@@ -16,6 +16,7 @@ import math.Ray;
 import math.Transformation;
 import math.Vector;
 import sampling.Sample;
+import shape.Cylinder;
 import shape.Disk;
 import shape.Plane;
 import shape.Shape;
@@ -90,17 +91,19 @@ public class Renderer {
 		Transformation t4 = Transformation.createTranslation(4, 4, 12);
 		Transformation t5 = Transformation.createTranslation(-4, 4, 12);
 		
-		Transformation t6 = Transformation.createRotationY(60);
+		Transformation t6 = Transformation.createRotationX(60);
 		Transformation t7 = t1.append(t6);
 		
 		List<Shape> shapes = new ArrayList<Shape>();
 		//shapes.add(new Sphere(t1, 5));
-		shapes.add(new Sphere(t2, 4));
-		shapes.add(new Sphere(t3, 4));
-		shapes.add(new Sphere(t4, 4));
-		shapes.add(new Sphere(t5, 4));
+		//shapes.add(new Sphere(t2, 4));
+		//shapes.add(new Sphere(t3, 4));
+		//shapes.add(new Sphere(t4, 4));
+		//shapes.add(new Sphere(t5, 4));
 		
-		shapes.add(new Disk(t7, new Point(), 1, new Vector(0, 0, -1)));
+		shapes.add(new Cylinder(t1, 1, 1, -1));
+		
+		//shapes.add(new Disk(t7, new Point(), 1, new Vector(0, 0, -1)));
 		
 		//shapes.add(new Triangle(t7, new Point(2,0,0), new Point(-2,0,0), new Point(0,3,0)));
 		
