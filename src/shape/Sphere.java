@@ -13,6 +13,8 @@ import math.Vector;
 public class Sphere implements Shape {
 	public Transformation transformation;
 	public final double radius;
+	public static final double kEpsilon = 0;
+	
 
 	/**
 	 * Creates a new {@link Sphere} with the given radius and which is
@@ -64,6 +66,6 @@ public class Sphere implements Shape {
 		double t0 = q / a;
 		double t1 = c / q;
 
-		return t0 >= 0 || t1 >= 0;
+		return t0 >= kEpsilon || t1 >= kEpsilon;
 	}
 }

@@ -28,9 +28,9 @@ public class PerspectiveCamera implements Camera {
 	 * specifies the horizontal field of view in degrees.
 	 * 
 	 * @param xResolution
-	 *            x resolution of the image this camera is for.
+	 *            x resolution of the image this camera is for. (the number of pixels in the horizontal direction)
 	 * @param yResolution
-	 *            y resolution of the image this camera is for.
+	 *            y resolution of the image this camera is for. (the number of pixels in the vertical direction)
 	 * @param origin
 	 *            origin of the camera.
 	 * @param lookat
@@ -71,7 +71,9 @@ public class PerspectiveCamera implements Camera {
 		this.origin = origin;
 		this.basis = new OrthonormalBasis(lookat, up);
 
+		//cfr handbook: width = s*hres/d  = s*xRes/d
 		width = 2.0 * Math.tan(0.5 * Math.toRadians(fov));
+		//cfr handbook: height = s*vres/d = s*yRes/d
 		height = ((double) yResolution * width) / (double) xResolution;
 	}
 
