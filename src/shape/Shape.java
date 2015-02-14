@@ -9,6 +9,7 @@ import math.Ray;
  * @version 1.0
  */
 public interface Shape {
+	
 	/**
 	 * Returns whether the given {@link Ray} intersects this {@link Shape}.
 	 * False when the given ray is null.

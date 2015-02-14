@@ -10,18 +10,28 @@ public class Triangle implements Shape {
 	public Point v0; //point a
 	public Point v1; // point b
 	public Point v2; // point c
+	public Vector normal;
 	public static final double kEpsilon = 0;
 	
 	/**
-	 * Creates a new {@link Plane} with the given point and normal and which is
+	 * Creates a new triangle with points (0,0,0), (0,0,1) and (1,0,0)
+	 */
+	public Triangle(){
+		this(Transformation.createIdentity(), new Point(0,0,0), new Point(0,0,1),new Point(1,0,0));
+		
+	}
+	
+	
+	/**
+	 * Creates a new {@link Triangle} with the given three points and which is
 	 * transformed by the given {@link Transformation}.
 	 * 
 	 * @param transformation
-	 *            the transformation applied to this {@link Plane}.
+	 *            the transformation applied to this {@link Triangle}.
 	 * @param point
-	 *            a point of this {@link Plane}.
+	 *            a point of this {@link Triangle}.
 	 * @param normal
-	 *            the normal of this {@link Plane}.            
+	 *            the normal of this {@link Triangle}.            
 	 * @throws NullPointerException
 	 *             when the transformation, point or normal is null.
 	 */
@@ -32,17 +42,25 @@ public class Triangle implements Shape {
 		
 		if(a == null)
 			throw new NullPointerException("the given point a is null");
-		this.v0 = a;
+		this.v0 = new Point(a);
 		
 		if(b == null)
 			throw new NullPointerException("the given point b is null");
-		this.v1 = b;
+		this.v1 = new Point(b);
 		
 		if(c == null)
 			throw new NullPointerException("the given point c is null");
-		this.v2 = c;	
+		this.v2 = new Point(c);	
+		
+		normal = (v1.subtract(v0)).cross(v2.subtract(v0));
+		normal = normal.normalize();
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see shape.Shape#intersect(geometry3d.Ray3D)
+	 */
 	@Override
 	public boolean intersect(Ray ray) {
 		Ray transformed = transformation.transformInverse(ray);

@@ -16,6 +16,7 @@ import math.Ray;
 import math.Transformation;
 import math.Vector;
 import sampling.Sample;
+import shape.Disk;
 import shape.Plane;
 import shape.Shape;
 import shape.Sphere;
@@ -98,7 +99,10 @@ public class Renderer {
 		shapes.add(new Sphere(t3, 4));
 		shapes.add(new Sphere(t4, 4));
 		shapes.add(new Sphere(t5, 4));
-		shapes.add(new Triangle(t7, new Point(2,0,0), new Point(-2,0,0), new Point(0,3,0)));
+		
+		shapes.add(new Disk(t7, new Point(), 1, new Vector(0, 0, -1)));
+		
+		//shapes.add(new Triangle(t7, new Point(2,0,0), new Point(-2,0,0), new Point(0,3,0)));
 		
 		//shapes.add(new Plane(t1, new Point(), new Vector(0,0,-1)));
 		
