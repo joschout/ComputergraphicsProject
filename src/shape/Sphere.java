@@ -1,5 +1,8 @@
 package shape;
 
+import util.RGBColor;
+import util.ShadeRec;
+import material.Material;
 import math.Ray;
 import math.Transformation;
 import math.Vector;
@@ -14,7 +17,8 @@ public class Sphere implements Shape {
 	public Transformation transformation;
 	public final double radius;
 	public static final double kEpsilon = 0;
-	
+	public RGBColor color;
+	public Material material;
 
 	/**
 	 * Creates a new {@link Sphere} with the given radius and which is
@@ -67,5 +71,55 @@ public class Sphere implements Shape {
 		double t1 = c / q;
 
 		return t0 >= kEpsilon || t1 >= kEpsilon;
+	}
+
+	@Override
+	public boolean intersect(Ray ray, ShadeRec sr) {
+		//inverse transform the ray
+		Ray transformed = transformation.transformInverse(ray);
+
+		//zie handboek pagina 57
+		Vector o = transformed.origin.toVector3D();
+
+		double a = transformed.direction.dot(transformed.direction);
+		double b = 2.0 * (transformed.direction.dot(o));
+		double c = o.dot(o) - radius * radius;
+
+		double d = b * b - 4.0 * a * c;
+
+		if (d < 0)
+			return false;
+		double dr = Math.sqrt(d);
+		double q = b < 0 ? -0.5 * (b - dr) : -0.5 * (b + dr);
+
+		double t0 = q / a;
+		double t1 = c / q;
+
+		if( (t0 >= kEpsilon && t1 >= kEpsilon && t1 >= t0) || (t0 >= kEpsilon && t1 < kEpsilon)){
+			sr.t = t0;
+			Vector temp = transformed.origin.toVector3D();
+			sr.normal = temp.add(transformed.direction.scale(t0)).normalize();
+			sr.localHitPoint = transformed.origin.add(transformed.direction.scale(t0));
+			return true;
+		}
+		if( (t0 >= kEpsilon && t1 >= kEpsilon && t0 > t1) || (t1 >= kEpsilon && t0 < kEpsilon)){
+			sr.t = t1;
+			Vector temp = transformed.origin.toVector3D();
+			sr.normal = temp.add(transformed.direction.scale(t1)).normalize();
+			sr.localHitPoint = transformed.origin.add(transformed.direction.scale(t1));
+			return true;
+		}
+		
+		return false;
+	}
+
+	@Override
+	public Material getMaterial() {
+		return this.material;
+	}
+
+	@Override
+	public RGBColor getColor() {
+		return this.color;
 	}
 }

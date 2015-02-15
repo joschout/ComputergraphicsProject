@@ -1,5 +1,8 @@
 package shape;
 
+import util.RGBColor;
+import util.ShadeRec;
+import material.Material;
 import math.Point;
 import math.Ray;
 import math.Transformation;
@@ -12,8 +15,9 @@ public class Disk implements Shape {
 	public final double radius;
 	public Vector normal;
 	public static final double kEpsilon = 0;
+	public RGBColor color;
+	public Material material;
 	
-
 	/**
 	 * creates a disk in centered in the origin with radius 1 and normal (0, 0, -1).
 	 */
@@ -78,6 +82,22 @@ public class Disk implements Shape {
 		}
 		
 		return false;
+	}
+
+	@Override
+	public boolean intersect(Ray ray, ShadeRec sr) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Material getMaterial() {
+		return this.material;
+	}
+
+	@Override
+	public RGBColor getColor() {
+		return this.color;
 	}
 
 }

@@ -1,5 +1,8 @@
 package shape;
 
+import util.RGBColor;
+import util.ShadeRec;
+import material.Material;
 import math.Ray;
 import math.Point;
 import math.Transformation;
@@ -10,6 +13,8 @@ public class Plane implements Shape {
 	public Point point;
 	public Vector normal;
 	public static final double kEpsilon = 0;
+	public Material material;
+	public RGBColor color;
 	
 	/**
 	 * Creates a new {@link Plane} with the given point and normal and which is
@@ -44,6 +49,7 @@ public class Plane implements Shape {
 	 */
 	@Override
 	public boolean intersect(Ray ray) {
+		
 		Ray transformed = transformation.transformInverse(ray);
 		
 		//zie handboek pagina 54-56
@@ -54,6 +60,37 @@ public class Plane implements Shape {
 		double t = numerator / denominator;
 		
 		return t > kEpsilon;
+	}
+	
+	public boolean intersect(Ray ray, ShadeRec sr) {
+		
+		Ray transformed = transformation.transformInverse(ray);
+		
+		//zie handboek pagina 54-56
+		Vector aMinO = point.subtract(transformed.origin);
+		double numerator = aMinO.dot(normal);
+		double denominator = transformed.direction.dot(normal);
+		
+		double t = numerator / denominator;
+		
+		if(t > kEpsilon){
+			sr.t=t;
+			sr.normal = normal;
+			sr.localHitPoint = transformed.origin.add(transformed.direction.scale(t));
+		}
+		return t > kEpsilon;
+	}
+
+
+	@Override
+	public Material getMaterial() {
+		return this.material;
+	}
+
+
+	@Override
+	public RGBColor getColor() {
+		return this.color;
 	}
 
 

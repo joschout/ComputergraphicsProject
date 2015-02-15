@@ -6,23 +6,19 @@ import gui.RenderFrame;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
+
+
 
 import javax.imageio.ImageIO;
 
-import math.Point;
 import math.Ray;
-import math.Transformation;
-import math.Vector;
 import sampling.Sample;
-import shape.Cylinder;
-import shape.Disk;
-import shape.Plane;
 import shape.Shape;
-import shape.Sphere;
-import shape.Triangle;
-import camera.PerspectiveCamera;
+import shape.World;
+import util.RGBColor;
+import util.ShadeRec;
+;
 
 /**
  * Entry point of your renderer.
@@ -30,10 +26,10 @@ import camera.PerspectiveCamera;
  * @author Niels Billen
  * @version 1.0
  */
-public class Renderer {
-	
+public class Main {
 
-	
+
+
 	/**
 	 * Entry point of your renderer.
 	 * 
@@ -75,9 +71,6 @@ public class Renderer {
 		// validate the input
 		validateInput(width, height);
 
-		// initialize the camera
-		PerspectiveCamera camera = initializeCamera(width, height);
-
 		// initialize the graphical user interface
 		ImagePanel panel = new ImagePanel(width, height);
 		RenderFrame frame = new RenderFrame("Sphere", panel);
@@ -86,47 +79,32 @@ public class Renderer {
 		ProgressReporter reporter = new ProgressReporter("Rendering", 40, width
 				* height, false);
 		reporter.addProgressListener(frame);
-		
-		// initialize the scene
-		Transformation t1 = Transformation.createTranslation(0, 0, 14);
-		Transformation t2 = Transformation.createTranslation(4, -4, 12);
-		Transformation t3 = Transformation.createTranslation(-4, -4, 12);
-		Transformation t4 = Transformation.createTranslation(4, 4, 12);
-		Transformation t5 = Transformation.createTranslation(-4, 4, 12);
-		
-		Transformation t6 = Transformation.createRotationX(60);
-		Transformation t7 = t1.append(t6);
-		
-		List<Shape> shapes = new ArrayList<Shape>();
-		//shapes.add(new Sphere(t1, 5));
-		//shapes.add(new Sphere(t2, 4));
-		//shapes.add(new Sphere(t3, 4));
-		//shapes.add(new Sphere(t4, 4));
-		//shapes.add(new Sphere(t5, 4));
-		
-		shapes.add(new Cylinder(t1, 1, 1, -1));
-		
-		//shapes.add(new Disk(t7, new Point(), 1, new Vector(0, 0, -1)));
-		
-		//shapes.add(new Triangle(t7, new Point(2,0,0), new Point(-2,0,0), new Point(0,3,0)));
-		
-		//shapes.add(new Plane(t1, new Point(), new Vector(0,0,-1)));
-		
-		
+
+		World world = new World();
+		world.build(width, height);
+
 		// render the scene
 		for (int x = 0; x < width; ++x) {
 			for (int y = 0; y < height; ++y) {
 				// create a ray through the center of the pixel.
-				Ray ray = camera.generateRay(new Sample(x + 0.5, y + 0.5));
+				Ray ray = world.camera.generateRay(new Sample(x + 0.5, y + 0.5));
 
-				boolean hit = false;
-				for (Shape shape : shapes){
-					if (shape.intersect(ray)) {
-						hit = true;
+				Shape hittedShape = null;
+				ShadeRec sr = new ShadeRec(world);
+				for (Shape shape : world.shapes){
+					if (shape.intersect(ray, sr)) {
+						hittedShape = shape;
+						sr.ray = ray;
 						break;
 					}
 				}
-				panel.set(x, y, 255, hit ? 255 : 0, 0, 0);
+				if( hittedShape  == null){
+					panel.set(x, y, world.backgroundColor);
+				}else{
+					
+					RGBColor color =hittedShape.getMaterial().shade(sr);
+					panel.set(x, y, color.convertToColor());
+				}
 			}
 			reporter.update(height);
 		}
@@ -139,11 +117,6 @@ public class Renderer {
 		}
 	}
 
-	private static PerspectiveCamera initializeCamera(int width, int height) {
-		PerspectiveCamera camera = new PerspectiveCamera(width, height,
-				new Point(), new Vector(0, 0, 1), new Vector(0, 1, 0),90);
-		return camera;
-	}
 
 	private static void validateInput(int width, int height) {
 		if (width <= 0)
@@ -154,3 +127,5 @@ public class Renderer {
 					+ "smaller than or equal to zero!");
 	}
 }
+
+

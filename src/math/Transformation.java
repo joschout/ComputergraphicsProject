@@ -85,6 +85,40 @@ public class Transformation implements Cloneable {
 		return new Transformation(matrix.multiply(transformation.matrix),
 				transformation.inverse.multiply(inverse));
 	}
+	
+	/**
+	 * Appends the given {@link Transformation} to the right of this {@link Transformation}.
+	 * That is, the given {@link Transformation} will be applied  before this {@link Transformation}..
+	 * 
+	 * @param transformation
+	 *             the {@link Transformation} to append to the right.
+	 * @return this {@link Transformation} concatenated to the left of the given
+	 *         {@link Transformation}.
+	 * @throws NullPointerException
+	 *              when the given {@link Transformation} is null.
+	 */
+	public Transformation appendToTheRight(Transformation transformation)
+			throws NullPointerException {
+		return new Transformation(matrix.multiply(transformation.matrix),
+				transformation.inverse.multiply(inverse));
+	}
+	
+	/**
+	 * Appends the given {@link Transformation} to the left of this {@link Transformation}.
+	 * That is, the given {@link Transformation} will be applied after this {@link Transformation}..
+	 * 
+	 * @param transformation
+	 *             the {@link Transformation} to append to the left.
+	 * @return this {@link Transformation} concatenated to the right of the given
+	 *         {@link Transformation}.
+	 * @throws NullPointerException
+	 *              when the given {@link Transformation} is null.
+	 */
+	public Transformation appendToTheLeft(Transformation transformation)
+			throws NullPointerException {
+		return new Transformation(transformation.matrix.multiply(matrix),
+				inverse.multiply(transformation.inverse));
+	}
 
 	/**
 	 * Transforms the given {@link Point} with this {@link Transformation}.

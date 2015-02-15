@@ -1,5 +1,8 @@
 package shape;
 
+import util.RGBColor;
+import util.ShadeRec;
+import material.Material;
 import math.Point;
 import math.Ray;
 import math.Transformation;
@@ -12,6 +15,8 @@ public class Triangle implements Shape {
 	public Point v2; // point c
 	public Vector normal;
 	public static final double kEpsilon = 0;
+	public Material material;
+	public RGBColor color;
 	
 	/**
 	 * Creates a new triangle with points (0,0,0), (0,0,1) and (1,0,0)
@@ -117,6 +122,25 @@ public class Triangle implements Shape {
 			return false;
 		}
 		return true;
+	}
+
+
+	@Override
+	public boolean intersect(Ray ray, ShadeRec sr) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public Material getMaterial() {
+		return this.material;
+	}
+
+
+	@Override
+	public RGBColor getColor() {
+		return this.color;
 	}
 
 }

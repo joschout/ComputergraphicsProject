@@ -1,5 +1,8 @@
 package shape;
 
+import util.RGBColor;
+import util.ShadeRec;
+import material.Material;
 import math.Point;
 import math.Ray;
 import math.Transformation;
@@ -11,6 +14,8 @@ public class Cylinder implements Shape {
 	public final double ySmall;
 	public final double yLarge;
 	public static final double kEpsilon = 0;
+	public RGBColor color;
+	public Material material;
 	
 	/**
 	 * Creates a cylinder with radius 1, centered around the y-axis,
@@ -98,5 +103,23 @@ public class Cylinder implements Shape {
 		}
 		return false;
 	}
+
+	@Override
+	public boolean intersect(Ray ray, ShadeRec sr) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Material getMaterial() {
+		return this.material;
+	}
+
+	@Override
+	public RGBColor getColor() {
+		return this.color;
+	}
+	
+	
 
 }
