@@ -3,9 +3,11 @@ package shape;
 import util.RGBColor;
 import util.ShadeRec;
 import material.Material;
+import math.Matrix;
 import math.Point;
 import math.Ray;
 import math.Transformation;
+import math.Vector;
 
 public class Cylinder implements Shape {
 
@@ -106,7 +108,55 @@ public class Cylinder implements Shape {
 
 	@Override
 	public boolean intersect(Ray ray, ShadeRec sr) {
-		// TODO Auto-generated method stub
+		//inverse transform the ray
+		Ray transformed = transformation.transformInverse(ray);
+
+		//zie handboek pagina 373
+
+		double a = Math.pow(transformed.direction.get(0),2) + Math.pow(transformed.direction.get(2),2);
+		double b = 2.0 * (transformed.origin.get(0)*transformed.direction.get(0) 
+				+ transformed.origin.get(2)*transformed.direction.get(2));
+		double c = Math.pow(transformed.origin.get(0),2) + Math.pow(transformed.origin.get(2),2) - Math.pow(radius, 2);
+
+		double d = b * b - 4.0 * a * c;
+
+		if (d < 0)
+			return false;
+		double dr = Math.sqrt(d);
+		double q = b < 0 ? -0.5 * (b - dr) : -0.5 * (b + dr);
+
+		double t0 = q / a;
+		double t1 = c / q;
+
+		//check of voor deze t's y wel in het juiste interval zit
+		
+		Point p0 = transformed.origin.add(transformed.direction.scale(t0));
+		Point p1 = transformed.origin.add(transformed.direction.scale(t1));
+		
+		
+		if (p0.get(1) >= ySmall && p0.get(1)<= yLarge &&  t0 >= kEpsilon && t0 < t1){
+			sr.t = t0;
+			//Point localHitPoint = p0;
+			Point pointOnYAxis = new Point(0, p0.y, 0);
+			Vector localNormal = p0.subtract(pointOnYAxis).normalize();
+			Matrix transposeOfInverse = this.transformation.getInverseTransformationMatrix().transpose();
+			Vector transformedNormal = transposeOfInverse.transform(localNormal);
+			sr.normal = transformedNormal;
+			sr.localHitPoint = p0;
+			return true;
+		}
+		
+		if (p1.get(1) >= ySmall && p1.get(1)<= yLarge &&  t1 >= kEpsilon && t1 <t0){
+			sr.t = t1;
+			//Point localHitPoint = p1;
+			Point pointOnYAxis = new Point(0, p1.y, 0);
+			Vector localNormal = p1.subtract(pointOnYAxis).normalize();
+			Matrix transposeOfInverse = this.transformation.getInverseTransformationMatrix().transpose();
+			Vector transformedNormal = transposeOfInverse.transform(localNormal);
+			sr.normal = transformedNormal;
+			sr.localHitPoint = p1;
+			return true;
+		}
 		return false;
 	}
 

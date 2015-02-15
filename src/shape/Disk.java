@@ -3,6 +3,7 @@ package shape;
 import util.RGBColor;
 import util.ShadeRec;
 import material.Material;
+import math.Matrix;
 import math.Point;
 import math.Ray;
 import math.Transformation;
@@ -86,7 +87,24 @@ public class Disk implements Shape {
 
 	@Override
 	public boolean intersect(Ray ray, ShadeRec sr) {
-		// TODO Auto-generated method stub
+	Ray transformed = transformation.transformInverse(ray);
+		
+		// hb pagina 368
+		double t = (center.subtract(transformed.origin)).dot(normal) / (transformed.direction.dot(normal));
+		
+		if(t < kEpsilon){
+			return false;
+		}
+		
+		Point p = transformed.origin.add(transformed.direction.scale(t));
+		if(center.subtract(p).lengthSquared() < Math.sqrt(radius)){
+			sr.t = t;
+			Matrix transposeOfInverse = this.transformation.getInverseTransformationMatrix().transpose();
+			Vector transformedNormal = transposeOfInverse.transform(normal);
+			sr.normal = transformedNormal;
+			sr.localHitPoint = p;
+			return true;
+		}
 		return false;
 	}
 

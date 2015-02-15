@@ -89,22 +89,25 @@ public class Main {
 				// create a ray through the center of the pixel.
 				Ray ray = world.camera.generateRay(new Sample(x + 0.5, y + 0.5));
 
-				Shape hittedShape = null;
-				ShadeRec sr = new ShadeRec(world);
-				for (Shape shape : world.shapes){
-					if (shape.intersect(ray, sr)) {
-						hittedShape = shape;
-						sr.ray = ray;
-						break;
-					}
-				}
-				if( hittedShape  == null){
-					panel.set(x, y, world.backgroundColor);
-				}else{
-					
-					RGBColor color =hittedShape.getMaterial().shade(sr);
-					panel.set(x, y, color.convertToColor());
-				}
+//				Shape hittedShape = null;
+//				ShadeRec sr = new ShadeRec(world);
+//				for (Shape shape : world.shapes){
+//					if (shape.intersect(ray, sr)) {
+//						hittedShape = shape;
+//						sr.ray = ray;
+//						break;
+//					}
+//				}
+//				if( hittedShape  == null){
+//					panel.set(x, y, world.backgroundColor);
+//				}else{
+//					sr.hitPoint = ray.origin.add(ray.direction.scale(sr.t));
+//					RGBColor color = hittedShape.getMaterial().shade(sr);
+//					panel.set(x, y, color.convertToColor());
+//				}
+				
+				RGBColor color = world.tracer.traceRay(ray);
+				panel.set(x, y, color.convertToColor());	
 			}
 			reporter.update(height);
 		}

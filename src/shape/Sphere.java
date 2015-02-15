@@ -3,6 +3,8 @@ package shape;
 import util.RGBColor;
 import util.ShadeRec;
 import material.Material;
+import math.Matrix;
+import math.Point;
 import math.Ray;
 import math.Transformation;
 import math.Vector;
@@ -97,16 +99,23 @@ public class Sphere implements Shape {
 
 		if( (t0 >= kEpsilon && t1 >= kEpsilon && t1 >= t0) || (t0 >= kEpsilon && t1 < kEpsilon)){
 			sr.t = t0;
-			Vector temp = transformed.origin.toVector3D();
-			sr.normal = temp.add(transformed.direction.scale(t0)).normalize();
-			sr.localHitPoint = transformed.origin.add(transformed.direction.scale(t0));
+			Point localHitPoint = transformed.origin.add(transformed.direction.scale(t0));
+			Vector localNormal = localHitPoint.toVector3D().normalize();
+			Matrix transposeOfInverse = this.transformation.getInverseTransformationMatrix().transpose();
+			Vector transformedNormal = transposeOfInverse.transform(localNormal);
+			sr.normal = transformedNormal;
+			sr.localHitPoint = localHitPoint;
 			return true;
+			
 		}
 		if( (t0 >= kEpsilon && t1 >= kEpsilon && t0 > t1) || (t1 >= kEpsilon && t0 < kEpsilon)){
 			sr.t = t1;
-			Vector temp = transformed.origin.toVector3D();
-			sr.normal = temp.add(transformed.direction.scale(t1)).normalize();
-			sr.localHitPoint = transformed.origin.add(transformed.direction.scale(t1));
+			Point localHitPoint = transformed.origin.add(transformed.direction.scale(t1));
+			Vector localNormal = localHitPoint.toVector3D().normalize();
+			Matrix transposeOfInverse = this.transformation.getInverseTransformationMatrix().transpose();
+			Vector transformedNormal = transposeOfInverse.transform(localNormal);
+			sr.normal = transformedNormal;
+			sr.localHitPoint = localHitPoint;
 			return true;
 		}
 		

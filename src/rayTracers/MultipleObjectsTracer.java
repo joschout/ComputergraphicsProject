@@ -1,39 +1,28 @@
 package rayTracers;
 
-import java.awt.Color;
-
 import shape.Shape;
+import shape.World;
+import util.RGBColor;
 import util.ShadeRec;
 import math.Ray;
 
 public class MultipleObjectsTracer extends Tracer {
 
+	private World world;
 	
-	public Color traceRay(Ray ray){
+	public MultipleObjectsTracer(World world) {
+		this.world = world;
+	}
+	
+	public RGBColor traceRay(Ray ray){
 		ShadeRec sr = world.hitObjects(ray);
 		
 		if(sr.hasHitAnObject){
 			sr.ray = ray;
 			return sr.material.shade(sr);
-			
-			
 		}
 		else{
 			return world.backgroundColor;
 		}
-		
-		
-		
-//		boolean hit = false;
-//		for (Shape shape : super.world.shapes){
-//			if (shape.intersect(ray)) {
-//				hit = true;
-//				return shape.color;
-//			}
-//		}
-		
-		
-		
-		return Color.BLACK;
 	}
 }

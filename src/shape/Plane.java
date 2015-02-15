@@ -3,6 +3,7 @@ package shape;
 import util.RGBColor;
 import util.ShadeRec;
 import material.Material;
+import math.Matrix;
 import math.Ray;
 import math.Point;
 import math.Transformation;
@@ -75,10 +76,16 @@ public class Plane implements Shape {
 		
 		if(t > kEpsilon){
 			sr.t=t;
+			
+			Matrix transposeOfInverse = this.transformation.getInverseTransformationMatrix().transpose();
+			Vector transformedNormal = transposeOfInverse.transform(normal);
+			sr.normal = transformedNormal;
 			sr.normal = normal;
 			sr.localHitPoint = transformed.origin.add(transformed.direction.scale(t));
+			
+			return true;
 		}
-		return t > kEpsilon;
+		return false;
 	}
 
 

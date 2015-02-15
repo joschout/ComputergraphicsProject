@@ -12,7 +12,8 @@ public class ShadeRec {
 	
 	public boolean hasHitAnObject; // has the ray hit an object?
 	public Material material;
-	public Point localHitPoint; // world coordinates of hit point
+	public Point hitPoint; // world coordinates of hit point on the transformed object
+	public Point localHitPoint; // world coordinates of hit point of the untransformed object
 	public Vector normal; //normal at hit point
 	public Color color;
 	public World world; // world reference for shading
@@ -27,6 +28,7 @@ public class ShadeRec {
 		normal = null;
 		color = Color.BLACK;
 		this.world = world;
+		t = Double.MAX_VALUE;
 	}
 	
 	public ShadeRec(ShadeRec sr){

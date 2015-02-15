@@ -1,9 +1,8 @@
 package rayTracers;
 
-import java.awt.Color;
-
 import math.Ray;
 import shape.World;
+import util.RGBColor;
 
 public class Tracer {
 
@@ -17,8 +16,8 @@ public class Tracer {
 		this.world = world;
 	}
 	
-	public Color traceRay(Ray ray){
-		return Color.BLACK;
+	public RGBColor traceRay(Ray ray){
+		return new RGBColor(0);
 	}
 	
 }

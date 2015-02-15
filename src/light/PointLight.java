@@ -30,7 +30,7 @@ public class PointLight extends Light {
 	 * @return
 	 */
 	public Vector getDirectionOfIncomingLight(ShadeRec sr){
-		return location.subtract(sr.localHitPoint).normalize();
+		return location.subtract(sr.hitPoint).normalize();
 	}
 	
 	/**
@@ -39,6 +39,7 @@ public class PointLight extends Light {
 	 * @return
 	 */
 	public RGBColor getRadiance(ShadeRec sr){
+		//return color.scale(ls/location.subtract(sr.hitPoint).lengthSquared());
 		return color.scale(ls);
 	}
 	
