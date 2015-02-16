@@ -6,12 +6,15 @@ import java.util.List;
 
 import camera.Camera;
 import camera.PerspectiveCamera;
+import rayTracers.DepthTracer;
 import rayTracers.MultipleObjectsTracer;
+import rayTracers.NormalFalseColorImagetracer;
 import rayTracers.Tracer;
 import light.AmbientLight;
 import light.Light;
 import light.PointLight;
 import material.MatteMaterial;
+import material.PhongMaterial;
 import math.Point;
 import math.Ray;
 import math.Transformation;
@@ -31,8 +34,10 @@ public class World {
 	
 	public World(){
 		camera = null;
-		backgroundColor = new RGBColor(0);
+		backgroundColor = new RGBColor((float)0.3);
 		tracer = new MultipleObjectsTracer(this);
+		//tracer = new DepthTracer(this);
+		//tracer = new NormalFalseColorImagetracer(this);
 		ambientLight = new AmbientLight();
 	}
 	
@@ -48,13 +53,13 @@ public class World {
 	public  void build(int width, int height){
 				this.initializeCamera(width, height);
 				// initialize the scene
-				Transformation t1 = Transformation.createTranslation(0, 0, 14);
-				Transformation t2 = Transformation.createTranslation(4, -4, 12);
-				Transformation t3 = Transformation.createTranslation(-4, -4, 12);
-				Transformation t4 = Transformation.createTranslation(4, 4, 12);
-				Transformation t5 = Transformation.createTranslation(-4, 4, 12);
+				Transformation t1 = Transformation.createTranslation(0, 0, 5);
+				Transformation t2 = Transformation.createTranslation(4, -4, 14);
+				Transformation t3 = Transformation.createTranslation(-4, -4, 14);
+				Transformation t4 = Transformation.createTranslation(4, 4, 14);
+				Transformation t5 = Transformation.createTranslation(-4, 4, 14);
 				
-				Transformation t6 = Transformation.createRotationX(60);
+				Transformation t6 = Transformation.createRotationX(-120);
 				Transformation t7 = t1.append(t6);
 				Transformation t8 = t2.append(t6);
 				
@@ -62,33 +67,45 @@ public class World {
 				pl1.setLocation(new Point(0,0,-1));
 				this.addLight(pl1);
 				
+				PhongMaterial phong = new PhongMaterial();
+				phong.setKa(0.25);
+				phong.setKd(0.65);
+				phong.setCd(RGBColor.convertToRGBColor(Color.GREEN));
+				phong.setKs(0.2);
+				phong.setPhongExponent(10);
+				phong.setCs(RGBColor.convertToRGBColor(Color.WHITE));
+				
 				MatteMaterial matte = new MatteMaterial();
 				matte.setKa(0.25);
 				matte.setKd(0.65);
-				matte.setCd(RGBColor.convertToRGBColor(Color.GREEN));
+				matte.setCd(RGBColor.convertToRGBColor(Color.BLUE));
 				
-				Sphere sp1 = new Sphere(t1, 5);
-				sp1.material =  matte;
-				shapes.add(sp1);
+				Plane plane = new Plane(t2, new Point(), new Vector(0,1,0));
+				plane.material = matte;
+				shapes.add(plane);
 				
-				Sphere sp2 = new Sphere(t2, 5);
-				sp2.material = matte;
-				shapes.add(sp2);
+//				Sphere sp1 = new Sphere(t1, 5);
+//				sp1.material =  matte;
+//				shapes.add(sp1);
 				
-				Sphere sp3 = new Sphere(t3, 5);
-				sp3.material = matte;
-				shapes.add(sp3);
-				
-				Sphere sp4 = new Sphere(t4, 5);
-				sp4.material = matte;
-				shapes.add(sp4);
-				
-				Sphere sp5 = new Sphere(t5, 5);
-				sp5.material = matte;
-				shapes.add(sp5);
+//				Sphere sp2 = new Sphere(t2, 3);
+//				sp2.material = phong;
+//				shapes.add(sp2);
+//				
+//				Sphere sp3 = new Sphere(t3, 3);
+//				sp3.material = phong;
+//				shapes.add(sp3);
+//				
+//				Sphere sp4 = new Sphere(t4, 3);
+//				sp4.material = phong;
+//				shapes.add(sp4);
+//				
+//				Sphere sp5 = new Sphere(t5, 3);
+//				sp5.material = phong;
+//				shapes.add(sp5);
 			
 				Cylinder cy = new Cylinder(t7, 1, 1, -1);
-				cy.material = matte;
+				cy.material = phong;
 				shapes.add(cy);
 				
 //				Disk disk = new Disk(t8, new Point(), 60, new Vector(0, 0, -1));

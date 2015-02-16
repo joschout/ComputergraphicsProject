@@ -1,12 +1,12 @@
 package brdf;
 
 import math.Vector;
-
 import util.RGBColor;
+import util.ShadeRec;
 
 public abstract class BRDF {
 
-	public abstract RGBColor f(Vector w0, Vector w1);
+	public abstract RGBColor f(ShadeRec sr, Vector wo, Vector wi);
 	
 	
 

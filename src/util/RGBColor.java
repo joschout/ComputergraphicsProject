@@ -35,6 +35,10 @@ public class RGBColor {
 		this(i,i,i);
 	}
 	
+	public RGBColor(RGBColor color){
+		this(color.R, color.G, color.B);
+	}
+	
 	public float R(){
 		return R;
 	}
@@ -62,17 +66,17 @@ public class RGBColor {
 		return format( tempR, tempG, tempB);
 	}
 
-	public RGBColor format(RGBColor color){
-		return color;
-	}
+//	public RGBColor format(RGBColor color){
+//		return color;
+//	}
 	
 	public RGBColor format(float R, float G, float B){
-		return new RGBColor( R, G,  B);
+		return clamp( R, G,  B);
 	}
 	
-	public RGBColor format(){
-		return this;
-	}
+//	public RGBColor format(){
+//		return this;
+//	}
 	
 	public RGBColor scale(double s){
 		float tempR = (float) s*R;
@@ -94,6 +98,15 @@ public class RGBColor {
 		return color;
 	}
 	
+	public static RGBColor clamp(float r, float g, float b){
+		float maxValue = Math.max(r, Math.max(g, b));
+		
+		if(maxValue > 1.0){
+			return new RGBColor(r/maxValue,g/maxValue,b/maxValue);
+		}
+		return new RGBColor(r,g,b);
+	}
+	
 	public RGBColor clampToRed(){
 		if(this.R > 1.0 || this.G > 1.0 || this.B > 1.0){
 			return new RGBColor((float)1, (float)0, (float)0);
@@ -101,5 +114,8 @@ public class RGBColor {
 		return this;
 	}
 	
-	
+//	public double toneMap(double i){
+//		return (i/(i+1));
+//	}
+//	
 }

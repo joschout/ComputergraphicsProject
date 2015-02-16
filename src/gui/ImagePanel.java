@@ -138,7 +138,6 @@ public class ImagePanel extends JPanel implements Runnable {
 			throws ArrayIndexOutOfBoundsException {
 		int color = ((alpha & 0xFF) << 24) | ((red & 0xFF) << 16)
 				| ((green & 0xFF) << 8) | (blue & 0xFF);
-
 		set(x, y, color);
 	}
 

@@ -90,4 +90,8 @@ public class PerspectiveCamera implements Camera {
 
 		return new Ray(origin, direction);
 	}
+	
+	public Point getOrigin(){
+		return this.origin;
+	}
 }

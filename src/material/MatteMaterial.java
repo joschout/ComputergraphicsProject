@@ -52,7 +52,7 @@ public class MatteMaterial extends Material {
 			double ndotwi = sr.normal.dot(wi);
 			
 			if(ndotwi > 0.0){
-				 L = L.add(diffuseBRDF.f(wo, wi).multiply(sr.world.lights.get(j).getRadiance(sr).scale(ndotwi)));
+				 L = L.add(diffuseBRDF.f(sr, wo, wi).multiply(sr.world.lights.get(j).getRadiance(sr).scale(ndotwi)));
 			}
 		}
 	

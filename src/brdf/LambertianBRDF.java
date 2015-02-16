@@ -10,7 +10,7 @@ public class LambertianBRDF extends BRDF {
 	private double kd;
 	private RGBColor color;
 	@Override
-	public RGBColor f(Vector w0, Vector w02) {
+	public RGBColor f(ShadeRec sr, Vector wo, Vector wi) {
 		return color.scale(kd * inversePi);
 				
 	}

@@ -18,7 +18,7 @@ public class Cylinder implements Shape {
 	public static final double kEpsilon = 0;
 	public RGBColor color;
 	public Material material;
-	
+
 	/**
 	 * Creates a cylinder with radius 1, centered around the y-axis,
 	 * with y-values ranging from -1 to 1.
@@ -92,14 +92,14 @@ public class Cylinder implements Shape {
 		double t1 = c / q;
 
 		//check of voor deze t's y wel in het juiste interval zit
-		
+
 		Point p0 = transformed.origin.add(transformed.direction.scale(t0));
 		Point p1 = transformed.origin.add(transformed.direction.scale(t1));
-		
+
 		if (p0.get(1) >= ySmall && p0.get(1)<= yLarge &&  t0 >= kEpsilon){
 			return true;
 		}
-		
+
 		if (p1.get(1) >= ySmall && p1.get(1)<= yLarge &&  t1 >= kEpsilon){
 			return true;
 		}
@@ -120,42 +120,60 @@ public class Cylinder implements Shape {
 
 		double d = b * b - 4.0 * a * c;
 
-		if (d < 0)
+		if (d < 0){
 			return false;
+		}
 		double dr = Math.sqrt(d);
 		double q = b < 0 ? -0.5 * (b - dr) : -0.5 * (b + dr);
 
 		double t0 = q / a;
 		double t1 = c / q;
 
-		//check of voor deze t's y wel in het juiste interval zit
-		
-		Point p0 = transformed.origin.add(transformed.direction.scale(t0));
-		Point p1 = transformed.origin.add(transformed.direction.scale(t1));
-		
-		
-		if (p0.get(1) >= ySmall && p0.get(1)<= yLarge &&  t0 >= kEpsilon && t0 < t1){
-			sr.t = t0;
-			//Point localHitPoint = p0;
-			Point pointOnYAxis = new Point(0, p0.y, 0);
-			Vector localNormal = p0.subtract(pointOnYAxis).normalize();
-			Matrix transposeOfInverse = this.transformation.getInverseTransformationMatrix().transpose();
-			Vector transformedNormal = transposeOfInverse.transform(localNormal);
-			sr.normal = transformedNormal;
-			sr.localHitPoint = p0;
-			return true;
+		// zorg dat t0 de kleinste waarde heeft.
+		if(t0 > t1){
+			double t3 = t0;
+			t0 = t1;
+			t1 = t3;
 		}
-		
-		if (p1.get(1) >= ySmall && p1.get(1)<= yLarge &&  t1 >= kEpsilon && t1 <t0){
-			sr.t = t1;
-			//Point localHitPoint = p1;
-			Point pointOnYAxis = new Point(0, p1.y, 0);
-			Vector localNormal = p1.subtract(pointOnYAxis).normalize();
-			Matrix transposeOfInverse = this.transformation.getInverseTransformationMatrix().transpose();
-			Vector transformedNormal = transposeOfInverse.transform(localNormal);
-			sr.normal = transformedNormal;
-			sr.localHitPoint = p1;
-			return true;
+
+		if(t0 > kEpsilon ){
+			Point p0 = transformed.origin.add(transformed.direction.scale(t0));
+
+			if ( p0.y >=  ySmall && p0.y <= yLarge){
+				//if (p0.get(1) >= ySmall && p0.get(1)<= yLarge &&  t0 >= kEpsilon && t0 < t1){
+				sr.t = t0;
+				//Point localHitPoint = p0;
+				Point pointOnYAxis = new Point(0, p0.y, 0);
+				Vector localNormal = p0.subtract(pointOnYAxis).normalize();
+				Matrix transposeOfInverse = this.transformation.getInverseTransformationMatrix().transpose();
+				Vector transformedNormal = transposeOfInverse.transform(localNormal);
+				// als normaal dot Wo kleiner dan 0, draai normaal om
+				if(ray.direction.scale(-1).dot(transformedNormal) < 0.0){
+					transformedNormal = transformedNormal.scale(-1);
+				}
+				sr.normal = transformedNormal;
+				sr.localHitPoint = p0;
+				return true;
+			}
+		}
+
+		if ( t1 > kEpsilon){
+			Point p1 = transformed.origin.add(transformed.direction.scale(t1));
+
+			if( p1.y >=  ySmall && p1.y <= yLarge){
+				sr.t = t1;
+				//Point localHitPoint = p1;
+				Point pointOnYAxis = new Point(0, p1.y, 0);
+				Vector localNormal = p1.subtract(pointOnYAxis).normalize();
+				Matrix transposeOfInverse = this.transformation.getInverseTransformationMatrix().transpose();
+				Vector transformedNormal = transposeOfInverse.transform(localNormal);
+				if(ray.direction.scale(-1).dot(transformedNormal) < 0.0){
+					transformedNormal = transformedNormal.scale(-1);
+				}
+				sr.normal = transformedNormal;
+				sr.localHitPoint = p1;
+				return true;
+			}
 		}
 		return false;
 	}
@@ -169,7 +187,7 @@ public class Cylinder implements Shape {
 	public RGBColor getColor() {
 		return this.color;
 	}
-	
-	
+
+
 
 }
