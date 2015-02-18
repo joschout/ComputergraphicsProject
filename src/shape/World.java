@@ -1,6 +1,9 @@
 package shape;
 
+import ioPackage.ObjectFileReader;
+
 import java.awt.Color;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,9 +38,9 @@ public class World {
 	public World(){
 		camera = null;
 		backgroundColor = new RGBColor((float)0.3);
-		tracer = new MultipleObjectsTracer(this);
+		//tracer = new MultipleObjectsTracer(this);
 		//tracer = new DepthTracer(this);
-		//tracer = new NormalFalseColorImagetracer(this);
+		tracer = new NormalFalseColorImagetracer(this);
 		ambientLight = new AmbientLight();
 	}
 	
@@ -59,7 +62,7 @@ public class World {
 				Transformation t4 = Transformation.createTranslation(4, 4, 14);
 				Transformation t5 = Transformation.createTranslation(-4, 4, 14);
 				
-				Transformation t6 = Transformation.createRotationX(-120);
+				Transformation t6 = Transformation.createRotationX(10);
 				Transformation t7 = t1.append(t6);
 				Transformation t8 = t2.append(t6);
 				
@@ -80,14 +83,14 @@ public class World {
 				matte.setKd(0.65);
 				matte.setCd(RGBColor.convertToRGBColor(Color.BLUE));
 				
-				Plane plane = new Plane(t2, new Point(), new Vector(0,1,0));
-				plane.material = matte;
-				shapes.add(plane);
+//				Plane plane = new Plane(t2, new Point(), new Vector(0,1,0));
+//				plane.material = matte;
+//				shapes.add(plane);
 				
 //				Sphere sp1 = new Sphere(t1, 5);
 //				sp1.material =  matte;
 //				shapes.add(sp1);
-				
+//				
 //				Sphere sp2 = new Sphere(t2, 3);
 //				sp2.material = phong;
 //				shapes.add(sp2);
@@ -104,23 +107,42 @@ public class World {
 //				sp5.material = phong;
 //				shapes.add(sp5);
 			
-				Cylinder cy = new Cylinder(t7, 1, 1, -1);
-				cy.material = phong;
-				shapes.add(cy);
+//				Cylinder cy = new Cylinder(t7, 1, 1, -1);
+//				cy.material = phong;
+//				shapes.add(cy);
 				
 //				Disk disk = new Disk(t8, new Point(), 60, new Vector(0, 0, -1));
 //				disk.material = matte;
 //				shapes.add(disk);
 //				
-				
-//				Triangle tri = new Triangle(t2, new Point(5,0,0), new Point(-5,0,0), new Point(0,5,0));
+//				Transformation triangleTrans = Transformation.createTranslation(0, 0, 14);
+//				Triangle tri = new Triangle(triangleTrans, new Point(5,0,0), new Point(-5,0,0), new Point(0,5,0));
 //				tri.material = matte;
 //				shapes.add(tri);
 				
-//				Plane pl = new Plane(t1, new Point(), new Vector(0,0,-1));
+//				Transformation pllTrans = Transformation.createRotationX(0);
+//				pllTrans = pllTrans.appendToTheLeft(Transformation.createTranslation(0, 0, 14)); 
+//				Parallelogram pll = new Parallelogram(pllTrans, new Point(5,0,0), new Point(-5,0,0), new Point(0,5,0));
+//				pll.material = matte;
+//				shapes.add(pll);
+//			
+//				Transformation planeTransform = Transformation.createTranslation(0, 0, 5);
+//				Transformation planeTransform2 = Transformation.createRotationX(50);
+//				Plane pl = new Plane(planeTransform, new Point(0, -5, 0), new Vector(0,1,0));
 //				pl.material = matte;
 //				shapes.add(pl);
 				
+				Transformation meshTransform = Transformation.createRotationY(200);
+				meshTransform = meshTransform.append(Transformation.createRotationX(10));
+				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(0, 0, 2));
+				ObjectFileReader reader = new ObjectFileReader();
+				TriangleMesh mesh;
+				mesh = reader.readFile("suzanne.obj");
+				mesh.transformation = meshTransform;
+				mesh.material = phong;
+				shapes.add(mesh);
+			
+			
 	}
 
 	public ShadeRec hitObjects(Ray ray){
@@ -150,45 +172,17 @@ public class World {
 				}
 			}	
 		}
-		
 		if(sr.hasHitAnObject){
 			sr.t = tmin;
 			sr.normal = normal;
 			sr.localHitPoint = localHitPoint;
 		}
-		
 		return sr;
 	}
-
-	
-//	public void renderScene(){
-//		
-//		
-//		// render the scene
-//				for (int x = 0; x < width; ++x) {
-//					for (int y = 0; y < height; ++y) {
-//						// create a ray through the center of the pixel.
-//						Ray ray = camera.generateRay(new Sample(x + 0.5, y + 0.5));
-//						Color pixelColor = tracer.traceRay(ray);
-//						
-//						
-//						panel.set(x, y, pixelColor);
-//					}
-//					reporter.update(height);
-//				}
-//				reporter.done();
-//	}
-
-
 
 	private  void initializeCamera(int width, int height) {
 		camera = new PerspectiveCamera(width, height,
 				new Point(), new Vector(0, 0, 1), new Vector(0, 1, 0),90);
-		
 	}
-
-
-	
-
 	
 }

@@ -37,7 +37,7 @@ public class Sphere implements Shape {
 	 */
 	public Sphere(Transformation transformation, double radius) {
 		if (transformation == null)
-			throw new NullPointerException("the given origin is null!");
+			throw new NullPointerException("the given transformation is null!");
 		if (radius < 0)
 			throw new IllegalArgumentException(
 					"the given radius cannot be smaller than zero!");

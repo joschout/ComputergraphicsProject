@@ -20,10 +20,12 @@ private World world;
 		if(sr.hasHitAnObject){
 			int k = 15;
 			double depth = world.camera.getOrigin().subtract(sr.hitPoint).length();
-			double grayValue = 1 - depth/ k;
+			//double grayValue = 1 - depth/ k;
+			double grayValue = 1.0/Math.log(depth);
 			//double grayValue = Math.exp(-depth);
 			//sr.ray = ray;
-			return new RGBColor((float) grayValue);
+			return RGBColor.clamp((float)grayValue, (float)grayValue, (float)grayValue);
+			//return new RGBColor((float) grayValue);
 		}
 		else{
 			return world.backgroundColor;
