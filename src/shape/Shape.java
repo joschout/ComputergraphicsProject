@@ -21,11 +21,13 @@ public interface Shape {
 	 *            the ray to intersect with.
 	 * @return true when the given {@link Ray} intersects this {@link Shape}.
 	 */
-	public boolean intersect(Ray ray);
+	//public boolean intersect(Ray ray);
 	
 	public boolean intersect(Ray ray, ShadeRec sr);
 	
 	public Material getMaterial();
 	
 	public RGBColor getColor();
+
+	public BoundingBox getBoundingBox();
 }

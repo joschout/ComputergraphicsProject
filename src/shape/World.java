@@ -38,9 +38,9 @@ public class World {
 	public World(){
 		camera = null;
 		backgroundColor = new RGBColor((float)0.3);
-		//tracer = new MultipleObjectsTracer(this);
+		tracer = new MultipleObjectsTracer(this);
 		//tracer = new DepthTracer(this);
-		tracer = new NormalFalseColorImagetracer(this);
+		//tracer = new NormalFalseColorImagetracer(this);
 		ambientLight = new AmbientLight();
 	}
 	
@@ -132,16 +132,84 @@ public class World {
 //				pl.material = matte;
 //				shapes.add(pl);
 				
-				Transformation meshTransform = Transformation.createRotationY(200);
-				meshTransform = meshTransform.append(Transformation.createRotationX(10));
-				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(0, 0, 2));
+//				//==== BUNNY ====//
+//				Transformation meshTransform = Transformation.createRotationY(200);
+//				meshTransform = meshTransform.append(Transformation.createRotationX(10));
+//				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -1, 5));
+//				ObjectFileReader reader = new ObjectFileReader();
+//				TriangleMesh mesh;
+//				mesh = reader.readFile("objects//bunny.obj");
+//				mesh.transformation = meshTransform;
+//				mesh.material = phong;
+//				shapes.add(mesh);
+//				
+				
+//				//===== SUZANNE ===========//
+//				Transformation meshTransform = Transformation.createRotationY(200);
+//				meshTransform = meshTransform.append(Transformation.createRotationX(10));
+//				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(0, 0, 2));
+//				ObjectFileReader reader = new ObjectFileReader();
+//				TriangleMesh mesh;
+//				mesh = reader.readFile("objects//suzanne.obj");
+//				mesh.transformation = meshTransform;
+//				mesh.material = phong;
+//				shapes.add(mesh);
+	
+//				//======== CYLINDER ==========//
+//				Transformation meshTransform = Transformation.createRotationY(0);
+//				meshTransform = meshTransform.append(Transformation.createRotationX(-15));
+//				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(0, 0, 5));
+//				ObjectFileReader reader = new ObjectFileReader();
+//				TriangleMesh mesh;
+//				mesh = reader.readFile("objects//cylinder.obj");
+//				mesh.transformation = meshTransform;
+//				mesh.material = phong;
+//				shapes.add(mesh);				
+//				
+				
+//				//======== CONE ==========//
+//				Transformation meshTransform = Transformation.createRotationY(0);
+//				meshTransform = meshTransform.append(Transformation.createRotationX(-15));
+//				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(0, 0, 5));
+//				ObjectFileReader reader = new ObjectFileReader();
+//				TriangleMesh mesh;
+//				mesh = reader.readFile("objects//cone.obj");
+//				mesh.transformation = meshTransform;
+//				mesh.material = phong;
+//				shapes.add(mesh);				
+	
+				//======== apple ==========//
+				Transformation meshTransform = Transformation.createRotationY(0);
+				meshTransform = meshTransform.append(Transformation.createRotationX(0));
+				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(0, 0, 0.5));
 				ObjectFileReader reader = new ObjectFileReader();
 				TriangleMesh mesh;
-				mesh = reader.readFile("suzanne.obj");
+				mesh = reader.readFile("objects//apple//apple.obj");
 				mesh.transformation = meshTransform;
 				mesh.material = phong;
-				shapes.add(mesh);
+				shapes.add(mesh);			
+				
+//				//======== TORUS ==========//
+//				Transformation meshTransform = Transformation.createRotationY(0);
+//				meshTransform = meshTransform.append(Transformation.createRotationX(40));
+//				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(0, 0, 5));
+//				ObjectFileReader reader = new ObjectFileReader();
+//				TriangleMesh mesh;
+//				mesh = reader.readFile("objects//torus.obj");
+//				mesh.transformation = meshTransform;
+//				mesh.material = phong;
+//				shapes.add(mesh);
 			
+//				//======== Table ==========//
+//				Transformation meshTransform = Transformation.createRotationY(0);
+//				meshTransform = meshTransform.append(Transformation.createRotationX(0));
+//				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(0, 0, 5));
+//				ObjectFileReader reader = new ObjectFileReader();
+//				TriangleMesh mesh;
+//				mesh = reader.readFile("objects//table.obj");
+//				mesh.transformation = meshTransform;
+//				mesh.material = phong;
+//				shapes.add(mesh);
 			
 	}
 
