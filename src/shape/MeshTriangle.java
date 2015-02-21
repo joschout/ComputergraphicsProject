@@ -1,12 +1,14 @@
 package shape;
 
+import material.Material;
 import math.Matrix;
 import math.Point;
 import math.Ray;
 import math.Vector;
+import util.RGBColor;
 import util.ShadeRec;
 
-public class MeshTriangle {
+public class MeshTriangle implements Shape{
 	
 	TriangleMesh mesh;
 	
@@ -85,14 +87,56 @@ public class MeshTriangle {
 		if(t < TriangleMesh.kEpsilon){
 			return false;
 		}
+//		//=== flat triangle mesh ===//
+//		Vector normal = (v1.subtract(v0)).cross(v2.subtract(v0));
+//		normal = normal.normalize();
 		
-		Vector normal = (v1.subtract(v0)).cross(v2.subtract(v0));
-		normal = normal.normalize();
+		//=== Phong interpolatie ===//
+		Vector normal = interPolateNormal(beta, gamma);		
+		
 		sr.t = t;
 		Matrix transposeOfInverse = mesh.transformation.getInverseTransformationMatrix().transpose();
 		Vector transformedNormal = transposeOfInverse.transform(normal);
+	
 		sr.normal = transformedNormal;
 		sr.localHitPoint = transformed.origin.add(transformed.direction.scale(t)) ;
 		return true;
+	}
+	
+	/**
+	 * Phong interpolatie
+	 * @param beta
+	 * @param gamma
+	 * @return
+	 */
+	private Vector interPolateNormal(double beta, double gamma){
+		Vector normal = mesh.normals.get(normals[0]).scale( 1- beta -gamma)
+				.add(mesh.normals.get(normals[1]).scale(beta))
+				.add(mesh.normals.get(normals[2]).scale(gamma));
+		return normal.normalize();
+	}
+
+
+
+	@Override
+	public boolean intersect(Ray ray) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+
+	@Override
+	public Material getMaterial() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public RGBColor getColor() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -6,19 +6,13 @@ import gui.RenderFrame;
 
 import java.io.File;
 import java.io.IOException;
-
-
-
-
 import javax.imageio.ImageIO;
 
 import math.Ray;
 import sampling.Sample;
-import shape.Shape;
 import shape.World;
 import util.RGBColor;
-import util.ShadeRec;
-;
+
 
 /**
  * Entry point of your renderer.
