@@ -11,7 +11,7 @@ import math.Vector;
 
 public class Cylinder implements Shape {
 
-	public Transformation transformation;
+	private Transformation transformation;
 	public final double radius;
 	public final double ySmall;
 	public final double yLarge;
@@ -51,7 +51,7 @@ public class Cylinder implements Shape {
 		if (radius < 0)
 			throw new IllegalArgumentException(
 					"the given radius cannot be smaller than zero!");
-		this.transformation = transformation;
+		setTransformation(transformation);
 		this.radius = radius;
 		if(y0 == y1)
 			throw new IllegalArgumentException("the given endpoints of the y-interval cannot be equal");
@@ -64,47 +64,47 @@ public class Cylinder implements Shape {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see shape.Shape#intersect(geometry3d.Ray3D)
-	 */
-	@Override
-	public boolean intersect(Ray ray) {
-		//inverse transform the ray
-		Ray transformed = transformation.transformInverse(ray);
-
-		//zie handboek pagina 373
-
-		double a = Math.pow(transformed.direction.get(0),2) + Math.pow(transformed.direction.get(2),2);
-		double b = 2.0 * (transformed.origin.get(0)*transformed.direction.get(0) 
-				+ transformed.origin.get(2)*transformed.direction.get(2));
-		double c = Math.pow(transformed.origin.get(0),2) + Math.pow(transformed.origin.get(2),2) - Math.pow(radius, 2);
-
-		double d = b * b - 4.0 * a * c;
-
-		if (d < 0)
-			return false;
-		double dr = Math.sqrt(d);
-		double q = b < 0 ? -0.5 * (b - dr) : -0.5 * (b + dr);
-
-		double t0 = q / a;
-		double t1 = c / q;
-
-		//check of voor deze t's y wel in het juiste interval zit
-
-		Point p0 = transformed.origin.add(transformed.direction.scale(t0));
-		Point p1 = transformed.origin.add(transformed.direction.scale(t1));
-
-		if (p0.get(1) >= ySmall && p0.get(1)<= yLarge &&  t0 >= kEpsilon){
-			return true;
-		}
-
-		if (p1.get(1) >= ySmall && p1.get(1)<= yLarge &&  t1 >= kEpsilon){
-			return true;
-		}
-		return false;
-	}
+//	/*
+//	 * (non-Javadoc)
+//	 * 
+//	 * @see shape.Shape#intersect(geometry3d.Ray3D)
+//	 */
+//
+//	public boolean intersect(Ray ray) {
+//		//inverse transform the ray
+//		Ray transformed = transformation.transformInverse(ray);
+//
+//		//zie handboek pagina 373
+//
+//		double a = Math.pow(transformed.direction.get(0),2) + Math.pow(transformed.direction.get(2),2);
+//		double b = 2.0 * (transformed.origin.get(0)*transformed.direction.get(0) 
+//				+ transformed.origin.get(2)*transformed.direction.get(2));
+//		double c = Math.pow(transformed.origin.get(0),2) + Math.pow(transformed.origin.get(2),2) - Math.pow(radius, 2);
+//
+//		double d = b * b - 4.0 * a * c;
+//
+//		if (d < 0)
+//			return false;
+//		double dr = Math.sqrt(d);
+//		double q = b < 0 ? -0.5 * (b - dr) : -0.5 * (b + dr);
+//
+//		double t0 = q / a;
+//		double t1 = c / q;
+//
+//		//check of voor deze t's y wel in het juiste interval zit
+//
+//		Point p0 = transformed.origin.add(transformed.direction.scale(t0));
+//		Point p1 = transformed.origin.add(transformed.direction.scale(t1));
+//
+//		if (p0.get(1) >= ySmall && p0.get(1)<= yLarge &&  t0 >= kEpsilon){
+//			return true;
+//		}
+//
+//		if (p1.get(1) >= ySmall && p1.get(1)<= yLarge &&  t1 >= kEpsilon){
+//			return true;
+//		}
+//		return false;
+//	}
 
 	@Override
 	public boolean intersect(Ray ray, ShadeRec sr) {
@@ -186,6 +186,18 @@ public class Cylinder implements Shape {
 	@Override
 	public RGBColor getColor() {
 		return this.color;
+	}
+
+	@Override
+	public BoundingBox getBoundingBox() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setTransformation(Transformation transformation) {
+		this.transformation = transformation;
+		
 	}
 
 

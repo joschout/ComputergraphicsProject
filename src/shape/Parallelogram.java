@@ -14,7 +14,7 @@ import util.ShadeRec;
  */
 public class Parallelogram implements Shape {
 
-	public Transformation transformation;
+	private Transformation transformation;
 	public static final double kEpsilon = 0;
 	public RGBColor color;
 	public Material material;
@@ -74,7 +74,7 @@ public class Parallelogram implements Shape {
 	public Parallelogram(Transformation transformation, Point a, Point b, Point c) {
 		if (transformation == null)
 			throw new NullPointerException("the given origin is null!");
-		this.transformation = transformation;
+		setTransformation(transformation);
 		
 		if(a == null)
 			throw new NullPointerException("the given point a is null");
@@ -92,11 +92,11 @@ public class Parallelogram implements Shape {
 		normal = normal.normalize();
 	}
 	
-	@Override
-	public boolean intersect(Ray ray) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+//	@Override
+//	public boolean intersect(Ray ray) {
+//		// TODO Auto-generated method stub
+//		return false;
+//	}
 
 	@Override
 	public boolean intersect(Ray ray, ShadeRec sr) {
@@ -213,6 +213,20 @@ public class Parallelogram implements Shape {
 	@Override
 	public RGBColor getColor() {
 		return this.color;
+	}
+
+
+	@Override
+	public BoundingBox getBoundingBox() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void setTransformation(Transformation transformation) {
+		this.transformation = transformation;
+		
 	}
 
 

@@ -10,7 +10,7 @@ import math.Transformation;
 import math.Vector;
 
 public class Plane implements Shape {
-	public Transformation transformation;
+	private Transformation transformation;
 	public Point point;
 	public Vector normal;
 	public static final double kEpsilon = 0;
@@ -33,7 +33,7 @@ public class Plane implements Shape {
 	public Plane(Transformation transformation, Point point, Vector normal) {
 		if (transformation == null)
 			throw new NullPointerException("the given origin is null!");
-		this.transformation = transformation;
+		setTransformation(transformation);
 		if(point == null)
 			throw new NullPointerException("the given point is null");
 		this.point = point;
@@ -43,25 +43,25 @@ public class Plane implements Shape {
 	}
 	
 	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see shape.Shape#intersect(geometry3d.Ray3D)
-	 */
-	@Override
-	public boolean intersect(Ray ray) {
-		
-		Ray transformed = transformation.transformInverse(ray);
-		
-		//zie handboek pagina 54-56
-		Vector aMinO = point.subtract(transformed.origin);
-		double numerator = aMinO.dot(normal);
-		double denominator = transformed.direction.dot(normal);
-		
-		double t = numerator / denominator;
-		
-		return t > kEpsilon;
-	}
+//	/*
+//	 * (non-Javadoc)
+//	 * 
+//	 * @see shape.Shape#intersect(geometry3d.Ray3D)
+//	 */
+//	@Override
+//	public boolean intersect(Ray ray) {
+//		
+//		Ray transformed = transformation.transformInverse(ray);
+//		
+//		//zie handboek pagina 54-56
+//		Vector aMinO = point.subtract(transformed.origin);
+//		double numerator = aMinO.dot(normal);
+//		double denominator = transformed.direction.dot(normal);
+//		
+//		double t = numerator / denominator;
+//		
+//		return t > kEpsilon;
+//	}
 	
 	public boolean intersect(Ray ray, ShadeRec sr) {
 		
@@ -98,6 +98,20 @@ public class Plane implements Shape {
 	@Override
 	public RGBColor getColor() {
 		return this.color;
+	}
+
+
+	@Override
+	public BoundingBox getBoundingBox() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void setTransformation(Transformation transformation) {
+		this.transformation = transformation;
+		
 	}
 
 

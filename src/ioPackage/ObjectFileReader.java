@@ -56,6 +56,7 @@ public class ObjectFileReader {
 		        e.printStackTrace();
 		    }
 		}
+		mesh.recalculateBoundingBoxFromScratch();
 		return mesh;
 		
 	}
@@ -93,6 +94,8 @@ public class ObjectFileReader {
 	private void tokenParser(String[] tokens) throws UnsupportedEncodingException{
 		String lineType = tokens[0];
 		switch (lineType) {
+		case "#":
+			break;
 		case "v":
 			parseVertex(tokens);
 			break;

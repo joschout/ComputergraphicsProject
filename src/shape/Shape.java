@@ -4,6 +4,7 @@ import util.RGBColor;
 import util.ShadeRec;
 import material.Material;
 import math.Ray;
+import math.Transformation;
 
 /**
  * Interface which should be implemented by all {@link Shape}s.
@@ -30,4 +31,6 @@ public interface Shape {
 	public RGBColor getColor();
 
 	public BoundingBox getBoundingBox();
+	
+	public void setTransformation(Transformation transformation);
 }

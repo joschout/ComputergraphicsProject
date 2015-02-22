@@ -117,7 +117,7 @@ public class Grid extends CompoundObject {
 		}
 		
 		counts.clear();
-		shapes.clear();
+		shapes = new ArrayList<Shape>();
 		
 	}
 	
@@ -358,7 +358,7 @@ public class Grid extends CompoundObject {
 			}	
 		}
 
-		return new Point(p0X - kEpsilon, p0Y -kEpsilon, p0Z -kEpsilon);
+		return new Point(p0X - kEpsilon, p0Y - kEpsilon, p0Z - kEpsilon);
 	}
 
 	private Point computeMaxCoords(){
@@ -376,7 +376,7 @@ public class Grid extends CompoundObject {
 			if(temp.p1.y > p1Y){
 				p1Y = temp.p1.y;
 			}
-			if(temp.p0.z > p1Z){
+			if(temp.p1.z > p1Z){
 				p1Z = temp.p1.z;
 			}	
 		}
