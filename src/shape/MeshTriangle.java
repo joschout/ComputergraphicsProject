@@ -4,6 +4,7 @@ import material.Material;
 import math.Matrix;
 import math.Point;
 import math.Ray;
+import math.Transformation;
 import math.Vector;
 import util.RGBColor;
 import util.ShadeRec;
@@ -30,11 +31,11 @@ public class MeshTriangle implements Shape{
 
 
 	public boolean intersect(Ray ray, ShadeRec sr) {
-		Ray transformed = mesh.transformation.transformInverse(ray);
+		Ray transformed = mesh.getTransformation().transformInverse(ray);
 		
 		Point v0 = mesh.vertices.get(vertices[0]);
 		Point v1 = mesh.vertices.get(vertices[1]);
-		Point v2 =mesh.vertices.get(vertices[2]);
+		Point v2 = mesh.vertices.get(vertices[2]);
 		
 		Vector v0Minv1 = v0.subtract(v1);
 		Vector v0Minv2 = v0.subtract(v2);
@@ -95,7 +96,7 @@ public class MeshTriangle implements Shape{
 		Vector normal = interPolateNormal(beta, gamma);		
 		
 		sr.t = t;
-		Matrix transposeOfInverse = mesh.transformation.getInverseTransformationMatrix().transpose();
+		Matrix transposeOfInverse = mesh.getTransformation().getInverseTransformationMatrix().transpose();
 		Vector transformedNormal = transposeOfInverse.transform(normal);
 	
 		sr.normal = transformedNormal;
@@ -118,11 +119,11 @@ public class MeshTriangle implements Shape{
 
 
 
-	@Override
-	public boolean intersect(Ray ray) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+//	@Override
+//	public boolean intersect(Ray ray) {
+//		// TODO Auto-generated method stub
+//		return false;
+//	}
 
 
 
@@ -138,5 +139,34 @@ public class MeshTriangle implements Shape{
 	public RGBColor getColor() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+
+	@Override
+	public BoundingBox getBoundingBox() {
+		double delta = 0.0001;
+		
+		Point v0 = mesh.vertices.get(vertices[0]);
+		Point v1 = mesh.vertices.get(vertices[1]);
+		Point v2 = mesh.vertices.get(vertices[2]);
+		
+		double p0X = Math.min(Math.min(v0.x, v1.x), v2.x) - delta;
+		double p0Y = Math.min(Math.min(v0.y, v1.y), v2.y) - delta;
+		double p0Z = Math.min(Math.min(v0.z, v1.z), v2.z) - delta;
+		
+		double p1X = Math.max(Math.max(v0.x, v1.x), v2.x) + delta;
+		double p1Y = Math.max(Math.max(v0.y, v1.y), v2.y) + delta;
+		double p1Z = Math.max(Math.max(v0.z, v1.z), v2.z) + delta;
+		
+		return new BoundingBox(p0X, p0Y, p0Z, p1X, p1Y, p1Z, mesh.getTransformation());
+	}
+
+
+
+	@Override
+	public void setTransformation(Transformation transformation) {
+	
+		
 	}
 }

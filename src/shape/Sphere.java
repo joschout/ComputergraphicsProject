@@ -16,7 +16,7 @@ import math.Vector;
  * @version 1.0
  */
 public class Sphere implements Shape {
-	public Transformation transformation;
+	private Transformation transformation;
 	public final double radius;
 	public static final double kEpsilon = 0;
 	public RGBColor color;
@@ -41,39 +41,39 @@ public class Sphere implements Shape {
 		if (radius < 0)
 			throw new IllegalArgumentException(
 					"the given radius cannot be smaller than zero!");
-		this.transformation = transformation;
+		setTransformation(transformation);
 		this.radius = radius;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see shape.Shape#intersect(geometry3d.Ray3D)
-	 */
-	@Override
-	public boolean intersect(Ray ray) {
-		//inverse transform the ray
-		Ray transformed = transformation.transformInverse(ray);
-
-		//zie handboek pagina 57
-		Vector o = transformed.origin.toVector3D();
-
-		double a = transformed.direction.dot(transformed.direction);
-		double b = 2.0 * (transformed.direction.dot(o));
-		double c = o.dot(o) - radius * radius;
-
-		double d = b * b - 4.0 * a * c;
-
-		if (d < 0)
-			return false;
-		double dr = Math.sqrt(d);
-		double q = b < 0 ? -0.5 * (b - dr) : -0.5 * (b + dr);
-
-		double t0 = q / a;
-		double t1 = c / q;
-
-		return t0 >= kEpsilon || t1 >= kEpsilon;
-	}
+//	/*
+//	 * (non-Javadoc)
+//	 * 
+//	 * @see shape.Shape#intersect(geometry3d.Ray3D)
+//	 */
+//	@Override
+//	public boolean intersect(Ray ray) {
+//		//inverse transform the ray
+//		Ray transformed = transformation.transformInverse(ray);
+//
+//		//zie handboek pagina 57
+//		Vector o = transformed.origin.toVector3D();
+//
+//		double a = transformed.direction.dot(transformed.direction);
+//		double b = 2.0 * (transformed.direction.dot(o));
+//		double c = o.dot(o) - radius * radius;
+//
+//		double d = b * b - 4.0 * a * c;
+//
+//		if (d < 0)
+//			return false;
+//		double dr = Math.sqrt(d);
+//		double q = b < 0 ? -0.5 * (b - dr) : -0.5 * (b + dr);
+//
+//		double t0 = q / a;
+//		double t1 = c / q;
+//
+//		return t0 >= kEpsilon || t1 >= kEpsilon;
+//	}
 
 	@Override
 	public boolean intersect(Ray ray, ShadeRec sr) {
@@ -130,5 +130,17 @@ public class Sphere implements Shape {
 	@Override
 	public RGBColor getColor() {
 		return this.color;
+	}
+
+	@Override
+	public BoundingBox getBoundingBox() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setTransformation(Transformation transformation) {
+		this.transformation = transformation;
+		
 	}
 }

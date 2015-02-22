@@ -11,7 +11,7 @@ import math.Vector;
 
 public class Disk implements Shape {
 	
-	public Transformation transformation;
+	private Transformation transformation;
 	public Point center;
 	public final double radius;
 	public Vector normal;
@@ -49,7 +49,7 @@ public class Disk implements Shape {
 		if (radius < 0)
 			throw new IllegalArgumentException(
 					"the given radius cannot be smaller than zero!");
-		this.transformation = transformation;
+		setTransformation(transformation);
 		this.radius = radius;
 		
 		if (center == null)
@@ -61,29 +61,29 @@ public class Disk implements Shape {
 		
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see shape.Shape#intersect(geometry3d.Ray3D)
-	 */
-	@Override
-	public boolean intersect(Ray ray) {
-		Ray transformed = transformation.transformInverse(ray);
-		
-		// hb pagina 368
-		double t = (center.subtract(transformed.origin)).dot(normal) / (transformed.direction.dot(normal));
-		
-		if(t < kEpsilon){
-			return false;
-		}
-		
-		Point p = transformed.origin.add(transformed.direction.scale(t));
-		if(center.subtract(p).lengthSquared() < Math.sqrt(radius)){
-			return true;
-		}
-		
-		return false;
-	}
+//	/*
+//	 * (non-Javadoc)
+//	 * 
+//	 * @see shape.Shape#intersect(geometry3d.Ray3D)
+//	 */
+//	@Override
+//	public boolean intersect(Ray ray) {
+//		Ray transformed = transformation.transformInverse(ray);
+//		
+//		// hb pagina 368
+//		double t = (center.subtract(transformed.origin)).dot(normal) / (transformed.direction.dot(normal));
+//		
+//		if(t < kEpsilon){
+//			return false;
+//		}
+//		
+//		Point p = transformed.origin.add(transformed.direction.scale(t));
+//		if(center.subtract(p).lengthSquared() < Math.sqrt(radius)){
+//			return true;
+//		}
+//		
+//		return false;
+//	}
 
 	@Override
 	public boolean intersect(Ray ray, ShadeRec sr) {
@@ -116,6 +116,17 @@ public class Disk implements Shape {
 	@Override
 	public RGBColor getColor() {
 		return this.color;
+	}
+
+	@Override
+	public BoundingBox getBoundingBox() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setTransformation(Transformation transformation) {
+		this.transformation = transformation;
 	}
 
 }

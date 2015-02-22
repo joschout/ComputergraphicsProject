@@ -83,6 +83,15 @@ public class World {
 				matte.setKd(0.65);
 				matte.setCd(RGBColor.convertToRGBColor(Color.BLUE));
 				
+//				// ==== BOX PRIMITIVE ==== ///
+//				Transformation boxTrans = Transformation.createRotationY(200);
+//				boxTrans = boxTrans.append(Transformation.createRotationX(40));
+//				boxTrans = boxTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 4));
+//				Box box = new  Box(boxTrans, new Point(), new Point(1,1,1));
+//				box.material = phong;
+//				shapes.add(box);
+				
+				
 //				Plane plane = new Plane(t2, new Point(), new Vector(0,1,0));
 //				plane.material = matte;
 //				shapes.add(plane);
@@ -114,35 +123,43 @@ public class World {
 //				Disk disk = new Disk(t8, new Point(), 60, new Vector(0, 0, -1));
 //				disk.material = matte;
 //				shapes.add(disk);
-//				
+				
+//				//==== TRIANGLE PRIMITIVE ====///
 //				Transformation triangleTrans = Transformation.createTranslation(0, 0, 14);
 //				Triangle tri = new Triangle(triangleTrans, new Point(5,0,0), new Point(-5,0,0), new Point(0,5,0));
-//				tri.material = matte;
+//				tri.material = phong;
 //				shapes.add(tri);
+//				Box box = Box.boundingBoxtoBox(tri.getBoundingBox());
+//				box.material = matte;
+//				shapes.add(box);
 				
+//				//==== PARALLELOGRAM PRIMITIVE ====//
 //				Transformation pllTrans = Transformation.createRotationX(0);
 //				pllTrans = pllTrans.appendToTheLeft(Transformation.createTranslation(0, 0, 14)); 
 //				Parallelogram pll = new Parallelogram(pllTrans, new Point(5,0,0), new Point(-5,0,0), new Point(0,5,0));
-//				pll.material = matte;
+//				pll.material = phong;
 //				shapes.add(pll);
-//			
+		
+//				//==== PLANE PRIMITIVE ====//
 //				Transformation planeTransform = Transformation.createTranslation(0, 0, 5);
 //				Transformation planeTransform2 = Transformation.createRotationX(50);
 //				Plane pl = new Plane(planeTransform, new Point(0, -5, 0), new Vector(0,1,0));
-//				pl.material = matte;
+//				pl.material = phong;
 //				shapes.add(pl);
 				
 //				//==== BUNNY ====//
 //				Transformation meshTransform = Transformation.createRotationY(200);
 //				meshTransform = meshTransform.append(Transformation.createRotationX(10));
-//				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -1, 5));
+//				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -1, 10));
 //				ObjectFileReader reader = new ObjectFileReader();
 //				TriangleMesh mesh;
 //				mesh = reader.readFile("objects//bunny.obj");
-//				mesh.transformation = meshTransform;
+//				mesh.setTransformation(meshTransform);
 //				mesh.material = phong;
 //				shapes.add(mesh);
-//				
+////				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
+////				box1.material = phong;
+////				shapes.add(box1);
 				
 //				//===== SUZANNE ===========//
 //				Transformation meshTransform = Transformation.createRotationY(200);
@@ -151,9 +168,14 @@ public class World {
 //				ObjectFileReader reader = new ObjectFileReader();
 //				TriangleMesh mesh;
 //				mesh = reader.readFile("objects//suzanne.obj");
-//				mesh.transformation = meshTransform;
+//				mesh.setTransformation(meshTransform);
 //				mesh.material = phong;
 //				shapes.add(mesh);
+////				Box box = Box.boundingBoxtoBox(mesh.getBoundingBox());
+////				box.material = phong;
+////				shapes.add(box);
+				
+				
 	
 //				//======== CYLINDER ==========//
 //				Transformation meshTransform = Transformation.createRotationY(0);
@@ -162,11 +184,14 @@ public class World {
 //				ObjectFileReader reader = new ObjectFileReader();
 //				TriangleMesh mesh;
 //				mesh = reader.readFile("objects//cylinder.obj");
-//				mesh.transformation = meshTransform;
+//				mesh.setTransformation(meshTransform);
 //				mesh.material = phong;
-//				shapes.add(mesh);				
+//				shapes.add(mesh);	
+////				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
+////				box1.material = phong;
+////				shapes.add(box1);
+			
 //				
-				
 //				//======== CONE ==========//
 //				Transformation meshTransform = Transformation.createRotationY(0);
 //				meshTransform = meshTransform.append(Transformation.createRotationX(-15));
@@ -174,20 +199,29 @@ public class World {
 //				ObjectFileReader reader = new ObjectFileReader();
 //				TriangleMesh mesh;
 //				mesh = reader.readFile("objects//cone.obj");
-//				mesh.transformation = meshTransform;
+//				mesh.setTransformation(meshTransform);
 //				mesh.material = phong;
-//				shapes.add(mesh);				
+//				//shapes.add(mesh);
+////				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
+////				box1.material = matte;
+////				shapes.add(box1);
+////				Box box2 = Box.boundingBoxtoBox(mesh.getBoundingBoxFromScratch());
+////				box2.material = matte;
+////				shapes.add(box2);
 	
-				//======== apple ==========//
-				Transformation meshTransform = Transformation.createRotationY(0);
-				meshTransform = meshTransform.append(Transformation.createRotationX(0));
-				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(0, 0, 0.5));
-				ObjectFileReader reader = new ObjectFileReader();
-				TriangleMesh mesh;
-				mesh = reader.readFile("objects//apple//apple.obj");
-				mesh.transformation = meshTransform;
-				mesh.material = phong;
-				shapes.add(mesh);			
+//				//======== apple ==========//
+//				Transformation meshTransform = Transformation.createRotationY(1);
+//				meshTransform = meshTransform.append(Transformation.createRotationX(0));
+//				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-0.2,-0.5, 1));
+//				ObjectFileReader reader = new ObjectFileReader();
+//				TriangleMesh mesh;
+//				mesh = reader.readFile("objects//apple//apple.obj");
+//				mesh.setTransformation(meshTransform);
+//				mesh.material = phong;
+//				shapes.add(mesh);
+////				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
+////				box1.material = phong;
+////				shapes.add(box1);
 				
 //				//======== TORUS ==========//
 //				Transformation meshTransform = Transformation.createRotationY(0);
@@ -196,21 +230,82 @@ public class World {
 //				ObjectFileReader reader = new ObjectFileReader();
 //				TriangleMesh mesh;
 //				mesh = reader.readFile("objects//torus.obj");
-//				mesh.transformation = meshTransform;
+//				mesh.setTransformation(meshTransform);
 //				mesh.material = phong;
 //				shapes.add(mesh);
+////				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
+////				box1.material = phong;
+////				shapes.add(box1);				
 			
-//				//======== Table ==========//
+				//======== Table ==========//
 //				Transformation meshTransform = Transformation.createRotationY(0);
 //				meshTransform = meshTransform.append(Transformation.createRotationX(0));
 //				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(0, 0, 5));
 //				ObjectFileReader reader = new ObjectFileReader();
 //				TriangleMesh mesh;
 //				mesh = reader.readFile("objects//table.obj");
-//				mesh.transformation = meshTransform;
+//				mesh.setTransformation(meshTransform);
 //				mesh.material = phong;
 //				shapes.add(mesh);
-			
+////				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
+////				box1.material = phong;
+////				shapes.add(box1);
+						
+//				//==== VENUS ====//
+//				Transformation meshTransform = Transformation.createRotationY(200);
+//				meshTransform = meshTransform.append(Transformation.createRotationX(10));
+//				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -1, 15));
+//				ObjectFileReader reader = new ObjectFileReader();
+//				TriangleMesh mesh;
+//				mesh = reader.readFile("objects//venus.obj");
+//				mesh.setTransformation(meshTransform);
+//				mesh.material = phong;
+//				shapes.add(mesh);
+////				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
+////				box1.material = phong;
+////				shapes.add(box1);
+				
+//				//==== TRICERATOPS ====//
+//				Transformation meshTransform = Transformation.createRotationY(200);
+//				meshTransform = meshTransform.append(Transformation.createRotationX(10));
+//				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -1, 20));
+//				ObjectFileReader reader = new ObjectFileReader();
+//				TriangleMesh mesh;
+//				mesh = reader.readFile("objects//triceratops.obj");
+//				mesh.setTransformation(meshTransform);
+//				mesh.material = phong;
+//				shapes.add(mesh);
+////				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
+////				box1.material = phong;
+////				shapes.add(box1);
+
+//				//==== TEAPOT ====//
+//				Transformation meshTransform = Transformation.createRotationY(200);
+//				meshTransform = meshTransform.append(Transformation.createRotationX(10));
+//				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -1, 10));
+//				ObjectFileReader reader = new ObjectFileReader();
+//				TriangleMesh mesh;
+//				mesh = reader.readFile("objects//teapot.obj");
+//				mesh.setTransformation(meshTransform);
+//				mesh.material = phong;
+//				shapes.add(mesh);
+////				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
+////				box1.material = phong;
+////				shapes.add(box1);
+				
+				//==== TREA BRANCHES ====//
+				Transformation meshTransform = Transformation.createRotationY(200);
+				meshTransform = meshTransform.append(Transformation.createRotationX(10));
+				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -3, 10));
+				ObjectFileReader reader = new ObjectFileReader();
+				TriangleMesh mesh;
+				mesh = reader.readFile("objects//treebranches.obj");
+				mesh.setTransformation(meshTransform);
+				mesh.material = phong;
+				shapes.add(mesh);
+//				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
+//				box1.material = phong;
+//				shapes.add(box1);
 	}
 
 	public ShadeRec hitObjects(Ray ray){

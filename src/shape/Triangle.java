@@ -10,7 +10,7 @@ import math.Transformation;
 import math.Vector;
 
 public class Triangle implements Shape {
-	public Transformation transformation;
+	private Transformation transformation;
 	public Point v0; //point a
 	public Point v1; // point b
 	public Point v2; // point c
@@ -44,7 +44,7 @@ public class Triangle implements Shape {
 	public Triangle(Transformation transformation, Point a, Point b, Point c) {
 		if (transformation == null)
 			throw new NullPointerException("the given origin is null!");
-		this.transformation = transformation;
+		setTransformation(transformation);
 		
 		if(a == null)
 			throw new NullPointerException("the given point a is null");
@@ -62,68 +62,68 @@ public class Triangle implements Shape {
 		normal = normal.normalize();
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see shape.Shape#intersect(geometry3d.Ray3D)
-	 */
-	@Override
-	public boolean intersect(Ray ray) {
-		Ray transformed = transformation.transformInverse(ray);
-		
-		Vector v0Minv1 = v0.subtract(v1);
-		Vector v0Minv2 = v0.subtract(v2);
-		Vector v0MinRayOrigin = v0.subtract(transformed.origin);
-		
-		double a = v0Minv1.get(0);
-		double b = v0Minv2.get(0);
-		double c = transformed.direction.get(0);
-		double d = v0MinRayOrigin.get(0);
-		
-		double e = v0Minv1.get(1);
-		double f = v0Minv2.get(1);
-		double g = transformed.direction.get(1);
-		double h = v0MinRayOrigin.get(1);
-		
-		double i = v0Minv1.get(2);
-		double j = v0Minv2.get(2);
-		double k = transformed.direction.get(2);
-		double l = v0MinRayOrigin.get(2);
-		
-		double m = f*k - g*j;
-		double n = h*k - g*l;
-		double p = f*l - h*j;
-		double q = g*i - e*k;
-		double s = e*j - f*i;
-		
-		double inverseDenominator = 1.0 / (a*m + b*q + c*s);
-		
-		double numeratorBeta =d*m - b*n -c*p;
-		double beta = numeratorBeta *  inverseDenominator;
-		
-		if(beta < 0.0){
-			return false;
-		}
-		
-		double r = e*l - h*i;
-		double numeratorGamma = a*n + d*q + c*r;
-		double gamma = numeratorGamma * inverseDenominator;
-		
-		if(gamma < 0.0){
-			return false;
-		}
-		
-		if(beta + gamma > 1){
-			return false;
-		}
-		
-		double numeratorT = a*p - b*r +d*s;
-		double t = numeratorT * inverseDenominator;
-		if(t < kEpsilon){
-			return false;
-		}
-		return true;
-	}
+//	/*
+//	 * (non-Javadoc)
+//	 * 
+//	 * @see shape.Shape#intersect(geometry3d.Ray3D)
+//	 */
+//	@Override
+//	public boolean intersect(Ray ray) {
+//		Ray transformed = transformation.transformInverse(ray);
+//		
+//		Vector v0Minv1 = v0.subtract(v1);
+//		Vector v0Minv2 = v0.subtract(v2);
+//		Vector v0MinRayOrigin = v0.subtract(transformed.origin);
+//		
+//		double a = v0Minv1.get(0);
+//		double b = v0Minv2.get(0);
+//		double c = transformed.direction.get(0);
+//		double d = v0MinRayOrigin.get(0);
+//		
+//		double e = v0Minv1.get(1);
+//		double f = v0Minv2.get(1);
+//		double g = transformed.direction.get(1);
+//		double h = v0MinRayOrigin.get(1);
+//		
+//		double i = v0Minv1.get(2);
+//		double j = v0Minv2.get(2);
+//		double k = transformed.direction.get(2);
+//		double l = v0MinRayOrigin.get(2);
+//		
+//		double m = f*k - g*j;
+//		double n = h*k - g*l;
+//		double p = f*l - h*j;
+//		double q = g*i - e*k;
+//		double s = e*j - f*i;
+//		
+//		double inverseDenominator = 1.0 / (a*m + b*q + c*s);
+//		
+//		double numeratorBeta =d*m - b*n -c*p;
+//		double beta = numeratorBeta *  inverseDenominator;
+//		
+//		if(beta < 0.0){
+//			return false;
+//		}
+//		
+//		double r = e*l - h*i;
+//		double numeratorGamma = a*n + d*q + c*r;
+//		double gamma = numeratorGamma * inverseDenominator;
+//		
+//		if(gamma < 0.0){
+//			return false;
+//		}
+//		
+//		if(beta + gamma > 1){
+//			return false;
+//		}
+//		
+//		double numeratorT = a*p - b*r +d*s;
+//		double t = numeratorT * inverseDenominator;
+//		if(t < kEpsilon){
+//			return false;
+//		}
+//		return true;
+//	}
 
 
 	@Override
@@ -201,5 +201,28 @@ public class Triangle implements Shape {
 	public RGBColor getColor() {
 		return this.color;
 	}
+
+
+	@Override
+	public BoundingBox getBoundingBox() {
+		double delta = 0.0001;
+	
+		double p0X = Math.min(Math.min(v0.x, v1.x), v2.x) - delta;
+		double p0Y = Math.min(Math.min(v0.y, v1.y), v2.y) - delta;
+		double p0Z = Math.min(Math.min(v0.z, v1.z), v2.z) - delta;
+		
+		double p1X = Math.max(Math.max(v0.x, v1.x), v2.x) + delta;
+		double p1Y = Math.max(Math.max(v0.y, v1.y), v2.y) + delta;
+		double p1Z = Math.max(Math.max(v0.z, v1.z), v2.z) + delta;
+		
+		return new BoundingBox(p0X, p0Y, p0Z, p1X, p1Y, p1Z, transformation);
+	}
+
+
+	@Override
+	public void setTransformation(Transformation transformation) {
+		this.transformation = transformation;	
+	}
+	
 
 }

@@ -48,7 +48,7 @@ public class TriangleMesh extends CompoundObject{
 	}
 	public void addTriangle(MeshTriangle triangle){
 		//triangles.add(triangle);
-		super.shapes.add(triangle);
+		super.addObject(triangle);
 	}
 
 //	public boolean intersect(Ray ray, ShadeRec sr) {
