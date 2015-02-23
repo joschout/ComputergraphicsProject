@@ -18,7 +18,7 @@ import math.Vector;
 public class Sphere implements Shape {
 	private Transformation transformation;
 	public final double radius;
-	public static final double kEpsilon = 0;
+	public static final double kEpsilon = 0.00001;
 	public RGBColor color;
 	public Material material;
 
@@ -142,5 +142,44 @@ public class Sphere implements Shape {
 	public void setTransformation(Transformation transformation) {
 		this.transformation = transformation;
 		
+	}
+
+	@Override
+	public boolean shadowHit(Ray ray, ShadeRec sr) {
+		//inverse transform the ray
+				Ray transformed = transformation.transformInverse(ray);
+
+				//zie handboek pagina 57
+				Vector o = transformed.origin.toVector3D();
+
+				double a = transformed.direction.dot(transformed.direction);
+				double b = 2.0 * (transformed.direction.dot(o));
+				double c = o.dot(o) - radius * radius;
+
+				double d = b * b - 4.0 * a * c;
+
+				if (d < 0)
+					return false;
+				double dr = Math.sqrt(d);
+				double q = b < 0 ? -0.5 * (b - dr) : -0.5 * (b + dr);
+
+				double t0 = q / a;
+				double t1 = c / q;
+
+				if( (t0 >= kEpsilon && t1 >= kEpsilon && t1 >= t0) || (t0 >= kEpsilon && t1 < kEpsilon)){
+					sr.t = t0;
+//					Point localHitPoint = transformed.origin.add(transformed.direction.scale(t0));
+//					sr.localHitPoint = localHitPoint;
+					return true;
+					
+				}
+				if( (t0 >= kEpsilon && t1 >= kEpsilon && t0 > t1) || (t1 >= kEpsilon && t0 < kEpsilon)){
+					sr.t = t1;
+//					Point localHitPoint = transformed.origin.add(transformed.direction.scale(t1));
+//					sr.localHitPoint = localHitPoint;
+					return true;
+				}
+				
+				return false;
 	}
 }

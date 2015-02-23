@@ -1,5 +1,6 @@
 package light;
 
+import math.Ray;
 import math.Vector;
 import util.RGBColor;
 import util.ShadeRec;
@@ -27,6 +28,15 @@ public class Light {
 	 */
 	public RGBColor getRadiance(ShadeRec sr){
 		return new RGBColor(0);
+	}
+
+	public boolean castShadows() {
+		return false;
+	}
+
+	public boolean inShadow(Ray shadowRay, ShadeRec sr) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

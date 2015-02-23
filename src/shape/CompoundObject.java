@@ -14,7 +14,7 @@ import util.ShadeRec;
 public class CompoundObject implements Shape {
 	
 	private Transformation transformation;
-	public static final double kEpsilon = 0;
+	public static final double kEpsilon = 1e-5;
 	public RGBColor color;
 	private List<Shape> shapes;
 	public Material material;
@@ -172,5 +172,44 @@ public class CompoundObject implements Shape {
 	
 	public void recalculateBoundingBoxFromScratch(){
 		this.boundingBox = getBoundingBoxFromScratch();
+	}
+
+
+	@Override
+	public boolean shadowHit(Ray ray, ShadeRec sr) {
+		if(boundingBox.intersect(ray, sr) == false){
+			//System.out.println("het is false geworden");
+			return false;
+		}
+		
+		double tmin = Double.MAX_VALUE;
+		//Vector normal = null;
+		Point localHitPoint = null;
+		//Shape hittedShape = null;
+
+		for(Shape shape: shapes){
+			if(shape.intersect(ray, sr)){
+				if(sr.t < tmin){
+					//hittedShape = shape;
+//					sr.hasHitAnObject = true;
+//					sr.ray = ray;
+//					sr.material = this.material;	
+//					sr.hitPoint = ray.origin.add(ray.direction.scale(sr.t));
+
+					//deze drie worden door de intersect functie van een shape aangepast
+					// en moeten we tijdelijk lokaal opslaan
+					tmin = sr.t;
+					//normal = sr.normal;
+					//localHitPoint = sr.localHitPoint;	
+				}
+			}
+		}
+		if(sr.hasHitAnObject){
+			sr.t = tmin;
+//			sr.normal = normal;
+//			sr.localHitPoint = localHitPoint;
+			return true;
+		}
+		return false;
 	}
 }

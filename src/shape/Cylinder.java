@@ -15,7 +15,7 @@ public class Cylinder implements Shape {
 	public final double radius;
 	public final double ySmall;
 	public final double yLarge;
-	public static final double kEpsilon = 0;
+	public static final double kEpsilon = 1e-5;
 	public RGBColor color;
 	public Material material;
 
@@ -198,6 +198,59 @@ public class Cylinder implements Shape {
 	public void setTransformation(Transformation transformation) {
 		this.transformation = transformation;
 		
+	}
+
+	@Override
+	public boolean shadowHit(Ray ray, ShadeRec sr) {
+		//inverse transform the ray
+				Ray transformed = transformation.transformInverse(ray);
+
+				//zie handboek pagina 373
+
+				double a = Math.pow(transformed.direction.get(0),2) + Math.pow(transformed.direction.get(2),2);
+				double b = 2.0 * (transformed.origin.get(0)*transformed.direction.get(0) 
+						+ transformed.origin.get(2)*transformed.direction.get(2));
+				double c = Math.pow(transformed.origin.get(0),2) + Math.pow(transformed.origin.get(2),2) - Math.pow(radius, 2);
+
+				double d = b * b - 4.0 * a * c;
+
+				if (d < 0){
+					return false;
+				}
+				double dr = Math.sqrt(d);
+				double q = b < 0 ? -0.5 * (b - dr) : -0.5 * (b + dr);
+
+				double t0 = q / a;
+				double t1 = c / q;
+
+				// zorg dat t0 de kleinste waarde heeft.
+				if(t0 > t1){
+					double t3 = t0;
+					t0 = t1;
+					t1 = t3;
+				}
+
+				if(t0 > kEpsilon ){
+					Point p0 = transformed.origin.add(transformed.direction.scale(t0));
+
+					if ( p0.y >=  ySmall && p0.y <= yLarge){
+						//if (p0.get(1) >= ySmall && p0.get(1)<= yLarge &&  t0 >= kEpsilon && t0 < t1){
+						sr.t = t0;
+//						sr.localHitPoint = p0;
+						return true;
+					}
+				}
+
+				if ( t1 > kEpsilon){
+					Point p1 = transformed.origin.add(transformed.direction.scale(t1));
+
+					if( p1.y >=  ySmall && p1.y <= yLarge){
+						sr.t = t1;						
+//						sr.localHitPoint = p1;
+						return true;
+					}
+				}
+				return false;
 	}
 
 

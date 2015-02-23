@@ -1,5 +1,6 @@
 package material;
 
+import math.Ray;
 import math.Vector;
 import brdf.GlossySpecularBRDF;
 import brdf.LambertianBRDF;
@@ -29,7 +30,15 @@ public class PhongMaterial extends Material {
 			double ndotwi = sr.normal.dot(wi);
 			
 			if(ndotwi > 0.0){
+				boolean inShadow = false;
+				if(sr.world.lights.get(j).castShadows()){
+					Ray shadowRay = new Ray(sr.hitPoint, wi);
+					inShadow = sr.world.lights.get(j).inShadow(shadowRay, sr);
+				}
+				
+				if(! inShadow){
 				 L = L.add((diffuseBRDF.f(sr, wo, wi).add(specularBRDF.f(sr, wo, wi))).multiply(sr.world.lights.get(j).getRadiance(sr).scale(ndotwi)));
+				}
 			}	
 		}
 		return L;

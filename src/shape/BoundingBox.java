@@ -11,7 +11,7 @@ import math.Vector;
 public class BoundingBox implements Shape{
 	public Point p0;
 	public Point p1;
-	public static final double kEpsilon = 0;
+	public static final double kEpsilon = 1e-5;
 	private Transformation transformation;
 	
 	
@@ -187,6 +187,12 @@ public class BoundingBox implements Shape{
 	
 	public Transformation getTransformation(){
 		return transformation;
+	}
+
+
+	@Override
+	public boolean shadowHit(Ray ray, ShadeRec sr) {
+		return false;
 	}
 	
 	

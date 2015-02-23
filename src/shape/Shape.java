@@ -33,4 +33,6 @@ public interface Shape {
 	public BoundingBox getBoundingBox();
 	
 	public void setTransformation(Transformation transformation);
+	
+	public boolean shadowHit(Ray ray, ShadeRec sr);
 }

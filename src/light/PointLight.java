@@ -1,11 +1,14 @@
 package light;
 
 import math.Point;
+import math.Ray;
 import math.Vector;
 import util.RGBColor;
 import util.ShadeRec;
 
 public class PointLight extends Light {
+	
+	private boolean castShadows = false;
 	
 	
 	//radiance scaling factor ls, where ls is between [0, infinity).
@@ -16,13 +19,15 @@ public class PointLight extends Light {
 	private Point location;
 	
 	public PointLight(){
-		super();
-		this.ls = 1.0;
-		this.color = new RGBColor(1);
-		this.location = new Point();
+		this(1.0, new RGBColor(1), new Point());
 	}
 	
-	
+	public PointLight(double ls, RGBColor rgbColor, Point location){
+		super();
+		this.ls = ls;
+		this.color = rgbColor;
+		this.location = location;
+	}
 	
 	/**
 	 * Gets the direction of the incoming light at a hit point.
@@ -49,6 +54,24 @@ public class PointLight extends Light {
 	
 	public void setLocation(Point location){
 		this.location = location;
+	}
+	
+	public boolean inShadow(Ray shadowRay, ShadeRec sr) {
+		double d = location.subtract(shadowRay.origin).length();
+		
+		for(int j = 0; j < sr.world.shapes.size(); j++){
+			if(sr.world.shapes.get(j).shadowHit(shadowRay, sr) && sr.t < d){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public void setCastShadows(boolean castShadows){
+		this.castShadows = castShadows;
+	}
+	public boolean castShadows() {
+		return castShadows;
 	}
 
 }

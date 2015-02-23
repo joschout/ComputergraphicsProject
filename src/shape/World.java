@@ -4,6 +4,7 @@ import ioPackage.ObjectFileReader;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.lang.ref.PhantomReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,8 +67,9 @@ public class World {
 				Transformation t7 = t1.append(t6);
 				Transformation t8 = t2.append(t6);
 				
-				PointLight pl1 = new PointLight();
-				pl1.setLocation(new Point(0,0,-1));
+				PointLight pl1 = new PointLight(1.0, new RGBColor(1), new  Point(0,0,2));
+				//pl1.setLocation(new Point(0,0,-1));
+				pl1.setCastShadows(true);
 				this.addLight(pl1);
 				
 				PhongMaterial phong = new PhongMaterial();
@@ -81,15 +83,9 @@ public class World {
 				MatteMaterial matte = new MatteMaterial();
 				matte.setKa(0.25);
 				matte.setKd(0.65);
-				matte.setCd(RGBColor.convertToRGBColor(Color.BLUE));
+				matte.setCd(RGBColor.convertToRGBColor(Color.CYAN));
 				
-//				// ==== BOX PRIMITIVE ==== ///
-//				Transformation boxTrans = Transformation.createRotationY(200);
-//				boxTrans = boxTrans.append(Transformation.createRotationX(40));
-//				boxTrans = boxTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 4));
-//				Box box = new  Box(boxTrans, new Point(), new Point(1,1,1));
-//				box.material = phong;
-//				shapes.add(box);
+
 				
 				
 //				Plane plane = new Plane(t2, new Point(), new Vector(0,1,0));
@@ -115,14 +111,50 @@ public class World {
 //				Sphere sp5 = new Sphere(t5, 3);
 //				sp5.material = phong;
 //				shapes.add(sp5);
-			
-//				Cylinder cy = new Cylinder(t7, 1, 1, -1);
+				
+//				//====CYLINDER PRIMITIVE ====//
+//				Transformation cylinderTrans = Transformation.createRotationY(200);
+//				cylinderTrans = cylinderTrans.append(Transformation.createRotationX(40));
+//				cylinderTrans = cylinderTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 4));			
+//				Cylinder cy = new Cylinder(cylinderTrans, 1, 1, -1);
 //				cy.material = phong;
 //				shapes.add(cy);
-				
-//				Disk disk = new Disk(t8, new Point(), 60, new Vector(0, 0, -1));
-//				disk.material = matte;
+
+//				//====DISK PRIMITIVE ====//
+//				Transformation diskTrans = Transformation.createRotationY(200);
+//				diskTrans = diskTrans.append(Transformation.createRotationX(40));
+//				diskTrans = diskTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 4));	
+//				Disk disk = new Disk(diskTrans, new Point(), 10, new Vector(0, 0, -1));
+//				disk.material = phong;
 //				shapes.add(disk);
+				
+//				// ==== BOX PRIMITIVE ==== ///
+//				Transformation boxTrans = Transformation.createRotationY(200);
+//				boxTrans = boxTrans.append(Transformation.createRotationX(40));
+//				boxTrans = boxTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 4));
+//				Box box = new  Box(boxTrans, new Point(), new Point(1,1,1));
+//				box.material = phong;
+//				shapes.add(box);
+				
+				
+				Plane plane = new Plane(Transformation.createIdentity(), new Point(0,0, 11), new Vector(0,0, -1));
+				PhongMaterial planeMaterial = new PhongMaterial();
+				planeMaterial.setKa(0.25);
+				planeMaterial.setKd(0.65);
+				planeMaterial.setCd(RGBColor.convertToRGBColor(Color.CYAN));
+				planeMaterial.setKs(0.2);
+				planeMaterial.setPhongExponent(10);
+				planeMaterial.setCs(RGBColor.convertToRGBColor(Color.WHITE));
+				plane.material = planeMaterial;
+				shapes.add(plane);
+//				
+//				//==== SPHERE PRIMITIVE ====//
+//				Transformation sphereTrans = Transformation.createRotationY(200);
+//				sphereTrans = sphereTrans.append(Transformation.createRotationX(40));
+//				sphereTrans = sphereTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 4));
+//				Sphere sp1 = new Sphere(sphereTrans, 1);
+//				sp1.material =  phong;
+//				shapes.add(sp1);
 				
 //				//==== TRIANGLE PRIMITIVE ====///
 //				Transformation triangleTrans = Transformation.createTranslation(0, 0, 14);
@@ -147,19 +179,19 @@ public class World {
 //				pl.material = phong;
 //				shapes.add(pl);
 				
-//				//==== BUNNY ====//
-//				Transformation meshTransform = Transformation.createRotationY(200);
-//				meshTransform = meshTransform.append(Transformation.createRotationX(10));
-//				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -1, 10));
-//				ObjectFileReader reader = new ObjectFileReader();
-//				TriangleMesh mesh;
-//				mesh = reader.readFile("objects//bunny.obj");
-//				mesh.setTransformation(meshTransform);
-//				mesh.material = phong;
-//				shapes.add(mesh);
-////				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
-////				box1.material = phong;
-////				shapes.add(box1);
+				//==== BUNNY ====//
+				Transformation meshTransform = Transformation.createRotationY(200);
+				meshTransform = meshTransform.append(Transformation.createRotationX(10));
+				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -1, 10));
+				ObjectFileReader reader = new ObjectFileReader();
+				TriangleMesh mesh;
+				mesh = reader.readFile("objects//bunny.obj");
+				mesh.setTransformation(meshTransform);
+				mesh.material = phong;
+				shapes.add(mesh);
+//				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
+//				box1.material = phong;
+//				shapes.add(box1);
 				
 //				//===== SUZANNE ===========//
 //				Transformation meshTransform = Transformation.createRotationY(200);
@@ -293,19 +325,33 @@ public class World {
 ////				box1.material = phong;
 ////				shapes.add(box1);
 				
-				//==== TREA BRANCHES ====//
-				Transformation meshTransform = Transformation.createRotationY(200);
-				meshTransform = meshTransform.append(Transformation.createRotationX(10));
-				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -3, 10));
-				ObjectFileReader reader = new ObjectFileReader();
-				TriangleMesh mesh;
-				mesh = reader.readFile("objects//treebranches.obj");
-				mesh.setTransformation(meshTransform);
-				mesh.material = phong;
-				shapes.add(mesh);
-//				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
-//				box1.material = phong;
-//				shapes.add(box1);
+//				//==== TREE BRANCHES ====//
+//				Transformation meshTransform = Transformation.createRotationY(200);
+//				meshTransform = meshTransform.append(Transformation.createRotationX(10));
+//				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -3, 10));
+//				ObjectFileReader reader = new ObjectFileReader();
+//				TriangleMesh mesh;
+//				mesh = reader.readFile("objects//treebranches.obj");
+//				mesh.setTransformation(meshTransform);
+//				mesh.material = phong;
+//				shapes.add(mesh);
+////				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
+////				box1.material = phong;
+////				shapes.add(box1);
+				
+//				//==== TREE LEAVES ====//
+//				Transformation meshTransform = Transformation.createRotationY(200);
+//				meshTransform = meshTransform.append(Transformation.createRotationX(10));
+//				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -3, 10));
+//				ObjectFileReader reader = new ObjectFileReader();
+//				TriangleMesh mesh;
+//				mesh = reader.readFile("objects//treeleaves.obj");
+//				mesh.setTransformation(meshTransform);
+//				mesh.material = phong;
+//				//shapes.add(mesh);
+////				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
+////				box1.material = phong;
+////				shapes.add(box1);
 	}
 
 	public ShadeRec hitObjects(Ray ray){

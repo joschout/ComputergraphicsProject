@@ -13,7 +13,7 @@ public class Plane implements Shape {
 	private Transformation transformation;
 	public Point point;
 	public Vector normal;
-	public static final double kEpsilon = 0;
+	public static final double kEpsilon = 1e-5;
 	public Material material;
 	public RGBColor color;
 	
@@ -82,6 +82,26 @@ public class Plane implements Shape {
 			sr.normal = transformedNormal;
 			sr.normal = normal;
 			sr.localHitPoint = transformed.origin.add(transformed.direction.scale(t));
+			
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean shadowHit(Ray ray, ShadeRec sr) {
+
+		Ray transformed = transformation.transformInverse(ray);
+		
+		//zie handboek pagina 54-56
+		Vector aMinO = point.subtract(transformed.origin);
+		double numerator = aMinO.dot(normal);
+		double denominator = transformed.direction.dot(normal);
+		
+		double t = numerator / denominator;
+		
+		if(t > kEpsilon){
+			sr.t=t;
+			//sr.localHitPoint = transformed.origin.add(transformed.direction.scale(t));
 			
 			return true;
 		}

@@ -15,7 +15,7 @@ public class Disk implements Shape {
 	public Point center;
 	public final double radius;
 	public Vector normal;
-	public static final double kEpsilon = 0;
+	public static final double kEpsilon = 1e-5;
 	public RGBColor color;
 	public Material material;
 	
@@ -87,7 +87,7 @@ public class Disk implements Shape {
 
 	@Override
 	public boolean intersect(Ray ray, ShadeRec sr) {
-	Ray transformed = transformation.transformInverse(ray);
+		Ray transformed = transformation.transformInverse(ray);
 		
 		// hb pagina 368
 		double t = (center.subtract(transformed.origin)).dot(normal) / (transformed.direction.dot(normal));
@@ -101,6 +101,9 @@ public class Disk implements Shape {
 			sr.t = t;
 			Matrix transposeOfInverse = this.transformation.getInverseTransformationMatrix().transpose();
 			Vector transformedNormal = transposeOfInverse.transform(normal);
+			if(ray.direction.scale(-1).dot(transformedNormal) < 0.0){
+				transformedNormal = transformedNormal.scale(-1);
+			}
 			sr.normal = transformedNormal;
 			sr.localHitPoint = p;
 			return true;
@@ -127,6 +130,26 @@ public class Disk implements Shape {
 	@Override
 	public void setTransformation(Transformation transformation) {
 		this.transformation = transformation;
+	}
+
+	@Override
+	public boolean shadowHit(Ray ray, ShadeRec sr) {
+		Ray transformed = transformation.transformInverse(ray);
+		
+		// hb pagina 368
+		double t = (center.subtract(transformed.origin)).dot(normal) / (transformed.direction.dot(normal));
+		
+		if(t < kEpsilon){
+			return false;
+		}
+		
+		Point p = transformed.origin.add(transformed.direction.scale(t));
+		if(center.subtract(p).lengthSquared() < Math.sqrt(radius)){
+			sr.t = t;
+//			sr.localHitPoint = p;
+			return true;
+		}
+		return false;
 	}
 
 }
