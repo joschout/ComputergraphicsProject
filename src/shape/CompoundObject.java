@@ -176,25 +176,24 @@ public class CompoundObject implements Shape {
 
 
 	@Override
-	public boolean shadowHit(Ray ray, ShadeRec sr) {
-		if(boundingBox.intersect(ray, sr) == false){
+	public boolean shadowHit(Ray shadowRay, ShadeRec sr) {
+		if(boundingBox.shadowHit(shadowRay, sr) == false){
 			//System.out.println("het is false geworden");
 			return false;
 		}
-		
+		boolean shadowhit = false;
 		double tmin = Double.MAX_VALUE;
 		//Vector normal = null;
-		Point localHitPoint = null;
-		//Shape hittedShape = null;
+		//Point localHitPoint = null;
 
 		for(Shape shape: shapes){
-			if(shape.intersect(ray, sr)){
+			if(shape.shadowHit(shadowRay, sr)){
 				if(sr.t < tmin){
-					//hittedShape = shape;
-//					sr.hasHitAnObject = true;
-//					sr.ray = ray;
-//					sr.material = this.material;	
-//					sr.hitPoint = ray.origin.add(ray.direction.scale(sr.t));
+					shadowhit = true;
+					//sr.hasHitAnObject = true;
+					//sr.ray = ray;
+					//sr.material = this.material;	
+					//sr.hitPoint = shadowRay.origin.add(shadowRay.direction.scale(sr.t));
 
 					//deze drie worden door de intersect functie van een shape aangepast
 					// en moeten we tijdelijk lokaal opslaan
@@ -204,10 +203,12 @@ public class CompoundObject implements Shape {
 				}
 			}
 		}
-		if(sr.hasHitAnObject){
+		//if(sr.hasHitAnObject){
+		if(shadowhit){
+
 			sr.t = tmin;
-//			sr.normal = normal;
-//			sr.localHitPoint = localHitPoint;
+			//sr.normal = normal;
+			//sr.localHitPoint = localHitPoint;
 			return true;
 		}
 		return false;

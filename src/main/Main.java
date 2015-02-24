@@ -67,7 +67,7 @@ public class Main {
 
 		// initialize the graphical user interface
 		ImagePanel panel = new ImagePanel(width, height);
-		RenderFrame frame = new RenderFrame("Sphere", panel);
+		RenderFrame frame = new RenderFrame("Renderer", panel);
 
 		// initialize the progress reporter
 		ProgressReporter reporter = new ProgressReporter("Rendering", 40, width

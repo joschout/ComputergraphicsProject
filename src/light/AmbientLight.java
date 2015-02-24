@@ -1,6 +1,7 @@
 package light;
 
 
+import math.Ray;
 import math.Vector;
 import util.RGBColor;
 import util.ShadeRec;
@@ -37,5 +38,15 @@ public class AmbientLight extends Light {
 	 */
 	public RGBColor getRadiance(ShadeRec sr){
 		return color.scale(ls);
+	}
+
+	@Override
+	public boolean castShadows() {
+		return false;
+	}
+
+	@Override
+	public boolean inShadow(Ray shadowRay, ShadeRec sr) {
+		return false;
 	}
 }

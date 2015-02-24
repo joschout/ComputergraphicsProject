@@ -192,7 +192,70 @@ public class BoundingBox implements Shape{
 
 	@Override
 	public boolean shadowHit(Ray ray, ShadeRec sr) {
-		return false;
+		Ray transformed = transformation.transformInverse(ray);
+		Point rayOrigin = transformed.origin;
+		Vector rayDirection = transformed.direction;
+		
+//		Point rayOrigin = ray.origin;
+//		Vector rayDirection = ray.direction;
+		
+		
+		double tx_min, ty_min, tz_min;
+		double tx_max, ty_max, tz_max; 
+
+		double a = 1.0 / rayDirection.x;
+		if (a >= 0) {
+			tx_min = (p0.x - rayOrigin.x) * a;
+			tx_max = (p1.x - rayOrigin.x) * a;
+		}
+		else {
+			tx_min = (p1.x - rayOrigin.x) * a;
+			tx_max = (p0.x - rayOrigin.x) * a;
+		}
+		
+		double b = 1.0 / rayDirection.y;
+		if (b >= 0) {
+			ty_min = (p0.y - rayOrigin.y) * b;
+			ty_max = (p1.y - rayOrigin.y) * b;
+		}
+		else {
+			ty_min = (p1.y - rayOrigin.y) * b;
+			ty_max = (p0.y - rayOrigin.y) * b;
+		}
+		
+		double c = 1.0 / rayDirection.z;
+		if (c >= 0) {
+			tz_min = (p0.z - rayOrigin.z) * c;
+			tz_max = (p1.z - rayOrigin.z) * c;
+		}
+		else {
+			tz_min = (p1.z - rayOrigin.z) * c;
+			tz_max = (p0.z - rayOrigin.z) * c;
+		}
+		
+		double t0, t1;
+	
+		// find largest entering t value
+		
+		if (tx_min > ty_min){
+			t0 = tx_min;
+		}else{
+			t0 = ty_min;	
+		}
+		if (tz_min > t0){
+			t0 = tz_min;	
+		}
+		// find smallest exiting t value
+			
+		if (tx_max < ty_max){
+			t1 = tx_max;
+		}else{
+			t1 = ty_max;
+		}	
+		if (tz_max < t1){
+			t1 = tz_max;
+		}	
+		return (t0 < t1 && t1 > kEpsilon);
 	}
 	
 	

@@ -5,7 +5,7 @@ import math.Vector;
 import util.RGBColor;
 import util.ShadeRec;
 
-public class Light {
+public abstract class Light {
 	
 	protected Boolean shadows;
 	
@@ -14,9 +14,8 @@ public class Light {
 	 * @param sr
 	 * @return
 	 */
-	public Vector getDirectionOfIncomingLight(ShadeRec sr){
-		return new Vector();
-	}
+	public abstract Vector getDirectionOfIncomingLight(ShadeRec sr);
+	
 	
 	/**
 	 * Returns the incident radiance at a hit point.
@@ -26,17 +25,10 @@ public class Light {
 	 * @param sr
 	 * @return
 	 */
-	public RGBColor getRadiance(ShadeRec sr){
-		return new RGBColor(0);
-	}
+	public abstract RGBColor getRadiance(ShadeRec sr);
 
-	public boolean castShadows() {
-		return false;
-	}
+	public abstract boolean castShadows();
 
-	public boolean inShadow(Ray shadowRay, ShadeRec sr) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	public abstract boolean inShadow(Ray shadowRay, ShadeRec sr);
 
 }

@@ -1,5 +1,6 @@
 package light;
 
+import math.Ray;
 import math.Vector;
 import util.RGBColor;
 import util.ShadeRec;
@@ -29,6 +30,18 @@ public class DirectionalLight extends Light {
 	 */
 	public RGBColor getRadiance(ShadeRec sr){
 		return color.scale(ls);
+	}
+
+	@Override
+	public boolean castShadows() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean inShadow(Ray shadowRay, ShadeRec sr) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 

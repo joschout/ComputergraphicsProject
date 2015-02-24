@@ -56,9 +56,21 @@ public class PointLight extends Light {
 		this.location = location;
 	}
 	
+	/**
+	 * test for this light source if there are objects between the hit point and the
+	 * location of the light source
+	 */
 	public boolean inShadow(Ray shadowRay, ShadeRec sr) {
+		// d = the length between the hit point and the light source
 		double d = location.subtract(shadowRay.origin).length();
 		
+		/*
+		 * check for all objects in the scene:
+		 * if the shadow ray in the direction to the light source starting from the hitpoint
+		 * 		hits another object
+		 * and if the distance to that object is a positive number t smaller than the distance d
+		 * then the hit point lies in the shadow of that object under this light source.
+		 */
 		for(int j = 0; j < sr.world.shapes.size(); j++){
 			if(sr.world.shapes.get(j).shadowHit(shadowRay, sr) && sr.t < d){
 				return true;

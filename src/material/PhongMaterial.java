@@ -37,7 +37,7 @@ public class PhongMaterial extends Material {
 				}
 				
 				if(! inShadow){
-				 L = L.add((diffuseBRDF.f(sr, wo, wi).add(specularBRDF.f(sr, wo, wi))).multiply(sr.world.lights.get(j).getRadiance(sr).scale(ndotwi)));
+					L = L.add((diffuseBRDF.f(sr, wo, wi).add(specularBRDF.f(sr, wo, wi))).multiply(sr.world.lights.get(j).getRadiance(sr).scale(ndotwi)));
 				}
 			}	
 		}

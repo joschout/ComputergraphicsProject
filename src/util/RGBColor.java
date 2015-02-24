@@ -118,4 +118,9 @@ public class RGBColor {
 //		return (i/(i+1));
 //	}
 //	
+	
+	
+	public String toString(){
+		return "R:" + Float.toString(R) + " , G:" + Float.toString(G) + " , B:" + Float.toString(B); 
+	}
 }
