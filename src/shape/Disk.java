@@ -86,6 +86,7 @@ public class Disk implements Shape {
 //	}
 
 
+
 	@Override
 	public boolean intersect(Ray ray, ShadeRec sr) {
 		Ray transformed = transformation.transformInverse(ray);
@@ -111,6 +112,7 @@ public class Disk implements Shape {
 		}
 		return false;
 	}
+
 
 
 	@Override

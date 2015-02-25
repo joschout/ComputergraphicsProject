@@ -4,7 +4,6 @@ import ioPackage.ObjectFileReader;
 
 import java.awt.Color;
 import java.io.IOException;
-import java.lang.ref.PhantomReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,6 +66,7 @@ public class World {
 //				Transformation t6 = Transformation.createRotationX(10);
 //				Transformation t7 = t1.append(t6);
 //				Transformation t8 = t2.append(t6);
+
 				
 				PointLight pl1 = new PointLight(3.0, new RGBColor(1), new  Point(-4,3,12));
 				//pl1.setLocation(new Point(0,0,-1));
@@ -99,6 +99,7 @@ public class World {
 				matte.setKd(0.65);
 				matte.setCd(RGBColor.convertToRGBColor(Color.CYAN));
 				
+
 //				SpecialMatteMaterial specialMatte = new SpecialMatteMaterial();
 //				specialMatte.setKa(0.25);
 //				specialMatte.setKd(0.65);
@@ -144,6 +145,7 @@ public class World {
 				shapes.add(mesh);
 				
 
+
 	}
 
 	public ShadeRec hitObjects(Ray ray){
@@ -183,6 +185,7 @@ public class World {
 
 	private  void initializeCamera(int width, int height) {
 		camera = new PerspectiveCamera(width, height,
+
 				new Point(0,5,0), new Vector(0, -1,3), new Vector(0, 1, 0),90);
 				//new Point(-), new Vector(0, 0, 1), new Vector(0, 1, 0),90);
 	}
