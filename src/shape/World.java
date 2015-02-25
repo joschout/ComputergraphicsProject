@@ -107,6 +107,7 @@ public class World {
 				Plane plane = new Plane(Transformation.createIdentity(), new Point(0,0,0), new Vector(0,1,0));
 				plane.material = matte;
 				shapes.add(plane);		
+
 				
 //				//==== BUNNY ====//
 //				Transformation meshTransform = Transformation.createRotationY(200);
@@ -122,6 +123,7 @@ public class World {
 ////				box1.material = phong;
 ////				shapes.add(box1);
 				
+
 //				// ==== BOX PRIMITIVE ==== ///
 //				Transformation boxTrans = Transformation.createRotationY(200);
 //				boxTrans = boxTrans.append(Transformation.createRotationX(0));

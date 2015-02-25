@@ -35,4 +35,5 @@ public interface Shape {
 	public void setTransformation(Transformation transformation);
 	
 	public boolean shadowHit(Ray ray, ShadeRec sr);
+
 }

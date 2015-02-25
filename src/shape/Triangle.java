@@ -126,6 +126,7 @@ public class Triangle implements Shape {
 //	}
 
 
+
 	@Override
 	public boolean intersect(Ray ray, ShadeRec sr) {
 		Ray transformed = transformation.transformInverse(ray);
@@ -189,6 +190,7 @@ public class Triangle implements Shape {
 		sr.localHitPoint = transformed.origin.add(transformed.direction.scale(t)) ;
 		return true;
 	}
+
 
 
 	@Override
@@ -285,6 +287,4 @@ public class Triangle implements Shape {
 //		sr.localHitPoint = transformed.origin.add(transformed.direction.scale(t)) ;
 		return true;
 	}
-	
-
 }

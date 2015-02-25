@@ -210,6 +210,7 @@ public class Box implements Shape {
 	}
 
 
+
 	@Override
 	public boolean shadowHit(Ray ray, ShadeRec sr) {
 		//inverse transform the ray

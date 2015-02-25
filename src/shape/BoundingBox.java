@@ -161,6 +161,7 @@ public class BoundingBox implements Shape{
 		return new Point(p0XOld - kEpsilon, p0YOld -kEpsilon, p0ZOld -kEpsilon);
 	}
 
+
 	private Point computeMaxCoords(Point p1OfNewShape){
 		double p1XOld = this.p1.x;
 		double p1YOld = this.p1.y;
@@ -256,6 +257,7 @@ public class BoundingBox implements Shape{
 			t1 = tz_max;
 		}	
 		return (t0 < t1 && t1 > kEpsilon);
+
 	}
 	
 	

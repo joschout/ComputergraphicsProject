@@ -291,6 +291,4 @@ public class Parallelogram implements Shape {
 		return true;
 	}
 
-
-
 }

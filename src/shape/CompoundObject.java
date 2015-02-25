@@ -172,6 +172,7 @@ public class CompoundObject implements Shape {
 	
 	public void recalculateBoundingBoxFromScratch(){
 		this.boundingBox = getBoundingBoxFromScratch();
+
 	}
 
 

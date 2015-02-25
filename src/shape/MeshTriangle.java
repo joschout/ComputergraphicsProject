@@ -172,6 +172,7 @@ public class MeshTriangle implements Shape{
 
 
 
+
 	@Override
 	public boolean shadowHit(Ray ray, ShadeRec sr) {
 		Ray transformed = mesh.getTransformation().transformInverse(ray);
