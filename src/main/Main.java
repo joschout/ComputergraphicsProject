@@ -32,9 +32,9 @@ public class Main {
 	 */
 	public static void main(String[] arguments) {
 		//the amount of pixels in the horizontal direction
-		int width = 640;
+		int width = 1080;
 		//the amount of pixels in the vertical direction
-		int height = 640;
+		int height = 1080;
 
 		// parse the command line arguments
 		for (int i = 0; i < arguments.length; ++i) {

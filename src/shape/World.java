@@ -56,36 +56,15 @@ public class World {
 	
 	public  void build(int width, int height){
 				this.initializeCamera(width, height);
-				// initialize the scene
-//				Transformation t1 = Transformation.createTranslation(0, 0, 5);
-//				Transformation t2 = Transformation.createTranslation(4, -4, 14);
-//				Transformation t3 = Transformation.createTranslation(-4, -4, 14);
-//				Transformation t4 = Transformation.createTranslation(4, 4, 14);
-//				Transformation t5 = Transformation.createTranslation(-4, 4, 14);
-//				
-//				Transformation t6 = Transformation.createRotationX(10);
-//				Transformation t7 = t1.append(t6);
-//				Transformation t8 = t2.append(t6);
-
 				
-				PointLight pl1 = new PointLight(3.0, new RGBColor(1), new  Point(-4,3,12));
-				//pl1.setLocation(new Point(0,0,-1));
+				PointLight pl1 = new PointLight(3.0, new RGBColor(1), new  Point(-5,3,0));
 				pl1.setCastShadows(true);
 				this.addLight(pl1);
-//				Sphere sphere1 = new Sphere(Transformation.createTranslation(-4, 3, 12), 0.5);
-//				MatteMaterial lightMat = new MatteMaterial();
-//				sphere1.material = lightMat;
-//				shapes.add(sphere1);
-				
-				
-				PointLight pl2 = new PointLight(1.0, new RGBColor(1), new  Point(0, 1,1));
-				//pl2.setLocation(new Point(0,0,-1));
+
+				PointLight pl2 = new PointLight(1.0, new RGBColor(1), new  Point(5,3,0));
 				pl2.setCastShadows(true);
 				this.addLight(pl2);
-//				Sphere sphere2 = new Sphere(Transformation.createTranslation(0, 3, 0), 0.5);
-//				sphere2.material = lightMat;
-//				shapes.add(sphere2);
-				
+
 				PhongMaterial phong = new PhongMaterial();
 				phong.setKa(0.25);
 				phong.setKd(0.65);
@@ -98,52 +77,41 @@ public class World {
 				matte.setKa(0.25);
 				matte.setKd(0.65);
 				matte.setCd(RGBColor.convertToRGBColor(Color.CYAN));
-				
-
-//				SpecialMatteMaterial specialMatte = new SpecialMatteMaterial();
-//				specialMatte.setKa(0.25);
-//				specialMatte.setKd(0.65);
-//				specialMatte.setCd(RGBColor.convertToRGBColor(Color.CYAN));
 
 				Plane plane = new Plane(Transformation.createIdentity(), new Point(0,0,0), new Vector(0,1,0));
 				plane.material = matte;
 				shapes.add(plane);		
 
-				
-//				//==== BUNNY ====//
-//				Transformation meshTransform = Transformation.createRotationY(200);
-//				meshTransform = meshTransform.append(Transformation.createRotationX(10));
-//				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(0, 0, 5)).append(Transformation.createScale(0.5, 0.5, 0.5));
-//				ObjectFileReader reader = new ObjectFileReader();
-//				TriangleMesh mesh;
-//				mesh = reader.readFile("objects//bunny.obj");
-//				mesh.setTransformation(meshTransform);
-//				mesh.material = phong;
-//				shapes.add(mesh);
-////				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
-////				box1.material = phong;
-////				shapes.add(box1);
-				
-
-//				// ==== BOX PRIMITIVE ==== ///
-//				Transformation boxTrans = Transformation.createRotationY(200);
-//				boxTrans = boxTrans.append(Transformation.createRotationX(0));
-//				boxTrans = boxTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 5));
-//				Box box = new  Box(boxTrans, new Point(), new Point(1,1,1));
-//				box.material = phong;
-//				shapes.add(box);
-				
-				//===== SUZANNE ===========//
+				//==== BUNNY ====//
 				Transformation meshTransform = Transformation.createRotationY(200);
-				meshTransform = meshTransform.append(Transformation.createRotationX(10));
-				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(0, 0, 5));
+				meshTransform = meshTransform.append(Transformation.createRotationX(0));
+				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, 1, 7));
 				ObjectFileReader reader = new ObjectFileReader();
 				TriangleMesh mesh;
 				mesh = reader.readFile("objects//suzanne.obj");
 				mesh.setTransformation(meshTransform);
 				mesh.material = phong;
 				shapes.add(mesh);
+//				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
+//				box1.material = phong;
+//				shapes.add(box1);
 				
+				//====CYLINDER PRIMITIVE ====//
+				Transformation cylinderTrans = Transformation.createRotationY(200);
+				cylinderTrans = cylinderTrans.append(Transformation.createRotationX(0));
+				cylinderTrans = cylinderTrans.appendToTheLeft(Transformation.createTranslation(-6 ,0,7));			
+				Cylinder cy = new Cylinder(cylinderTrans, 1, 0, 2 );
+				cy.material = phong;
+				shapes.add(cy);
+				
+				// ==== BOX PRIMITIVE ==== ///
+				Transformation boxTrans = Transformation.createRotationY(200);
+				boxTrans = boxTrans.append(Transformation.createRotationX(0));
+				boxTrans = boxTrans.appendToTheLeft(Transformation.createTranslation(6 ,0, 7));
+				Box box = new  Box(boxTrans, new Point(), new Point(1,1,1));
+				box.material = phong;
+				shapes.add(box);
+
 
 
 	}
@@ -187,7 +155,7 @@ public class World {
 		camera = new PerspectiveCamera(width, height,
 
 				new Point(0,5,0), new Vector(0, -1,3), new Vector(0, 1, 0),90);
-				//new Point(-), new Vector(0, 0, 1), new Vector(0, 1, 0),90);
+				//new Point(), new Vector(0, 0, 1), new Vector(0, 1, 0), 60);
 	}
 	
 }
