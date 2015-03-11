@@ -95,6 +95,8 @@ public class Main {
 		}
 		reporter.done();
 
+		System.out.println("Max number of intersections per pixel : " +world.maxBVHCounter);
+		
 		// save the output
 		try {
 			ImageIO.write(panel.getImage(), "png", new File("output.png"));

@@ -30,7 +30,7 @@ public class CompoundObject implements Shape {
 		shapes = new ArrayList<Shape>();
 		boundingBox = new BoundingBox(
 				new Point(Double.MAX_VALUE,Double.MAX_VALUE,Double.MAX_VALUE),
-				new Point(Double.MIN_VALUE, Double.MIN_VALUE, Double.MIN_VALUE),
+				new Point(-Double.MAX_VALUE, -Double.MAX_VALUE, -Double.MAX_VALUE),
 				transformation);
 		setTransformation(transformation);
 	}
@@ -110,9 +110,9 @@ public class CompoundObject implements Shape {
 	}
 
 	private Point computeMaxCoords(){
-		double p1X = Double.MIN_VALUE;
-		double p1Y = Double.MIN_VALUE;
-		double p1Z = Double.MIN_VALUE;
+		double p1X = -Double.MAX_VALUE;
+		double p1Y = -Double.MAX_VALUE;
+		double p1Z = -Double.MAX_VALUE;
 
 		BoundingBox temp;
 		for(Shape shape: shapes){

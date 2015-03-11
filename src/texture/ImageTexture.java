@@ -38,10 +38,12 @@ public class ImageTexture implements Texture {
 			xp = texCoo.xp;
 			yp = texCoo.yp;
 		}else{
-			xp = (int) (sr.u *(hres-1));
-			yp = (int) (sr.v *(vres-1));			
+//			xp = (int) (sr.u *(hres-1));
+//			yp =  (int) (sr.v *(vres-1));	
+			xp = (int)(sr.u *(hres-1));
+			yp = (vres-1) - (int) (sr.v *(vres-1));
 		}	
-//		System.out.println("xp/hres: " + xp + "/"+ hres + ", yp/vres: " + yp + "/"+ vres) ;
+		System.out.println("xp/hres: " + xp + "/"+ hres + ", yp/vres: " + yp + "/"+ vres) ;
 		int readColor = image.getRGB(xp, yp);
 
 //		int  red = (color & 0x00ff0000) >> 16;

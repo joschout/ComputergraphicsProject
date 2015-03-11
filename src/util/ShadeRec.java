@@ -21,6 +21,7 @@ public class ShadeRec {
 	public Vector direction; //for area light
 	public int depth; // recursion depth
 	public double t;
+	public double tbox;
 	public double u;
 	public double v;
 	public int bvhCounter;
@@ -33,6 +34,7 @@ public class ShadeRec {
 		this.world = world;
 		t = Double.MAX_VALUE;
 		bvhCounter = 0;
+		tbox = Double.MAX_VALUE;
 	}
 	
 	public ShadeRec(ShadeRec sr){
@@ -47,6 +49,7 @@ public class ShadeRec {
 		this.u = sr.u;
 		this.v = sr.v;
 		this.bvhCounter = sr.bvhCounter;
+		this.tbox = sr.tbox;
 		
 	}
 }

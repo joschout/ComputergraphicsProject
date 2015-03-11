@@ -9,9 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import boundingVolumeHierarchy.BVHManager;
+import boundingVolumeHierarchy.BVHManager2;
 import boundingVolumeHierarchy.CompositeAABBox;
 import camera.Camera;
 import camera.PerspectiveCamera;
+import rayTracers.BVHFalseColorGrayTracer;
+import rayTracers.BVHFalseColorImageTracer;
 import rayTracers.BVHTracer;
 import rayTracers.DepthTracer;
 import rayTracers.MultipleObjectsTracer;
@@ -25,6 +28,7 @@ import shape.Intersectable;
 import shape.Plane;
 import shape.Shape;
 import shape.Sphere;
+import shape.TriangleMesh;
 import texture.ImageTexture;
 import light.AmbientLight;
 import light.Light;
@@ -52,6 +56,7 @@ public class World {
 	public Tracer tracer;
 	public Light ambientLight;
 	public CompositeAABBox bvh;
+	public double maxBVHCounter;
 	
 	
 	public World(){
@@ -61,9 +66,12 @@ public class World {
 		//tracer = new DepthTracer(this);
 		//tracer = new NormalFalseColorImagetracer(this);
 		//tracer = new NormalBVHTracer(this);
-		tracer = new BVHTracer(this);
+		//tracer = new BVHTracer(this);
+		tracer = new BVHFalseColorImageTracer(this);
+		//tracer = new BVHFalseColorGrayTracer(this);
 		ambientLight = new AmbientLight();
 		bvh = null;
+		maxBVHCounter = 0;
 	}
 	
 	public void addShape(Shape shape){
@@ -157,9 +165,9 @@ public class World {
 				mesh.setTransformation(meshTransform);
 				mesh.material = phong;
 				shapes.add(mesh);
-////				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
-////				box1.material = phong;
-////				shapes.add(box1);			
+//				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
+//				box1.material = phong;
+//				shapes.add(box1);			
 				
 //				//====CYLINDER PRIMITIVE ====//
 //				Transformation cylinderTrans = Transformation.createRotationY(200);
@@ -223,6 +231,24 @@ public class World {
 ////				shapes.add(box1);
 
 
+//				//======== HOUSE =====//
+//				ImageTexture imTex = new ImageTexture("objects//house//house_texture.jpg", null);
+//				SVMatteMaterial svMatte = new SVMatteMaterial();
+//				svMatte.setKa(0.45);
+//				svMatte.setKd(0.65);
+//				svMatte.setCd(imTex);
+//				Transformation meshTransform = Transformation.createRotationY(120);
+//				meshTransform = meshTransform.append(Transformation.createRotationX(0));
+//				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(0,0, 2));
+//				ObjectFileReader2 reader = new ObjectFileReader2();
+//				CompoundObject mesh;
+//				mesh = reader.readFile("objects//house//house.obj");
+//				mesh.setTransformation(meshTransform);
+//				mesh.material = svMatte;
+//				shapes.add(mesh);
+				
+				
+				
 	}
 
 	public ShadeRec hitObjects(Ray ray){
@@ -262,39 +288,8 @@ public class World {
 	
 	
 public ShadeRec hitBVH(Ray ray){
-		
-		//hb p 262
 		ShadeRec sr = new ShadeRec(this);
-		
-//		double tmin = Double.MAX_VALUE;
-//		Vector normal = null;
-//		Point localHitPoint = null;
-		//Shape hittedShape = null;
-		
-		this.bvh.intersect(ray, sr);
-		
-//		for(Intersectable intersectable: intersectables){
-//			if(intersectable.intersect(ray, sr)){
-//				if(sr.t < tmin){
-//					//hittedShape = shape;
-//					sr.hasHitAnObject = true;
-//					sr.ray = ray;
-//					sr.material = ((Shape)intersectable).getMaterial();	
-//					sr.hitPoint = ray.origin.add(ray.direction.scale(sr.t));
-//					
-//					//deze drie worden door de intersect functie van een shape aangepast
-//					// en moeten we tijdelijk lokaal opslaan
-//					tmin = sr.t;
-//					normal = sr.normal;
-//					localHitPoint = sr.localHitPoint;	
-//				}
-//			}	
-//		}
-//		if(sr.hasHitAnObject){
-//			sr.t = tmin;
-//			sr.normal = normal;
-//			sr.localHitPoint = localHitPoint;
-//		}
+		this.bvh.intersect(ray, sr);	
 		return sr;
 	}
 	
@@ -308,7 +303,8 @@ public ShadeRec hitBVH(Ray ray){
 	}
 	
 	public CompositeAABBox createBVH(){
-		return BVHManager.getBoundingVolumeHierarchy(this.shapes);
+		//return BVHManager.getBoundingVolumeHierarchy(this.shapes);
+		return BVHManager2.getBoundingVolumeHierarchy(this.shapes);
 	}
 	
 	public void setBVH(CompositeAABBox bvh){

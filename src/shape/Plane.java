@@ -119,7 +119,7 @@ public class Plane implements Shape {
 
 	@Override
 	public BoundingBox getBoundingBox() {
-		return new BoundingBox(Point.MINVALUES, Point.MINVALUES, transformation);
+		return new BoundingBox(Point.MIN_MAXVALUES, Point.MIN_MAXVALUES, transformation);
 	}
 
 
@@ -132,7 +132,7 @@ public class Plane implements Shape {
 
 	@Override
 	public AABBox getAABoundingBox() {
-		return new AABBox(Point.MINVALUES, Point.MINVALUES, this);
+		return new AABBox(Point.MIN_MAXVALUES, Point.MIN_MAXVALUES, this);
 	}
 
 

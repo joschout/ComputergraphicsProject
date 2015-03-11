@@ -50,7 +50,7 @@ public class BoundingBox implements Intersectable{
 		setTransformation(transformation);
 	}
 	
-	public BoundingBox(double p0X, double p0Y, double p0Z, double p1X, double p1Y, double p1Z,Transformation transformation){
+	public BoundingBox(double p0X, double p0Y, double p0Z, double p1X, double p1Y, double p1Z, Transformation transformation){
 		if(p0X >= p1X){
 			throw new IllegalArgumentException("p1X should be bigger than p0X");
 		}
