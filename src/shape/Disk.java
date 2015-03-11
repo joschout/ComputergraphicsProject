@@ -1,5 +1,8 @@
 package shape;
 
+import boundingVolumeHierarchy.AABBox;
+import boundingVolumeHierarchy.BoundingBox;
+import boundingVolumeHierarchy.CompositeAABBox;
 import util.RGBColor;
 import util.ShadeRec;
 import material.Material;
@@ -16,6 +19,7 @@ public class Disk implements Shape {
 	public final double radius;
 	public Vector normal;
 	public static final double kEpsilon = 1e-5;
+	public static final double boundingBoxDelta = 1e-4;
 	public RGBColor color;
 	public Material material;
 	
@@ -120,16 +124,6 @@ public class Disk implements Shape {
 		return this.material;
 	}
 
-	@Override
-	public RGBColor getColor() {
-		return this.color;
-	}
-
-	@Override
-	public BoundingBox getBoundingBox() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public void setTransformation(Transformation transformation) {
@@ -154,6 +148,23 @@ public class Disk implements Shape {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public BoundingBox getBoundingBox() {
+		Point p0 = new Point(- this.radius - boundingBoxDelta, -this.radius - boundingBoxDelta, -this.radius - boundingBoxDelta);
+		Point p1 = new Point(this.radius + boundingBoxDelta, this.radius + boundingBoxDelta, this.radius + boundingBoxDelta);
+		return new BoundingBox(p0, p1, this.transformation);
+	}
+
+	@Override
+	public AABBox getAABoundingBox() {
+		return AABBox.boundingBoxToAABoundingBox(getBoundingBox(), this);
+	}
+
+	@Override
+	public CompositeAABBox getBoundingVolumeHierarchy() {
+		return getAABoundingBox();
 	}
 
 

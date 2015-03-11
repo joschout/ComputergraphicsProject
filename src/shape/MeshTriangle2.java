@@ -9,69 +9,37 @@ import math.Point;
 import math.Ray;
 import math.Transformation;
 import math.Vector;
-import util.RGBColor;
 import util.ShadeRec;
+import util.UVCoordinates;
 
-/**
- *
- */
-public class Parallelogram implements Shape {
+public class MeshTriangle2 implements Shape{
+	
+	CompoundObject mesh;
+	
+	public Point[] vertices = new Point[3];
 
-	private Transformation transformation;
-	public static final double kEpsilon = 1e-5;
-	public RGBColor color;
-	public Material material;
-	public Point v0; //point a
-	public Point v1; // point b
-	public Point v2; // point c
-	public Vector normal;
-
-	/**
-	 * Creates a new parallelogram with points (0,0,0), (0,0,1) and (1,0,0).
-	 */
-	public Parallelogram(){
-		this(Transformation.createIdentity(), new Point(0,0,0), new Point(0,0,1),new Point(1,0,0));
-		
+	public Vector[] normals = new Vector[3];
+	
+	public UVCoordinates[] uvCoordinates  = new UVCoordinates[3];
+	
+	public static double boundingBoxDelta = 0.0001;
+	
+	
+	public MeshTriangle2(CompoundObject mesh) {
+		if(mesh == null){
+			throw new NullPointerException("the given transformation is null!");
+		}
+		this.mesh = mesh;
 	}
-	
-	
-	/**
-	 * Creates a new {@link Triangle} with the given three points and which is
-	 * transformed by the given {@link Transformation}.
-	 * 
-	 * @param transformation
-	 *            the transformation applied to this {@link Triangle}.
-	 * @param point
-	 *            a point of this {@link Triangle}.
-	 * @param normal
-	 *            the normal of this {@link Triangle}.            
-	 * @throws NullPointerException
-	 *             when the transformation, point or normal is null.
-	 */
-	public Parallelogram(Transformation transformation, Point a, Point b, Point c) {
-		if (transformation == null)
-			throw new NullPointerException("the given origin is null!");
-		setTransformation(transformation);
-		
-		if(a == null)
-			throw new NullPointerException("the given point a is null");
-		this.v0 = new Point(a);
-		
-		if(b == null)
-			throw new NullPointerException("the given point b is null");
-		this.v1 = new Point(b);
-		
-		if(c == null)
-			throw new NullPointerException("the given point c is null");
-		this.v2 = new Point(c);	
-		
-		normal = (v1.subtract(v0)).cross(v2.subtract(v0));
-		normal = normal.normalize();
-	}
-	
-	@Override
+
+
+
 	public boolean intersect(Ray ray, ShadeRec sr) {
-		Ray transformed = transformation.transformInverse(ray);
+		Ray transformed = mesh.getTransformation().transformInverse(ray);
+		
+		Point v0 = vertices[0];
+		Point v1 = vertices[1];
+		Point v2 = vertices[2];
 		
 		Vector v0Minv1 = v0.subtract(v1);
 		Vector v0Minv2 = v0.subtract(v2);
@@ -103,7 +71,7 @@ public class Parallelogram implements Shape {
 		double numeratorBeta =d*m - b*n -c*p;
 		double beta = numeratorBeta *  inverseDenominator;
 		
-		if(beta < 0.0 || beta > 1.0){
+		if(beta < 0.0){
 			return false;
 		}
 		
@@ -111,50 +79,123 @@ public class Parallelogram implements Shape {
 		double numeratorGamma = a*n + d*q + c*r;
 		double gamma = numeratorGamma * inverseDenominator;
 		
-		if(gamma < 0.0 || gamma > 1.0){
+		if(gamma < 0.0){
 			return false;
 		}
 		
-		if(beta + gamma < 0 || beta + gamma > 2){
+		if(beta + gamma > 1){
 			return false;
 		}
 		
 		double numeratorT = a*p - b*r +d*s;
 		double t = numeratorT * inverseDenominator;
-		if(t < kEpsilon){
+		if(t < CompoundObject.kEpsilon){
 			return false;
 		}
+//		//=== flat triangle mesh ===//
+//		Vector normal = (v1.subtract(v0)).cross(v2.subtract(v0));
+//		normal = normal.normalize();
+		
+		//=== Phong interpolatie ===//
+		Vector normal = interPolateNormal(beta, gamma);		
+		
+		sr.u = interpolateU(beta, gamma);
+		sr.v = interpolateV(beta, gamma);
 		
 		sr.t = t;
-		Matrix transposeOfInverse = this.transformation.getInverseTransformationMatrix().transpose();
+		Matrix transposeOfInverse = mesh.getTransformation().getInverseTransformationMatrix().transpose();
 		Vector transformedNormal = transposeOfInverse.transform(normal);
+	
+		sr.material = this.getMaterial();
 		sr.normal = transformedNormal;
 		sr.localHitPoint = transformed.origin.add(transformed.direction.scale(t)) ;
 		return true;
 	}
+	
+	private double interpolateU(double beta, double gamma) {
+		double u = uvCoordinates[0].u * (1-beta-gamma) 
+				+ uvCoordinates[1].u * beta
+				+ uvCoordinates[2].u * gamma;
+		return u;
+	}
+
+
+
+	private double interpolateV(double beta, double gamma) {
+		double v = uvCoordinates[0].v * (1-beta-gamma) 
+				+ uvCoordinates[1].v * beta
+				+ uvCoordinates[2].v * gamma;
+		return v;
+	}
+
+
+
+	/**
+	 * Phong interpolatie
+	 * @param beta
+	 * @param gamma
+	 * @return
+	 */
+	private Vector interPolateNormal(double beta, double gamma){
+		Vector normal = normals[0].scale( 1- beta -gamma)
+				.add(normals[1].scale(beta))
+				.add(normals[2].scale(gamma));
+		return normal.normalize();
+	}
+
+
+
+//	@Override
+//	public boolean intersect(Ray ray) {
+//		// TODO Auto-generated method stub
+//		return false;
+//	}
+
+
 
 	@Override
 	public Material getMaterial() {
-		return this.material;
+		return mesh.getMaterial();
 	}
+
 
 	@Override
 	public BoundingBox getBoundingBox() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Point v0 = vertices[0];
+		Point v1 = vertices[1];
+		Point v2 = vertices[2];
+		
+		double p0X = Math.min(Math.min(v0.x, v1.x), v2.x) - boundingBoxDelta;
+		double p0Y = Math.min(Math.min(v0.y, v1.y), v2.y) - boundingBoxDelta;
+		double p0Z = Math.min(Math.min(v0.z, v1.z), v2.z) - boundingBoxDelta;
+		
+		double p1X = Math.max(Math.max(v0.x, v1.x), v2.x) + boundingBoxDelta;
+		double p1Y = Math.max(Math.max(v0.y, v1.y), v2.y) + boundingBoxDelta;
+		double p1Z = Math.max(Math.max(v0.z, v1.z), v2.z) + boundingBoxDelta;
+		
+		return new BoundingBox(p0X, p0Y, p0Z, p1X, p1Y, p1Z, mesh.getTransformation());
 	}
+
 
 
 	@Override
 	public void setTransformation(Transformation transformation) {
-		this.transformation = transformation;
+	
 		
 	}
 
 
+
+
+
 	@Override
 	public boolean shadowHit(Ray ray, ShadeRec sr) {
-		Ray transformed = transformation.transformInverse(ray);
+		Ray transformed = mesh.getTransformation().transformInverse(ray);
+		
+		Point v0 = vertices[0];
+		Point v1 = vertices[1];
+		Point v2 = vertices[2];
 		
 		Vector v0Minv1 = v0.subtract(v1);
 		Vector v0Minv2 = v0.subtract(v2);
@@ -186,7 +227,7 @@ public class Parallelogram implements Shape {
 		double numeratorBeta =d*m - b*n -c*p;
 		double beta = numeratorBeta *  inverseDenominator;
 		
-		if(beta < 0.0 || beta > 1.0){
+		if(beta < 0.0){
 			return false;
 		}
 		
@@ -194,19 +235,23 @@ public class Parallelogram implements Shape {
 		double numeratorGamma = a*n + d*q + c*r;
 		double gamma = numeratorGamma * inverseDenominator;
 		
-		if(gamma < 0.0 || gamma > 1.0){
+		if(gamma < 0.0){
 			return false;
 		}
 		
-		if(beta + gamma < 0 || beta + gamma > 2){
+		if(beta + gamma > 1){
 			return false;
 		}
 		
 		double numeratorT = a*p - b*r +d*s;
 		double t = numeratorT * inverseDenominator;
-		if(t < kEpsilon){
+		if(t < CompoundObject.kEpsilon){
 			return false;
 		}
+		if(Double.isNaN(t)){
+			System.out.println("Nanananananananananananananananan");
+		}
+		
 		
 		sr.t = t;
 //		sr.localHitPoint = transformed.origin.add(transformed.direction.scale(t)) ;
@@ -214,11 +259,12 @@ public class Parallelogram implements Shape {
 	}
 
 
+
 	@Override
 	public AABBox getAABoundingBox() {
-		// TODO Auto-generated method stub
-		return null;
+		return AABBox.boundingBoxToAABoundingBox(getBoundingBox(), this);
 	}
+
 
 
 	@Override

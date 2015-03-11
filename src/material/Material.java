@@ -13,7 +13,7 @@ import util.ShadeRec;
  * @author Jonas
  *
  */
-public class Material {
+public abstract class Material {
 	
 	public RGBColor rayCastShade(ShadeRec sr){
 		return new RGBColor(0);	
@@ -31,8 +31,6 @@ public class Material {
 		return new RGBColor(0);	
 	}
 	
-	public RGBColor shade(ShadeRec sr){
-		return new RGBColor(0);	
-	}
+	public abstract RGBColor shade(ShadeRec sr);
 
 }

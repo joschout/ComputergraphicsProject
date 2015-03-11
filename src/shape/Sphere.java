@@ -1,5 +1,8 @@
 package shape;
 
+import boundingVolumeHierarchy.AABBox;
+import boundingVolumeHierarchy.BoundingBox;
+import boundingVolumeHierarchy.CompositeAABBox;
 import util.RGBColor;
 import util.ShadeRec;
 import material.Material;
@@ -21,6 +24,7 @@ public class Sphere implements Shape {
 	public static final double kEpsilon = 0.00001;
 	public RGBColor color;
 	public Material material;
+	public static double boundingBoxDelta = 0.0001;
 
 	/**
 	 * Creates a new {@link Sphere} with the given radius and which is
@@ -128,17 +132,6 @@ public class Sphere implements Shape {
 	}
 
 	@Override
-	public RGBColor getColor() {
-		return this.color;
-	}
-
-	@Override
-	public BoundingBox getBoundingBox() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void setTransformation(Transformation transformation) {
 		this.transformation = transformation;
 		
@@ -182,5 +175,23 @@ public class Sphere implements Shape {
 				}
 				
 				return false;
+	}
+
+	@Override
+	public BoundingBox getBoundingBox() {
+		//create bounding box around untransformed sphere in the origin:
+		Point p0 = new Point(- this.radius - boundingBoxDelta, -this.radius - boundingBoxDelta, -this.radius - boundingBoxDelta);
+		Point p1 = new Point(this.radius + boundingBoxDelta, this.radius + boundingBoxDelta, this.radius + boundingBoxDelta);
+		return new BoundingBox(p0, p1, this.transformation);
+	}
+
+	@Override
+	public AABBox getAABoundingBox() {
+		return AABBox.boundingBoxToAABoundingBox(getBoundingBox(), this);
+	}
+
+	@Override
+	public CompositeAABBox getBoundingVolumeHierarchy() {
+		return getAABoundingBox();
 	}
 }

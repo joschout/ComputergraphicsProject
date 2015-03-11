@@ -2,7 +2,7 @@ package util;
 
 import java.awt.Color;
 
-import shape.World;
+import main.World;
 import material.Material;
 import math.Point;
 import math.Ray;
@@ -21,6 +21,9 @@ public class ShadeRec {
 	public Vector direction; //for area light
 	public int depth; // recursion depth
 	public double t;
+	public double u;
+	public double v;
+	public int bvhCounter;
 	
 	public ShadeRec(World world){
 		hasHitAnObject = false;
@@ -29,6 +32,7 @@ public class ShadeRec {
 		color = Color.BLACK;
 		this.world = world;
 		t = Double.MAX_VALUE;
+		bvhCounter = 0;
 	}
 	
 	public ShadeRec(ShadeRec sr){
@@ -40,6 +44,9 @@ public class ShadeRec {
 		this.ray = new Ray(sr.ray);
 		this.direction = new Vector(sr.direction);
 		this.depth = sr.depth;
+		this.u = sr.u;
+		this.v = sr.v;
+		this.bvhCounter = sr.bvhCounter;
 		
 	}
 }

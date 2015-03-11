@@ -1,8 +1,8 @@
 package rayTracers;
 
-import shape.World;
 import util.RGBColor;
 import util.ShadeRec;
+import main.World;
 import math.Ray;
 
 public class MultipleObjectsTracer extends Tracer {

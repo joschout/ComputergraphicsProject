@@ -6,11 +6,11 @@ import gui.RenderFrame;
 
 import java.io.File;
 import java.io.IOException;
+
 import javax.imageio.ImageIO;
 
 import math.Ray;
 import sampling.Sample;
-import shape.World;
 import util.RGBColor;
 
 
@@ -32,9 +32,9 @@ public class Main {
 	 */
 	public static void main(String[] arguments) {
 		//the amount of pixels in the horizontal direction
-		int width = 1080;
+		int width = 640;
 		//the amount of pixels in the vertical direction
-		int height = 1080;
+		int height = 640;
 
 		// parse the command line arguments
 		for (int i = 0; i < arguments.length; ++i) {
@@ -80,27 +80,15 @@ public class Main {
 		// render the scene
 		for (int x = 0; x < width; ++x) {
 			for (int y = 0; y < height; ++y) {
+				if(x == 180 && y == 305){
+					System.out.println("popopopop");
+					}
 				// create a ray through the center of the pixel.
 				Ray ray = world.camera.generateRay(new Sample(x + 0.5, y + 0.5));
-
-//				Shape hittedShape = null;
-//				ShadeRec sr = new ShadeRec(world);
-//				for (Shape shape : world.shapes){
-//					if (shape.intersect(ray, sr)) {
-//						hittedShape = shape;
-//						sr.ray = ray;
-//						break;
-//					}
-//				}
-//				if( hittedShape  == null){
-//					panel.set(x, y, world.backgroundColor);
-//				}else{
-//					sr.hitPoint = ray.origin.add(ray.direction.scale(sr.t));
-//					RGBColor color = hittedShape.getMaterial().shade(sr);
-//					panel.set(x, y, color.convertToColor());
-//				}
 				
 				RGBColor color = world.tracer.traceRay(ray);
+				
+				
 				panel.set(x, y, color.convertToColor());	
 			}
 			reporter.update(height);

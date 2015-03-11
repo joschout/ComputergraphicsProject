@@ -1,5 +1,8 @@
 package shape;
 
+import boundingVolumeHierarchy.AABBox;
+import boundingVolumeHierarchy.BoundingBox;
+import boundingVolumeHierarchy.CompositeAABBox;
 import util.RGBColor;
 import util.ShadeRec;
 import material.Material;
@@ -114,17 +117,9 @@ public class Plane implements Shape {
 		return this.material;
 	}
 
-
-	@Override
-	public RGBColor getColor() {
-		return this.color;
-	}
-
-
 	@Override
 	public BoundingBox getBoundingBox() {
-		// TODO Auto-generated method stub
-		return null;
+		return new BoundingBox(Point.MINVALUES, Point.MINVALUES, transformation);
 	}
 
 
@@ -132,6 +127,18 @@ public class Plane implements Shape {
 	public void setTransformation(Transformation transformation) {
 		this.transformation = transformation;
 		
+	}
+
+
+	@Override
+	public AABBox getAABoundingBox() {
+		return new AABBox(Point.MINVALUES, Point.MINVALUES, this);
+	}
+
+
+	@Override
+	public CompositeAABBox getBoundingVolumeHierarchy() {
+		return getAABoundingBox();
 	}
 
 

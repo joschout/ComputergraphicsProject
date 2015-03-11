@@ -1,5 +1,8 @@
 package shape;
 
+import boundingVolumeHierarchy.AABBox;
+import boundingVolumeHierarchy.BoundingBox;
+import boundingVolumeHierarchy.CompositeAABBox;
 import material.Material;
 import math.Matrix;
 import math.Point;
@@ -17,6 +20,7 @@ public class Box implements Shape {
 	public static final double kEpsilon = 1e-5;
 	public RGBColor color;
 	public Material material;
+	public static final double boundingBoxDelta = 1e-4;
 
 	/**
 	 * Creates a new {@link Box} with the given two points and which is
@@ -37,6 +41,15 @@ public class Box implements Shape {
 		this.p0 = p0;
 		if(p1 == null){
 			throw new NullPointerException("the given point p1 is null");
+		}
+		if(p0.x >= p1.x){
+			throw new IllegalArgumentException("p1X should be bigger than p0X");
+		}
+		if(p0.y >= p1.y){
+			throw new IllegalArgumentException("p1X should be bigger than p0X");
+		}
+		if(p0.z >= p1.z){
+			throw new IllegalArgumentException("p1X should be bigger than p0X");
 		}
 		this.p1 = p1;
 	}
@@ -186,22 +199,10 @@ public class Box implements Shape {
 		return this.material;
 	}
 
-	@Override
-	public RGBColor getColor() {
-		return this.color;
+
+	public static Box aaBoundingBoxtoBox(AABBox boundingBox){
+		return new Box(Transformation.createIdentity(), boundingBox.p0, boundingBox.p1);
 	}
-
-
-	@Override
-	public BoundingBox getBoundingBox() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public static Box boundingBoxtoBox(BoundingBox boundingBox){
-		return new Box(boundingBox.getTransformation(), boundingBox.p0, boundingBox.p1);
-	}
-
 
 	@Override
 	public void setTransformation(Transformation transformation) {
@@ -285,5 +286,30 @@ public class Box implements Shape {
 					return true;		
 				}
 				return false;
+	}
+
+
+	public static Box boundingBoxtoBox(BoundingBox boundingBox){
+		return new Box(boundingBox.getTransformation(), boundingBox.p0, boundingBox.p1);
+	}
+
+
+	@Override
+	public BoundingBox getBoundingBox() {
+		// TODO Auto-generated method stub
+		return new BoundingBox(new Point(p0.x - boundingBoxDelta, p0.y - boundingBoxDelta, p0.z - boundingBoxDelta),
+							new Point(p1.x - boundingBoxDelta, p1.y - boundingBoxDelta, p1.z - boundingBoxDelta), transformation);
+	}
+
+
+	@Override
+	public AABBox getAABoundingBox() {
+		return AABBox.boundingBoxToAABoundingBox(getBoundingBox(), this);
+	}
+
+
+	@Override
+	public CompositeAABBox getBoundingVolumeHierarchy() {
+		return getAABoundingBox();
 	}
 }

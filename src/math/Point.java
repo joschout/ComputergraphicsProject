@@ -10,6 +10,10 @@ import java.util.Locale;
  * @version 1.0
  */
 public class Point implements Cloneable, Comparable<Point> {
+	
+	public static final Point MAXVALUES = new Point(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+	public static final Point MINVALUES = new Point(Double.MIN_VALUE, Double.MIN_VALUE, Double.MIN_VALUE);
+	
 	/**
 	 * x coordinate of this {@link Point}.
 	 */

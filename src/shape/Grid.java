@@ -3,6 +3,7 @@ package shape;
 import java.util.ArrayList;
 import java.util.List;
 
+import boundingVolumeHierarchy.BoundingBox;
 import util.ShadeRec;
 import math.Ray;
 import math.Transformation;

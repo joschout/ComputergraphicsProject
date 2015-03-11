@@ -1,5 +1,8 @@
 package shape;
 
+import boundingVolumeHierarchy.AABBox;
+import boundingVolumeHierarchy.BoundingBox;
+import boundingVolumeHierarchy.CompositeAABBox;
 import util.RGBColor;
 import util.ShadeRec;
 import material.Material;
@@ -16,6 +19,7 @@ public class Triangle implements Shape {
 	public Point v2; // point c
 	public Vector normal;
 	public static final double kEpsilon = 1e-5;
+	public static final double boundingBoxDelta = 1e-4;
 	public Material material;
 	public RGBColor color;
 	
@@ -200,29 +204,6 @@ public class Triangle implements Shape {
 		return this.material;
 	}
 
-
-	@Override
-	public RGBColor getColor() {
-		return this.color;
-	}
-
-
-	@Override
-	public BoundingBox getBoundingBox() {
-		double delta = 0.0001;
-	
-		double p0X = Math.min(Math.min(v0.x, v1.x), v2.x) - delta;
-		double p0Y = Math.min(Math.min(v0.y, v1.y), v2.y) - delta;
-		double p0Z = Math.min(Math.min(v0.z, v1.z), v2.z) - delta;
-		
-		double p1X = Math.max(Math.max(v0.x, v1.x), v2.x) + delta;
-		double p1Y = Math.max(Math.max(v0.y, v1.y), v2.y) + delta;
-		double p1Z = Math.max(Math.max(v0.z, v1.z), v2.z) + delta;
-		
-		return new BoundingBox(p0X, p0Y, p0Z, p1X, p1Y, p1Z, transformation);
-	}
-
-
 	@Override
 	public void setTransformation(Transformation transformation) {
 		this.transformation = transformation;	
@@ -290,6 +271,35 @@ public class Triangle implements Shape {
 
 //		sr.localHitPoint = transformed.origin.add(transformed.direction.scale(t)) ;
 		return true;
+	}
+
+
+	@Override
+	public BoundingBox getBoundingBox() {
+			
+		double p0X = Math.min(Math.min(v0.x, v1.x), v2.x) - boundingBoxDelta;
+		double p0Y = Math.min(Math.min(v0.y, v1.y), v2.y) - boundingBoxDelta;
+		double p0Z = Math.min(Math.min(v0.z, v1.z), v2.z) - boundingBoxDelta;
+		
+		double p1X = Math.max(Math.max(v0.x, v1.x), v2.x) + boundingBoxDelta;
+		double p1Y = Math.max(Math.max(v0.y, v1.y), v2.y) + boundingBoxDelta;
+		double p1Z = Math.max(Math.max(v0.z, v1.z), v2.z) + boundingBoxDelta;
+		
+		return new BoundingBox(p0X, p0Y, p0Z, p1X, p1Y, p1Z, transformation);
+	}
+
+
+
+	@Override
+	public AABBox getAABoundingBox() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public CompositeAABBox getBoundingVolumeHierarchy() {
+		return getAABoundingBox();
 	}
 
 }

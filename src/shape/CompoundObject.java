@@ -3,6 +3,10 @@ package shape;
 import java.util.ArrayList;
 import java.util.List;
 
+import boundingVolumeHierarchy.AABBox;
+import boundingVolumeHierarchy.BVHManager;
+import boundingVolumeHierarchy.BoundingBox;
+import boundingVolumeHierarchy.CompositeAABBox;
 import material.Material;
 import math.Point;
 import math.Ray;
@@ -35,19 +39,16 @@ public class CompoundObject implements Shape {
 	@Override
 	public boolean intersect(Ray ray, ShadeRec sr) {
 		if(boundingBox.intersect(ray, sr) == false){
-			//System.out.println("het is false geworden");
 			return false;
 		}
 		
 		double tmin = Double.MAX_VALUE;
 		Vector normal = null;
 		Point localHitPoint = null;
-		//Shape hittedShape = null;
 
 		for(Shape shape: shapes){
 			if(shape.intersect(ray, sr)){
 				if(sr.t < tmin){
-					//hittedShape = shape;
 					sr.hasHitAnObject = true;
 					sr.ray = ray;
 					sr.material = this.material;	
@@ -76,26 +77,8 @@ public class CompoundObject implements Shape {
 		return this.material;
 	}
 
-	@Override
-	public RGBColor getColor() {
-		return this.color;
-	}
-
 	public void addObject(Shape shape){
-//		if(shapes.isEmpty()){
-//			shapes.add(shape);
-//			boundingBox = shape.getBoundingBox();
-//		}else{
-//			shapes.add(shape);
-//			this.boundingBox = boundingBox.addShape(shape);	
-//		}
-		shapes.add(shape);
-		
-		//this.boundingBox = getBoundingBoxFromScratch();
-		// getBoundingBoxFromScratch() wordt 1 keer gedaan,
-		// op het einde van ObjectFileReader.readFile();
-		// (in plaats van het hier bij het toevoegen van elk object te doen
-		
+		shapes.add(shape);		
 	}
 	
 	public BoundingBox getBoundingBoxFromScratch(){
@@ -123,7 +106,6 @@ public class CompoundObject implements Shape {
 				p0Z = temp.p0.z;
 			}	
 		}
-
 		return new Point(p0X - kEpsilon, p0Y -kEpsilon, p0Z -kEpsilon);
 	}
 
@@ -146,16 +128,13 @@ public class CompoundObject implements Shape {
 				p1Z = temp.p1.z;
 			}	
 		}
-
 		return new Point(p1X + kEpsilon, p1Y + kEpsilon, p1Z + kEpsilon);
 	}
-
 
 	@Override
 	public BoundingBox getBoundingBox() {
 		return boundingBox;
 	}
-
 
 	@Override
 	public void setTransformation(Transformation transformation) {
@@ -172,48 +151,40 @@ public class CompoundObject implements Shape {
 	
 	public void recalculateBoundingBoxFromScratch(){
 		this.boundingBox = getBoundingBoxFromScratch();
-
-
 	}
-
 
 	@Override
 	public boolean shadowHit(Ray shadowRay, ShadeRec sr) {
 		if(boundingBox.shadowHit(shadowRay, sr) == false){
-			//System.out.println("het is false geworden");
 			return false;
 		}
 		boolean shadowhit = false;
 		double tmin = Double.MAX_VALUE;
-		//Vector normal = null;
-		//Point localHitPoint = null;
-
+		
 		for(Shape shape: shapes){
 			if(shape.shadowHit(shadowRay, sr)){
 				if(sr.t < tmin){
 					shadowhit = true;
-					//sr.hasHitAnObject = true;
-					//sr.ray = ray;
-					//sr.material = this.material;	
-					//sr.hitPoint = shadowRay.origin.add(shadowRay.direction.scale(sr.t));
-
-					//deze drie worden door de intersect functie van een shape aangepast
-					// en moeten we tijdelijk lokaal opslaan
-					tmin = sr.t;
-					//normal = sr.normal;
-					//localHitPoint = sr.localHitPoint;	
+					tmin = sr.t;	
 				}
 			}
 		}
-		//if(sr.hasHitAnObject){
 		if(shadowhit){
-
 			sr.t = tmin;
-			//sr.normal = normal;
-			//sr.localHitPoint = localHitPoint;
 			return true;
 		}
 		return false;
-
 	}
+
+
+	@Override
+	public AABBox getAABoundingBox() {
+		return AABBox.boundingBoxToAABoundingBox(boundingBox, this);
+		
+	}
+	
+	
+	public CompositeAABBox getBoundingVolumeHierarchy(){
+		return BVHManager.getBoundingVolumeHierarchy(this.shapes);
+	}	
 }

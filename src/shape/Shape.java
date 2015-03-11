@@ -1,6 +1,8 @@
 package shape;
 
-import util.RGBColor;
+import boundingVolumeHierarchy.AABBox;
+import boundingVolumeHierarchy.BoundingBox;
+import boundingVolumeHierarchy.CompositeAABBox;
 import util.ShadeRec;
 import material.Material;
 import math.Ray;
@@ -12,7 +14,7 @@ import math.Transformation;
  * @author Niels Billen
  * @version 1.0
  */
-public interface Shape {
+public interface Shape extends Intersectable {
 	
 	/**
 	 * Returns whether the given {@link Ray} intersects this {@link Shape}.
@@ -24,16 +26,18 @@ public interface Shape {
 	 */
 	//public boolean intersect(Ray ray);
 	
-	public boolean intersect(Ray ray, ShadeRec sr);
+	//public boolean intersect(Ray ray, ShadeRec sr);
 	
 	public Material getMaterial();
-	
-	public RGBColor getColor();
 
 	public BoundingBox getBoundingBox();
+	
+	public AABBox getAABoundingBox();
 	
 	public void setTransformation(Transformation transformation);
 	
 	public boolean shadowHit(Ray ray, ShadeRec sr);
+	
+	public CompositeAABBox getBoundingVolumeHierarchy();
 
 }

@@ -35,7 +35,7 @@ public class Ray implements Cloneable {
 		if (direction == null)
 			throw new NullPointerException("the given direction is null!");
 		this.origin = origin;
-		this.direction = direction;
+		this.direction = direction.normalize();
 	}
 
 	/**

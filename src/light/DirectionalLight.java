@@ -44,5 +44,4 @@ public class DirectionalLight extends Light {
 		return false;
 	}
 
-
 }

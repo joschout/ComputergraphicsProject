@@ -36,7 +36,7 @@ public class GlossySpecularBRDF extends BRDF {
 		//normal times incoming direction
 		double ndotwi = sr.normal.dot(wi);
 		//the reflected direction: formula 15.4 page 281
-		Vector r = wi.scale(-1).add(sr.normal.scale(2.0*ndotwi));
+		Vector r = wi.scale(-1).add(sr.normal.scale(2.0*ndotwi)).normalize();
 		
 		double rDotWo = r.dot(wo);
 		

@@ -1,7 +1,7 @@
 package rayTracers;
 
+import main.World;
 import math.Ray;
-import shape.World;
 import util.RGBColor;
 import util.ShadeRec;
 

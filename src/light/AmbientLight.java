@@ -49,4 +49,5 @@ public class AmbientLight extends Light {
 	public boolean inShadow(Ray shadowRay, ShadeRec sr) {
 		return false;
 	}
+
 }
