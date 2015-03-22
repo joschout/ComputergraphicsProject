@@ -10,7 +10,7 @@ public class AABBComparator2 implements Comparator<CompositeAABBox> {
 	/**
 	 * 1 = x
 	 * 2 = y
-	 * 3 = 7
+	 * 3 = z
 	 */
 	public int coordinateToCompare;
 
@@ -20,13 +20,13 @@ public class AABBComparator2 implements Comparator<CompositeAABBox> {
 	}
 	
 	public void instantiateComparingAxis(List<CompositeAABBox> boxes){
-		double pXMin = Double.MAX_VALUE;
-		double pYMin = Double.MAX_VALUE;
-		double pZMin = Double.MAX_VALUE;
+		double pXMin = Double.POSITIVE_INFINITY;
+		double pYMin = Double.POSITIVE_INFINITY;
+		double pZMin = Double.POSITIVE_INFINITY;
 		
-		double pXMax = -Double.MAX_VALUE;
-		double pYMax = -Double.MAX_VALUE;
-		double pZMax= -Double.MAX_VALUE;
+		double pXMax = Double.NEGATIVE_INFINITY;
+		double pYMax = Double.NEGATIVE_INFINITY;
+		double pZMax= Double.NEGATIVE_INFINITY;
 		
 		//zoek de min en max waarden in de 3 richtingen van de middelpunten
 		for(CompositeAABBox box: boxes){

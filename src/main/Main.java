@@ -80,9 +80,6 @@ public class Main {
 		// render the scene
 		for (int x = 0; x < width; ++x) {
 			for (int y = 0; y < height; ++y) {
-				if(x == 180 && y == 305){
-					System.out.println("popopopop");
-					}
 				// create a ray through the center of the pixel.
 				Ray ray = world.camera.generateRay(new Sample(x + 0.5, y + 0.5));
 				

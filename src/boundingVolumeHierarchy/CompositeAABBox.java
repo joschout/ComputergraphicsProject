@@ -138,5 +138,5 @@ public abstract  class CompositeAABBox implements Intersectable{
 		return (((p.x > p0.x && p.x < p1.x) || ( p.x > p1.x && p.x < p0.x))
 				&& (p.y > p0.y && p.y < p1.y) || ( p.y > p1.y && p.y < p0.y)
 				&& (p.z > p0.z && p.z < p1.z) || ( p.z > p1.z && p.z < p0.z));
-}
+	}
 }

@@ -22,10 +22,6 @@ public class BVHTracer extends Tracer {
 		
 		ShadeRec sr = world.hitBVH(ray);
 		
-		if(sr.bvhCounter > world.maxBVHCounter){
-			world.maxBVHCounter = sr.bvhCounter;
-		}
-		
 		if(sr.hasHitAnObject){
 			sr.ray = ray;
 			

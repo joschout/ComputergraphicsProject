@@ -10,7 +10,7 @@ import util.ShadeRec;
 public class BVHFalseColorGrayTracer extends Tracer{
 
 	private World world;
-	//private static int maxValueOfIntersectionsClamper = 30;
+	//private static int maxValueOfIntersectionsClamper = 790;
 		
 		public BVHFalseColorGrayTracer(World world) {
 			this.world = world;
