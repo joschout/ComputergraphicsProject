@@ -81,12 +81,25 @@ public class AABBox extends CompositeAABBox{
 	public boolean intersectInside(Ray ray, ShadeRec sr){
 		return this.shape.intersect(ray, sr);
 	}
-		
+	
+	@Override
+	public boolean shadowHit(Ray shadowRay, ShadeRec sr) {
+		sr.bvhCounter ++;
+		double thisBoxT = this.getSurroundingBoxIntersectionT(shadowRay);
+		if(thisBoxT < kEpsilon ){
+			return false;
+		}
+		if(sr.hasHitAnObject && sr.t <  thisBoxT){
+			return false;
+		}
+		return shadowHitInside(shadowRay, sr);
+	}
+	
+	public boolean shadowHitInside(Ray shadowRay, ShadeRec sr){
+		return this.shape.shadowHit(shadowRay, sr);
+	}
 
-	
-	
 
-	
 	/**
 	 * Computes the AABoundingBox around a BoundingBox
 	 * 

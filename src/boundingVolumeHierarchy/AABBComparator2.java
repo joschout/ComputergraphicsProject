@@ -92,7 +92,7 @@ public class AABBComparator2 implements Comparator<CompositeAABBox> {
 			return -1;
 		}
 		if(box1.getMidpoint().z > box2.getMidpoint().z){
-			return -1;
+			return 1;
 		}
 		
 		return 0;
@@ -103,7 +103,7 @@ public class AABBComparator2 implements Comparator<CompositeAABBox> {
 			return -1;
 		}
 		if(box1.getMidpoint().y > box2.getMidpoint().y){
-			return -1;
+			return 1;
 		}
 		
 		return 0;
@@ -114,7 +114,7 @@ public class AABBComparator2 implements Comparator<CompositeAABBox> {
 			return -1;
 		}
 		if(box1.getMidpoint().x > box2.getMidpoint().x){
-			return -1;
+			return 1;
 		}
 		
 		return 0;

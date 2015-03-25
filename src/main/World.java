@@ -10,6 +10,7 @@ import java.util.List;
 
 import boundingVolumeHierarchy.BVHManager;
 import boundingVolumeHierarchy.BVHManager2;
+import boundingVolumeHierarchy.BVHManagerCfrJerre;
 import boundingVolumeHierarchy.CompositeAABBox;
 import camera.Camera;
 import camera.PerspectiveCamera;
@@ -62,11 +63,11 @@ public class World {
 	public World(){
 		camera = null;
 		backgroundColor = new RGBColor((float)0.3);
-		tracer = new MultipleObjectsTracer(this);
+		//tracer = new MultipleObjectsTracer(this);
 		//tracer = new DepthTracer(this);
 		//tracer = new NormalFalseColorImagetracer(this);
 		//tracer = new NormalBVHTracer(this);
-		//tracer = new BVHTracer(this);
+		tracer = new BVHTracer(this);
 		//tracer = new BVHFalseColorImageTracer(this);
 		//tracer = new BVHFalseColorGrayTracer(this);
 		ambientLight = new AmbientLight();
@@ -141,16 +142,16 @@ public class World {
 //				plane.material = matte;
 //				shapes.add(plane);		
 //
-//				//==== SUZANNE ====//
-//				Transformation meshTransform = Transformation.createRotationY(200);
-//				meshTransform = meshTransform.append(Transformation.createRotationX(0));
-//				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, 1, 7));
-//				ObjectFileReader2 reader = new ObjectFileReader2();
-//				CompoundObject mesh;
-//				mesh = reader.readFile("objects//suzanne.obj");
-//				mesh.setTransformation(meshTransform);
-//				mesh.material = phong;
-//				shapes.add(mesh);
+				//==== SUZANNE ====//
+				Transformation meshTransform = Transformation.createRotationY(200);
+				meshTransform = meshTransform.append(Transformation.createRotationX(0));
+				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(1, 1, 7));
+				ObjectFileReader2 reader = new ObjectFileReader2();
+				CompoundObject mesh;
+				mesh = reader.readFile("objects//suzanne.obj");
+				mesh.setTransformation(meshTransform);
+				mesh.material = phong;
+				shapes.add(mesh);
 //				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
 //				box1.material = phong;
 //				shapes.add(box1);
@@ -204,13 +205,13 @@ public class World {
 //				cylinderTrans = cylinderTrans.appendToTheLeft(Transformation.createTranslation(0 ,0,7));			
 //				Cylinder cy = new Cylinder(cylinderTrans, 1, 0, 2 );
 //				cy.material = phong;
-//				//shapes.add(cy);
-//				Box box1 = Box.boundingBoxtoBox(cy.getBoundingBox());
-//				box1.material = matte;
-//				//shapes.add(box1);
-//			Box box2 = Box.aaBoundingBoxtoBox(cy.getAABoundingBox());
-//			box2.material = matte;
-//			shapes.add(box2);
+//				shapes.add(cy);
+////				Box box1 = Box.boundingBoxtoBox(cy.getBoundingBox());
+////				box1.material = matte;
+////				//shapes.add(box1);
+////			Box box2 = Box.aaBoundingBoxtoBox(cy.getAABoundingBox());
+////			box2.material = matte;
+////			shapes.add(box2);
 
 				
 //				// ==== BOX PRIMITIVE ==== ///
@@ -276,21 +277,21 @@ public class World {
 //				mesh.material = svMatte;
 //				shapes.add(mesh);
 		
-				//======== TEAPOT =====//
-//				ImageTexture imTex = new ImageTexture("objects//house//house_texture.jpg", null);
-//				SVMatteMaterial svMatte = new SVMatteMaterial();
-//				svMatte.setKa(0.45);
-//				svMatte.setKd(0.65);
-//				svMatte.setCd(imTex);
-				Transformation meshTransform = Transformation.createRotationY(200);
-				meshTransform = meshTransform.append(Transformation.createRotationX(10));
-				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -1, 10));
-				ObjectFileReader2 reader = new ObjectFileReader2();
-				CompoundObject mesh;
-				mesh = reader.readFile("objects//teapot.obj");
-				mesh.setTransformation(meshTransform);
-				mesh.material = phong;
-				shapes.add(mesh);	
+//				//======== TEAPOT =====//
+////				ImageTexture imTex = new ImageTexture("objects//house//house_texture.jpg", null);
+////				SVMatteMaterial svMatte = new SVMatteMaterial();
+////				svMatte.setKa(0.45);
+////				svMatte.setKd(0.65);
+////				svMatte.setCd(imTex);
+//				Transformation meshTransform = Transformation.createRotationY(200);
+//				meshTransform = meshTransform.append(Transformation.createRotationX(10));
+//				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -1, 10));
+//				ObjectFileReader2 reader = new ObjectFileReader2();
+//				CompoundObject mesh;
+//				mesh = reader.readFile("objects//teapot.obj");
+//				mesh.setTransformation(meshTransform);
+//				mesh.material = phong;
+//				shapes.add(mesh);	
 				
 //				//==== BUDDHA ====//
 //				Transformation meshTransform = Transformation.createRotationY(0);
@@ -366,8 +367,9 @@ public ShadeRec hitBVH(Ray ray){
 	}
 	
 	public CompositeAABBox createBVH(){
-		//return BVHManager.getBoundingVolumeHierarchy(this.shapes);
-		return BVHManager2.getBoundingVolumeHierarchy(this.shapes);
+		BVHManager2 manager = new BVHManager2();
+		return manager.getBoundingVolumeHierarchy(this.shapes);
+		//return BVHManagerCfrJerre.getBoundingVolumeHierarchy(this.shapes);
 	}
 	
 	public void setBVH(CompositeAABBox bvh){

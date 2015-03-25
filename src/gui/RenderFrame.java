@@ -79,7 +79,13 @@ public class RenderFrame implements ProgressListener {
 	 */
 	private JMenuBar createMenuBar() {
 		JMenuBar bar = new JMenuBar();
-		bar.setPreferredSize(new Dimension(-1, 32));
+		
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		int displayWidth = gd.getDisplayMode().getWidth();
+		int displayHeight = gd.getDisplayMode().getHeight();
+		
+		
+		bar.setPreferredSize(new Dimension(-1, displayHeight/50));
 
 		JMenu fileMenu = new JMenu("File");
 		fileMenu.setMnemonic(KeyEvent.VK_F);

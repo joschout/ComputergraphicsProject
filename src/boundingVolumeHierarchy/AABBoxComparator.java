@@ -35,7 +35,7 @@ public class AABBoxComparator implements Comparator<CompositeAABBox> {
 			return -1;
 		}
 		if(box1.getP0().z > box2.getP0().z){
-			return -1;
+			return 1;
 		}
 		
 		return 0;
@@ -46,7 +46,7 @@ public class AABBoxComparator implements Comparator<CompositeAABBox> {
 			return -1;
 		}
 		if(box1.getP0().y > box2.getP0().y){
-			return -1;
+			return 1;
 		}
 		
 		return 0;
@@ -57,7 +57,7 @@ public class AABBoxComparator implements Comparator<CompositeAABBox> {
 			return -1;
 		}
 		if(box1.getP0().x > box2.getP0().x){
-			return -1;
+			return 1;
 		}
 		
 		return 0;

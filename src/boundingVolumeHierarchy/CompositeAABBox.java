@@ -25,23 +25,23 @@ public abstract  class CompositeAABBox implements Intersectable{
 	public void calculateMidpoint(){
 		double x;
 		if(getP0().x < getP1().x){
-			x = (getP1().x - getP0().x) /2;
+			x = getP0().x + (getP1().x - getP0().x) /2;
 		}else{
-			x = (getP0().x - getP1().x)/2;
+			x = getP1().x + (getP0().x - getP1().x)/2;
 		}
 		
 		double y;
 		if(getP0().y < getP1().y){
-			y = (getP1().y - getP0().y) /2;
+			y = getP0().y +(getP1().y - getP0().y) /2;
 		}else{
-			y = (getP0().y - getP1().y)/2;
+			y = getP1().y + (getP0().y - getP1().y)/2;
 		}
 		
 		double z;
 		if(getP0().z < getP1().z){
-			z = (getP1().z - getP0().z) /2;
+			z = getP0().z  + (getP1().z - getP0().z) /2;
 		}else{
-			z = (getP0().z - getP1().z)/2;
+			z = getP1().z + (getP0().z - getP1().z)/2;
 		}
 	
 		midpoint = new Point(x, y, z);
@@ -124,12 +124,12 @@ public abstract  class CompositeAABBox implements Intersectable{
 		}	
 		
 		if(t0 < t1 && t1 > kEpsilon){//condition for a hit
-			if(t0 > kEpsilon){
+//			if(t0 > kEpsilon){
 				return t0;
-			}else{
-				return t1;
-				
-			}
+//			}else{
+//				return t1;
+//				
+//			}
 		}
 		return -1;
 	}
@@ -138,5 +138,12 @@ public abstract  class CompositeAABBox implements Intersectable{
 		return (((p.x > p0.x && p.x < p1.x) || ( p.x > p1.x && p.x < p0.x))
 				&& (p.y > p0.y && p.y < p1.y) || ( p.y > p1.y && p.y < p0.y)
 				&& (p.z > p0.z && p.z < p1.z) || ( p.z > p1.z && p.z < p0.z));
+	}
+	
+	public String toString(){ 
+		return "CompositeAABox with: \n"
+				+ "   P0: (" + getP0().x + ", " + getP0().y + ", " + getP0().z+ ") \n"
+				+ "   P1: (" + getP1().x + ", " + getP1().y + ", " + getP1().z+ ") \n"
+				+  "   midpoint: (" + midpoint.x + ", " + midpoint.y + ", " + midpoint.z+ ") \n";
 	}
 }

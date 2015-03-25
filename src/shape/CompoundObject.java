@@ -5,6 +5,8 @@ import java.util.List;
 
 import boundingVolumeHierarchy.AABBox;
 import boundingVolumeHierarchy.BVHManager;
+import boundingVolumeHierarchy.BVHManager2;
+import boundingVolumeHierarchy.BVHManagerCfrJerre;
 import boundingVolumeHierarchy.BoundingBox;
 import boundingVolumeHierarchy.CompositeAABBox;
 import material.Material;
@@ -185,6 +187,9 @@ public class CompoundObject implements Shape {
 	
 	
 	public CompositeAABBox getBoundingVolumeHierarchy(){
-		return BVHManager.getBoundingVolumeHierarchy(this.shapes);
+		BVHManager2 manager = new BVHManager2();
+		return manager.getBoundingVolumeHierarchy(this.shapes);
+		//return BVHManager2.getBoundingVolumeHierarchy(this.shapes);
+		//return BVHManagerCfrJerre.getBoundingVolumeHierarchy(this.shapes);
 	}	
 }

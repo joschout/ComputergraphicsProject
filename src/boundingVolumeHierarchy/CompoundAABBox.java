@@ -6,6 +6,7 @@ import java.util.List;
 import math.Point;
 import math.Ray;
 import math.Vector;
+import shape.Shape;
 import util.ShadeRec;
 
 public class CompoundAABBox extends CompositeAABBox {
@@ -56,30 +57,33 @@ public class CompoundAABBox extends CompositeAABBox {
 		//double tmin = Double.MAX_VALUE;
 		Vector normal = null;
 		Point localHitPoint = null;
-
+		
+		//double tSubBoxMin = Double.MAX_VALUE;
 		
 		// check alle subboxes voor deze box
 		for(CompositeAABBox box: compositeAABBoxes){
+			//double tSubBox = box.getSurroundingBoxIntersectionT(ray);
+			//if(tSubBox < tSubBoxMin){
 			
+					if(box.intersect(ray, sr)){
+						//als sr.t kleiner is dan die tot nu toe gevonden
+						if(sr.t < tmin){
+							sr.hasHitAnObject = true;
+							sr.ray = ray;	
+							sr.hitPoint = ray.origin.add(ray.direction.scale(sr.t));
+		
+							//deze drie worden door de intersect functie van een shape aangepast
+							// en moeten we tijdelijk lokaal opslaan
+							tmin = sr.t;
+							normal = sr.normal;
+							localHitPoint = sr.localHitPoint;	
+						}
+					}
+//			}
 			
-			if(box.intersect(ray, sr)){
-				//als sr.t kleiner is dan die tot nu toe gevonden
-				if(sr.t < tmin){
-					sr.hasHitAnObject = true;
-					sr.ray = ray;	
-					sr.hitPoint = ray.origin.add(ray.direction.scale(sr.t));
-
-					//deze drie worden door de intersect functie van een shape aangepast
-					// en moeten we tijdelijk lokaal opslaan
-					tmin = sr.t;
-					normal = sr.normal;
-					localHitPoint = sr.localHitPoint;	
-				}
-			}
 		}
 		
 		//sr.tbox = tForThisBox;
-		
 		if(sr.hasHitAnObject){
 			sr.t = tmin;
 			sr.normal = normal;
@@ -89,6 +93,44 @@ public class CompoundAABBox extends CompositeAABBox {
 		return false;
 	}
 
+	
+	@Override
+	public boolean shadowHit(Ray shadowRay, ShadeRec sr) {
+		sr.bvhCounter ++;
+		double thisBoxT = this.getSurroundingBoxIntersectionT(shadowRay);
+		if(thisBoxT < kEpsilon ){
+			return false;
+		}	
+		
+		if(sr.hasHitAnObject && sr.t < thisBoxT){
+			return false;
+		}
+
+		boolean shadowhit = false;
+		double tmin = sr.t;
+		
+		// check alle subboxes voor deze box
+		for(CompositeAABBox box: compositeAABBoxes){
+			if(box.shadowHit(shadowRay, sr)){
+				//als sr.t kleiner is dan die tot nu toe gevonden
+				if(sr.t < tmin){
+					//deze drie worden door de intersect functie van een shape aangepast
+					// en moeten we tijdelijk lokaal opslaan
+					shadowhit = true;
+					tmin = sr.t;
+				}
+			}
+		}
+		
+		//sr.tbox = tForThisBox;
+		if(shadowhit){
+			sr.t = tmin;
+			return true;
+		}
+		return false;
+	}
+	
+	
 	public void addObject(CompositeAABBox box){
 		compositeAABBoxes.add(box);		
 	}

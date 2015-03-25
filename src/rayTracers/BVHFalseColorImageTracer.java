@@ -10,7 +10,7 @@ import util.ShadeRec;
 public class BVHFalseColorImageTracer extends Tracer {
 
 private World world;
-private static float nrOfIntersectionsClamper = 1200;
+private static float nrOfIntersectionsClamper = 317;
 	
 	public BVHFalseColorImageTracer(World world) {
 		this.world = world;
