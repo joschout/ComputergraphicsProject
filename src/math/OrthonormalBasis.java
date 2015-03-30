@@ -78,7 +78,7 @@ public class OrthonormalBasis implements Cloneable {
 			System.err.println(a);
 			System.err.println(b);
 		}
-		w = a.normalize();
+		w = a.scale(-1).normalize();
 		u = b.cross(w).normalize();
 		v = w.cross(u);
 	}

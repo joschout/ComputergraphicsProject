@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import boundingVolumeHierarchy.AABBox;
-import boundingVolumeHierarchy.BVHManager;
 import boundingVolumeHierarchy.BVHManager2;
-import boundingVolumeHierarchy.BVHManagerCfrJerre;
 import boundingVolumeHierarchy.BoundingBox;
 import boundingVolumeHierarchy.CompositeAABBox;
 import material.Material;

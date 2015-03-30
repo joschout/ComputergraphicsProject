@@ -4,7 +4,7 @@ import main.World;
 import math.Ray;
 import util.RGBColor;
 
-public class Tracer {
+public abstract class Tracer {
 
 	protected World world;
 	
@@ -16,8 +16,6 @@ public class Tracer {
 		this.world = world;
 	}
 	
-	public RGBColor traceRay(Ray ray){
-		return new RGBColor(0);
-	}
+	public abstract RGBColor traceRay(Ray ray);
 	
 }

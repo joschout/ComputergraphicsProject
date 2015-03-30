@@ -86,7 +86,7 @@ public class PerspectiveCamera implements Camera {
 		double u = width * (sample.x / (double) xResolution - 0.5);
 		double v = height * (sample.y / (double) yResolution - 0.5);
 
-		Vector direction = basis.w.add(basis.u.scale(u).add(basis.v.scale(v)));
+		Vector direction = basis.w.scale(-1).add(basis.u.scale(u).add(basis.v.scale(v)));
 
 		return new Ray(origin, direction);
 	}

@@ -8,9 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import boundingVolumeHierarchy.BVHManager;
 import boundingVolumeHierarchy.BVHManager2;
-import boundingVolumeHierarchy.BVHManagerCfrJerre;
 import boundingVolumeHierarchy.CompositeAABBox;
 import camera.Camera;
 import camera.PerspectiveCamera;
@@ -54,7 +52,7 @@ public class World {
 	public RGBColor backgroundColor;
 	public  List<Shape> shapes = new ArrayList<Shape>();
 	public List<Light> lights = new ArrayList<Light>();
-	public Tracer tracer;
+	//public Tracer tracer;
 	public Light ambientLight;
 	public CompositeAABBox bvh;
 	public double maxBVHCounter;
@@ -67,7 +65,7 @@ public class World {
 		//tracer = new DepthTracer(this);
 		//tracer = new NormalFalseColorImagetracer(this);
 		//tracer = new NormalBVHTracer(this);
-		tracer = new BVHTracer(this);
+		//tracer = new BVHTracer(this);
 		//tracer = new BVHFalseColorImageTracer(this);
 		//tracer = new BVHFalseColorGrayTracer(this);
 		ambientLight = new AmbientLight();
@@ -94,7 +92,7 @@ public class World {
 				PointLight pl2 = new PointLight(1.0, new RGBColor(1), new  Point(5,3,0));
 				pl2.setCastShadows(false);
 				this.addLight(pl2);
-//
+
 				PhongMaterial phong = new PhongMaterial();
 				phong.setKa(0.25);
 				phong.setKd(0.65);
@@ -142,172 +140,191 @@ public class World {
 //				plane.material = matte;
 //				shapes.add(plane);		
 //
-				//==== SUZANNE ====//
-				Transformation meshTransform = Transformation.createRotationY(200);
-				meshTransform = meshTransform.append(Transformation.createRotationX(0));
-				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(1, 1, 7));
-				ObjectFileReader2 reader = new ObjectFileReader2();
-				CompoundObject mesh;
-				mesh = reader.readFile("objects//suzanne.obj");
-				mesh.setTransformation(meshTransform);
-				mesh.material = phong;
-				shapes.add(mesh);
+				//testSuzanne(phong);
+				//testBunny(phong);
+				testTriceratops(phong);
+				//testVenus(phong);
+				//testCylinderPrimitive(phong);
+				//testBoxPrimitive(phong);
+				//testSpherePrimitive(phong);
+				//testApple();
+				//testHouse();
+				//testTeapot(phong);	
+				//testBuddha(phong);
+				
+				
+	}
+
+	private void testVenus(PhongMaterial phong) {
+		//==== VENUS ====//
+		Transformation meshTransform = Transformation.createRotationY(200);
+		meshTransform = meshTransform.append(Transformation.createRotationX(10));
+		meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -1, 15));
+		ObjectFileReader2 reader = new ObjectFileReader2();
+		CompoundObject mesh;
+		mesh = reader.readFile("objects//venus.obj");
+		mesh.setTransformation(meshTransform);
+		mesh.material = phong;
+		shapes.add(mesh);
 //				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
 //				box1.material = phong;
 //				shapes.add(box1);
+	}
 
-//				//==== BUNNY ====//
-//				Transformation meshTransform = Transformation.createRotationY(200);
-//				meshTransform = meshTransform.append(Transformation.createRotationX(10));
-//				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -1, 10));
-//				ObjectFileReader2 reader = new ObjectFileReader2();
-//				CompoundObject mesh;
-//				mesh = reader.readFile("objects//bunny.obj");
-//				mesh.setTransformation(meshTransform);
-//				mesh.material = phong;
-//				shapes.add(mesh);
-////				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
-////				box1.material = phong;
-////				shapes.add(box1);		
-				
-//				//==== TRICERATOPS ====//
-//				Transformation meshTransform = Transformation.createRotationY(200);
-//				meshTransform = meshTransform.append(Transformation.createRotationX(10));
-//				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -1, 20));
-//				ObjectFileReader2 reader = new ObjectFileReader2();
-//				CompoundObject mesh;
-//				mesh = reader.readFile("objects//triceratops.obj");
-//				mesh.setTransformation(meshTransform);
-//				mesh.material = phong;
-//				shapes.add(mesh);
-////				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
-////				box1.material = phong;
-////				shapes.add(box1);	
-				
-//				//==== VENUS ====//
-//				Transformation meshTransform = Transformation.createRotationY(200);
-//				meshTransform = meshTransform.append(Transformation.createRotationX(10));
-//				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -1, 15));
-//				ObjectFileReader2 reader = new ObjectFileReader2();
-//				CompoundObject mesh;
-//				mesh = reader.readFile("objects//venus.obj");
-//				mesh.setTransformation(meshTransform);
-//				mesh.material = phong;
-//				shapes.add(mesh);
-////				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
-////				box1.material = phong;
-////				shapes.add(box1);
-				
-				
-//				//====CYLINDER PRIMITIVE ====//
-//				Transformation cylinderTrans = Transformation.createRotationY(200);
-//				cylinderTrans = cylinderTrans.append(Transformation.createRotationX(0));
-//				cylinderTrans = cylinderTrans.appendToTheLeft(Transformation.createTranslation(0 ,0,7));			
-//				Cylinder cy = new Cylinder(cylinderTrans, 1, 0, 2 );
-//				cy.material = phong;
-//				shapes.add(cy);
-////				Box box1 = Box.boundingBoxtoBox(cy.getBoundingBox());
-////				box1.material = matte;
-////				//shapes.add(box1);
-////			Box box2 = Box.aaBoundingBoxtoBox(cy.getAABoundingBox());
-////			box2.material = matte;
-////			shapes.add(box2);
+	private void testTriceratops(PhongMaterial phong) {
+		//==== TRICERATOPS ====//
+		Transformation meshTransform = Transformation.createRotationY(200);
+		meshTransform = meshTransform.append(Transformation.createRotationX(10));
+		meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -1, 20));
+		ObjectFileReader2 reader = new ObjectFileReader2();
+		CompoundObject mesh;
+		mesh = reader.readFile("objects//triceratops.obj");
+		mesh.setTransformation(meshTransform);
+		mesh.material = phong;
+		shapes.add(mesh);
+//				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
+//				box1.material = phong;
+//				shapes.add(box1);	
+	}
 
-				
-//				// ==== BOX PRIMITIVE ==== ///
-//				Transformation boxTrans = Transformation.createRotationY(200);
-//				boxTrans = boxTrans.append(Transformation.createRotationX(0));
-//				boxTrans = boxTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 2));
-//				Box box = new  Box(boxTrans, new Point(), new Point(1,1,1));
-//				box.material = phong;
-//				shapes.add(box);
-				
+	private void testBunny(PhongMaterial phong) {
+		//==== BUNNY ====//
+		Transformation meshTransform = Transformation.createRotationY(200);
+		meshTransform = meshTransform.append(Transformation.createRotationX(10));
+		meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -1, 10));
+		ObjectFileReader2 reader = new ObjectFileReader2();
+		CompoundObject mesh;
+		mesh = reader.readFile("objects//bunny.obj");
+		mesh.setTransformation(meshTransform);
+		mesh.material = phong;
+		shapes.add(mesh);
+//				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
+//				box1.material = phong;
+//				shapes.add(box1);		
+	}
 
-//				// ==== SPHERE PRIMITIVE ==== ///
-//				Transformation sphereTrans = Transformation.createRotationY(200);
-//				sphereTrans = sphereTrans.append(Transformation.createRotationX(0));
-//				sphereTrans = sphereTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 4));
-//				Sphere sphere = new  Sphere(sphereTrans, 1);
-//				sphere.material = phong;
-//				shapes.add(sphere);
-////				Box box1 = Box.boundingBoxtoBox(sphere.getBoundingBox());
-////				box1.material = matte;
-////				shapes.add(box1);
-////				Box box2 = Box.aaBoundingBoxtoBox(sphere.getAABoundingBox());
-////				box2.material = matte;
-////				shapes.add(box2);
+	private void testSuzanne(PhongMaterial phong) {
+		//==== SUZANNE ====//
+		Transformation meshTransform = Transformation.createRotationY(200);
+		meshTransform = meshTransform.append(Transformation.createRotationX(0));
+		meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, 1, 7));
+		ObjectFileReader2 reader = new ObjectFileReader2();
+		CompoundObject mesh;
+		mesh = reader.readFile("objects//suzanne.obj");
+		mesh.setTransformation(meshTransform);
+		mesh.material = phong;
+		shapes.add(mesh);
+//				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
+//				box1.material = phong;
+//				shapes.add(box1);
+	}
 
-				
-				
-				
-//				//======== apple ==========//
-//
-//				ImageTexture imTex = new ImageTexture("objects//apple//apple_texture.jpg", null);
-//				SVMatteMaterial svMatte = new SVMatteMaterial();
-//				svMatte.setKa(0.45);
-//				svMatte.setKd(0.65);
-//				svMatte.setCd(imTex);
-//				Transformation meshTransform = Transformation.createRotationY(1);
-//				meshTransform = meshTransform.append(Transformation.createRotationX(0));
-//				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(0,0, 2));
-//				ObjectFileReader reader = new ObjectFileReader();
-//				TriangleMesh mesh;
-//				mesh = reader.readFile("objects//apple//apple.obj");
-//				mesh.setTransformation(meshTransform);
-//				mesh.material = svMatte;
-//				shapes.add(mesh);
-////				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
-////				box1.material = phong;
-////				shapes.add(box1);
+	private void testCylinderPrimitive(PhongMaterial phong) {
+		//====CYLINDER PRIMITIVE ====//
+		Transformation cylinderTrans = Transformation.createRotationY(200);
+		cylinderTrans = cylinderTrans.append(Transformation.createRotationX(0));
+		cylinderTrans = cylinderTrans.appendToTheLeft(Transformation.createTranslation(0 ,0,7));			
+		Cylinder cy = new Cylinder(cylinderTrans, 1, 0, 2 );
+		cy.material = phong;
+		shapes.add(cy);
+//				Box box1 = Box.boundingBoxtoBox(cy.getBoundingBox());
+//				box1.material = matte;
+//				//shapes.add(box1);
+//			Box box2 = Box.aaBoundingBoxtoBox(cy.getAABoundingBox());
+//			box2.material = matte;
+//			shapes.add(box2);
+	}
 
-//
-//				//======== HOUSE =====//
-//				ImageTexture imTex = new ImageTexture("objects//house//house_texture.jpg", null);
-//				SVMatteMaterial svMatte = new SVMatteMaterial();
-//				svMatte.setKa(0.45);
-//				svMatte.setKd(0.65);
-//				svMatte.setCd(imTex);
-//				Transformation meshTransform = Transformation.createRotationY(120);
-//				meshTransform = meshTransform.append(Transformation.createRotationX(40));
-//				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(0,0, 2));
-//				ObjectFileReader2 reader = new ObjectFileReader2();
-//				CompoundObject mesh;
-//				mesh = reader.readFile("objects//house//house.obj");
-//				mesh.setTransformation(meshTransform);
-//				mesh.material = svMatte;
-//				shapes.add(mesh);
-		
-//				//======== TEAPOT =====//
-////				ImageTexture imTex = new ImageTexture("objects//house//house_texture.jpg", null);
-////				SVMatteMaterial svMatte = new SVMatteMaterial();
-////				svMatte.setKa(0.45);
-////				svMatte.setKd(0.65);
-////				svMatte.setCd(imTex);
-//				Transformation meshTransform = Transformation.createRotationY(200);
-//				meshTransform = meshTransform.append(Transformation.createRotationX(10));
-//				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -1, 10));
-//				ObjectFileReader2 reader = new ObjectFileReader2();
-//				CompoundObject mesh;
-//				mesh = reader.readFile("objects//teapot.obj");
-//				mesh.setTransformation(meshTransform);
-//				mesh.material = phong;
-//				shapes.add(mesh);	
-				
-//				//==== BUDDHA ====//
-//				Transformation meshTransform = Transformation.createRotationY(0);
-//				meshTransform = meshTransform.append(Transformation.createRotationX(0));
-//				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(0, 0, 1.5));
-//				ObjectFileReader2 reader = new ObjectFileReader2();
-//				CompoundObject mesh;
-//				mesh = reader.readFile("objects//buddha.obj");
-//				mesh.setTransformation(meshTransform);
-//				mesh.material = phong;
-//				shapes.add(mesh);
-////				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
-////				box1.material = phong;
-////				shapes.add(box1);
-				
-				
+	private void testBoxPrimitive(PhongMaterial phong) {
+		// ==== BOX PRIMITIVE ==== ///
+		Transformation boxTrans = Transformation.createRotationY(200);
+		boxTrans = boxTrans.append(Transformation.createRotationX(0));
+		boxTrans = boxTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 2));
+		Box box = new  Box(boxTrans, new Point(), new Point(1,1,1));
+		box.material = phong;
+		shapes.add(box);
+	}
+
+	private void testSpherePrimitive(PhongMaterial phong) {
+		// ==== SPHERE PRIMITIVE ==== ///
+		Transformation sphereTrans = Transformation.createRotationY(200);
+		sphereTrans = sphereTrans.append(Transformation.createRotationX(0));
+		sphereTrans = sphereTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 4));
+		Sphere sphere = new  Sphere(sphereTrans, 1);
+		sphere.material = phong;
+		shapes.add(sphere);
+//				Box box1 = Box.boundingBoxtoBox(sphere.getBoundingBox());
+//				box1.material = matte;
+//				shapes.add(box1);
+//				Box box2 = Box.aaBoundingBoxtoBox(sphere.getAABoundingBox());
+//				box2.material = matte;
+//				shapes.add(box2);
+	}
+
+	private void testApple() {
+		ImageTexture imTex = new ImageTexture("objects//apple//apple_texture.jpg", null);
+		SVMatteMaterial svMatte = new SVMatteMaterial();
+		svMatte.setKa(0.45);
+		svMatte.setKd(0.65);
+		svMatte.setCd(imTex);
+		Transformation meshTransform = Transformation.createRotationY(1);
+		meshTransform = meshTransform.append(Transformation.createRotationX(0));
+		meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(0,0, 2));
+		ObjectFileReader reader = new ObjectFileReader();
+		TriangleMesh mesh;
+		mesh = reader.readFile("objects//apple//apple.obj");
+		mesh.setTransformation(meshTransform);
+		mesh.material = svMatte;
+		shapes.add(mesh);
+//				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
+//				box1.material = phong;
+//				shapes.add(box1);
+	}
+
+	private void testHouse() {
+		//======== HOUSE =====//
+		ImageTexture imTex = new ImageTexture("objects//house//house_texture.jpg", null);
+		SVMatteMaterial svMatte = new SVMatteMaterial();
+		svMatte.setKa(0.45);
+		svMatte.setKd(0.65);
+		svMatte.setCd(imTex);
+		Transformation meshTransform = Transformation.createRotationY(120);
+		meshTransform = meshTransform.append(Transformation.createRotationX(40));
+		meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(0,0, 2));
+		ObjectFileReader2 reader = new ObjectFileReader2();
+		CompoundObject mesh;
+		mesh = reader.readFile("objects//house//house.obj");
+		mesh.setTransformation(meshTransform);
+		mesh.material = svMatte;
+		shapes.add(mesh);
+	}
+
+	private void testTeapot(PhongMaterial phong) {
+		Transformation meshTransform = Transformation.createRotationY(200);
+		meshTransform = meshTransform.append(Transformation.createRotationX(10));
+		meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -1, 10));
+		ObjectFileReader2 reader = new ObjectFileReader2();
+		CompoundObject mesh;
+		mesh = reader.readFile("objects//teapot.obj");
+		mesh.setTransformation(meshTransform);
+		mesh.material = phong;
+		shapes.add(mesh);
+	}
+
+	private void testBuddha(PhongMaterial phong) {
+		//==== BUDDHA ====//
+		Transformation meshTransform = Transformation.createRotationY(0);
+		meshTransform = meshTransform.append(Transformation.createRotationX(0));
+		meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(0, 0, 1.5));
+		ObjectFileReader2 reader = new ObjectFileReader2();
+		CompoundObject mesh;
+		mesh = reader.readFile("objects//buddha.obj");
+		mesh.setTransformation(meshTransform);
+		mesh.material = phong;
+		shapes.add(mesh);
+//				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
+//				box1.material = phong;
+//				shapes.add(box1);
 	}
 
 	public ShadeRec hitObjects(Ray ray){
@@ -359,7 +376,7 @@ public ShadeRec hitBVH(Ray ray){
 	
 	
 
-	private  void initializeCamera(int width, int height) {
+	private void initializeCamera(int width, int height) {
 		camera = new PerspectiveCamera(width, height,
 
 				//new Point(0,5,0), new Vector(0, -1,3), new Vector(0, 1, 0),90);
