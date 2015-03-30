@@ -51,18 +51,20 @@ public class SimpleRenderer extends Renderer {
 		
 		render(world, tracer);
 		
-		tracer.maxBHVCounter
+		int maxBVHCount = world.maxBVHCounter;
 	
 		// initialize the graphical user interface
 		ImagePanel panel2 = new ImagePanel(imageWidth, imageHeight);
-		RenderFrame frame2 = new RenderFrame("Renderer", panel);
+		RenderFrame frame2 = new RenderFrame("False Color Image", panel2);
 
 		// initialize the progress reporter
 		ProgressReporter reporter2 = new ProgressReporter("Rendering", 40, imageWidth
 				* imageHeight, false);
 		reporter2.addProgressListener(frame2);
 		
-		Tracer tracer2 = new BVHFalseColorImageTracer(world);
+		BVHFalseColorImageTracer tracer2 = new BVHFalseColorImageTracer(world);
+		
+		BVHFalseColorImageTracer.setNrOfIntersectionsClamper(maxBVHCount);
 		
 		// render the scene
 				for (int x = 0; x < imageWidth; ++x) {
@@ -75,8 +77,6 @@ public class SimpleRenderer extends Renderer {
 					reporter2.update(imageHeight);
 				}
 				reporter2.done();
-
-				System.out.println("Max number of intersections per pixel : " + world.maxBVHCounter);
 
 				// save the output
 				try {

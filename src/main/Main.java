@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 
 import math.Ray;
 import rayTracers.BVHFalseColorImageTracer;
+import rayTracers.BVHTracer;
 import rayTracers.Tracer;
 import renderer.Renderer;
 import renderer.SimpleRenderer;
@@ -48,15 +49,6 @@ public class Main {
 		// validate the input
 		validateInput(imageResolution);
 
-//		// initialize the graphical user interface
-//		ImagePanel panel = new ImagePanel(imageResolution[0], imageResolution[1]);
-//		RenderFrame frame = new RenderFrame("Renderer", panel);
-//
-//		// initialize the progress reporter
-//		ProgressReporter reporter = new ProgressReporter("Rendering", 40, imageResolution[0]
-//				* imageResolution[1], false);
-//		reporter.addProgressListener(frame);
-
 		World world = new World();
 		world.build(imageResolution[0], imageResolution[1]);
 
@@ -65,34 +57,17 @@ public class Main {
 		//Tracer tracer = new NormalFalseColorImagetracer(world);
 		//Tracer tracer = new NormalBVHTracer(world);
 		//Tracer tracer = new BVHTracer(world);
-		Tracer tracer = new BVHFalseColorImageTracer(world);
+		//Tracer tracer = new BVHFalseColorImageTracer(world);
 		//Tracer tracer = new BVHFalseColorGrayTracer(world);
 		
-		Renderer renderer = new SimpleRenderer(imageResolution[0], imageResolution[1]);
-		renderer.render(world, tracer);
+//		Renderer renderer = new SimpleRenderer(imageResolution[0], imageResolution[1]);
+//		renderer.render(world, tracer);
 		
-//		// render the scene
-//		for (int x = 0; x < imageResolution[0]; ++x) {
-//			for (int y = 0; y < imageResolution[1]; ++y) {
-//				// create a ray through the center of the pixel.
-//				Ray ray = world.camera.generateRay(new Sample(x + 0.5, y + 0.5));
-//
-//				RGBColor color = world.tracer.traceRay(ray);
-//
-//
-//				panel.set(x, y, color.convertToColor());	
-//			}
-//			reporter.update(imageResolution[1]);
-//		}
-//		reporter.done();
-//
-//		System.out.println("Max number of intersections per pixel : " +world.maxBVHCounter);
-//
-//		// save the output
-//		try {
-//			ImageIO.write(panel.getImage(), "png", new File("output.png"));
-//		} catch (IOException e) {
-//		}
+		
+		BVHTracer tracer = new BVHTracer(world);
+		SimpleRenderer renderer = new SimpleRenderer(imageResolution[0], imageResolution[1]);
+		renderer.falseColorRender(world, tracer);
+		
 	}
 
 	private static void parseArgs(String[] arguments, int[] imageResolution){

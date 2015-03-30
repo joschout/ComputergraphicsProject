@@ -49,5 +49,6 @@ local.properties
 .texlipse
 
 output.png
+outputFalseColor.png
 *.obj
 /objects

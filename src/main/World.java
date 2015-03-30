@@ -55,7 +55,7 @@ public class World {
 	//public Tracer tracer;
 	public Light ambientLight;
 	public CompositeAABBox bvh;
-	public double maxBVHCounter;
+	public int maxBVHCounter;
 	
 	
 	public World(){

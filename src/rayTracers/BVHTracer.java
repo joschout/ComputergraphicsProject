@@ -8,7 +8,7 @@ import util.ShadeRec;
 public class BVHTracer extends Tracer {
 
 	private World world;
-	public int maxBHVCounter;
+	//public int maxBHVCounter;
 	
 	
 	public BVHTracer(World world) {
