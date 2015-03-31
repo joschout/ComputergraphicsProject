@@ -14,6 +14,9 @@ public class MultipleObjectsTracer extends Tracer {
 	}
 	
 	public RGBColor traceRay(Ray ray){
+		if(world.intersectablesToIntersect.isEmpty()){
+			world.intersectablesToIntersect = world.intersectables;
+		}
 		ShadeRec sr = world.hitObjects(ray);
 		
 		if(sr.hasHitAnObject){

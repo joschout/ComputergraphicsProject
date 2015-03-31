@@ -17,12 +17,11 @@ public class BVHFalseColorImageTracer extends Tracer {
 	}
 
 	public RGBColor traceRay(Ray ray){
-		if(world.bvh == null){
-			world.setBVH(world.createBVH());
+		if(world.intersectablesToIntersect.isEmpty()){
+			world.createBVH2();
 		}
-
-
-		ShadeRec sr = world.hitBVH(ray);
+		
+		ShadeRec sr = world.hitObjects(ray);
 
 		//if(sr.hasHitAnObject){
 		//int k = 15;

@@ -47,16 +47,18 @@ public class World{
 	
 	public Camera camera;
 	public RGBColor backgroundColor;
-	public List<Shape> shapes = new ArrayList<Shape>();
 	
-	public List<Intersectable> infiniteIntersectables = new ArrayList<Intersectable>();
+	/**
+	 * Deze lijst wordt geintersect
+	 */
 	public List<Intersectable> intersectablesToIntersect = new ArrayList<Intersectable>();
 	
-	
+	/**
+	 * hierin worden alle objecten gedumpt in het begin
+	 */
 	public List<Intersectable> intersectables = new ArrayList<Intersectable>();	
 	public List<Light> lights = new ArrayList<Light>();
 	public Light ambientLight;
-	public CompositeAABBox bvh;
 	public int maxBVHCounter;
 	
 	
@@ -64,12 +66,7 @@ public class World{
 		camera = null;
 		backgroundColor = new RGBColor((float)0.3);
 		ambientLight = new AmbientLight();
-		bvh = null;
 		maxBVHCounter = 0;
-	}
-	
-	public void addShape(Shape shape){
-		shapes.add(shape);
 	}
 	
 	public void addIntersectable(Intersectable intersectable){
@@ -162,20 +159,20 @@ public class World{
 //				intersectables.add(plane);
 //				
 //				
-//				//==== PLANE PRIMITIVE ====//
-//				Transformation planeTransform = Transformation.createTranslation(0, 0, 5);
-//				Transformation planeTransform2 = Transformation.createRotationX(50);
-//				Plane pl = new Plane(planeTransform, new Point(0, -5, 0), new Vector(0,1,0));
-//				pl.material = phong;
-//				intersectables.add(pl);
+				//==== PLANE PRIMITIVE ====//
+				Transformation planeTransform = Transformation.createTranslation(0, 0, 5);
+				Transformation planeTransform2 = Transformation.createRotationX(50);
+				Plane pl = new Plane(planeTransform, new Point(0, -5, 0), new Vector(0,1,0));
+				pl.material = svMatte;
+				intersectables.add(pl);
 				
 //				testTrianglePrimitive(phong);				
 //				testParallelogramPrimitive(phong);				
 //				testDiskPrimitive(phong);			
-				testTeapotCheckers3D(svMatte);
+//				testTeapotCheckers3D(svMatte);
 //				testSuzanne(phong);
 //				testBunny(phong);
-//				testTriceratops(phong);
+				testTriceratops(phong);
 //				testVenus(phong);
 //				testCylinderPrimitive(phong);
 //				testBoxPrimitive(phong);
@@ -224,40 +221,16 @@ public class World{
 			sr.normal = normal;
 			sr.localHitPoint = localHitPoint;
 		}
-		return sr;
-	}
-	
-	
-
-	
-	public ShadeRec hitBVH(Ray ray){
-		ShadeRec sr = new ShadeRec(this);
-		this.bvh.intersect(ray, sr);
-		
 		if(sr.bvhCounter > this.maxBVHCounter){
 			this.maxBVHCounter = sr.bvhCounter;
 		}
-		
 		return sr;
-	}
-
-	public CompositeAABBox createBVH(){
-		BVHManager2 manager = new BVHManager2();
-		List<Shape> finiteShapes = new ArrayList<Shape>();
-		for(Intersectable intersectable: intersectables){
-			if (intersectable.isInfinite()) {
-				infiniteIntersectables.add(intersectable);
-			}else {
-				finiteShapes.add((Shape)intersectable);
-			}
-		}
-		return manager.getBoundingVolumeHierarchy(finiteShapes);
-		//return BVHManagerCfrJerre.getBoundingVolumeHierarchy(this.shapes);
 	}
 
 	public void createBVH2(){
 		BVHManager2 manager = new BVHManager2();
 		List<Shape> finiteShapes = new ArrayList<Shape>();
+		
 		for(Intersectable intersectable: intersectables){
 			if (intersectable.isInfinite()) {
 				intersectablesToIntersect.add(intersectable);
@@ -266,12 +239,8 @@ public class World{
 			}
 		}
 		intersectablesToIntersect.add(manager.getBoundingVolumeHierarchy(finiteShapes));
-		//return BVHManagerCfrJerre.getBoundingVolumeHierarchy(this.shapes);
 	}
-	
-	public void setBVH(CompositeAABBox bvh){
-		this.bvh = bvh;
-	}
+
 
 	/**
 	 * 

@@ -31,8 +31,6 @@ import util.RGBColor;
  */
 public class Main {
 
-
-
 	/**
 	 * Entry point of your renderer.
 	 * 
@@ -55,11 +53,9 @@ public class Main {
 
 		World world = new World();
 		world.build(imageResolution[0], imageResolution[1]);
-		
-		world.createBVH2();
-		
+			
 
-		Tracer tracer = new MultipleObjectsTracer(world);
+		//Tracer tracer = new MultipleObjectsTracer(world);
 		//Tracer tracer = new DepthTracer(world);
 		//Tracer tracer = new NormalFalseColorImagetracer(world);
 		//Tracer tracer = new NormalBVHTracer(world);
@@ -72,13 +68,13 @@ public class Main {
 		
 //		AntialiasingRenderer renderer = new AntialiasingRenderer(imageResolution[0], imageResolution[1]);
 //		renderer.setSqrtOfNumberOfRaysPerPixel(10);
-		Renderer renderer = new SimpleRenderer(imageResolution[0], imageResolution[1]);
-		renderer.render(world, tracer);
+//		Renderer renderer = new SimpleRenderer(imageResolution[0], imageResolution[1]);
+//		renderer.render(world, tracer);
 		
 		
-//		BVHTracer tracer = new BVHTracer(world);
-//		SimpleRenderer renderer = new SimpleRenderer(imageResolution[0], imageResolution[1]);
-//		renderer.falseColorRender(world, tracer, sampleFactory);
+		BVHTracer tracer = new BVHTracer(world);
+		SimpleRenderer renderer = new SimpleRenderer(imageResolution[0], imageResolution[1]);
+		renderer.falseColorRender(world, tracer);
 		
 	}
 
