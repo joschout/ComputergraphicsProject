@@ -86,11 +86,11 @@ public class World{
 				this.initializeCamera(imageWidth, imageHeight);
 				
 				PointLight pl1 = new PointLight(3.0, new RGBColor(1), new  Point(-5,3,0));
-				pl1.setCastShadows(false);
+				pl1.setCastShadows(true);
 				this.addLight(pl1);
 
 				PointLight pl2 = new PointLight(1.0, new RGBColor(1), new  Point(5,3,0));
-				pl2.setCastShadows(false);
+				pl2.setCastShadows(true);
 				this.addLight(pl2);
 
 				PhongMaterial phong = new PhongMaterial();
@@ -147,16 +147,16 @@ public class World{
 //				intersectables.add(plane);
 				
 
-//				Plane plane = new Plane(Transformation.createIdentity(), new Point(0,0, 11), new Vector(0,0, -1));
-//				PhongMaterial planeMaterial = new PhongMaterial();
-//				planeMaterial.setKa(0.25);
-//				planeMaterial.setKd(0.65);
-//				planeMaterial.setCd(RGBColor.convertToRGBColor(Color.CYAN));
-//				planeMaterial.setKs(0.2);
-//				planeMaterial.setPhongExponent(10);
-//				planeMaterial.setCs(RGBColor.convertToRGBColor(Color.WHITE));
-//				plane.material = planeMaterial;
-//				intersectables.add(plane);
+				Plane plane = new Plane(Transformation.createIdentity(), new Point(0,0, 11), new Vector(0,0, -1));
+				PhongMaterial planeMaterial = new PhongMaterial();
+				planeMaterial.setKa(0.25);
+				planeMaterial.setKd(0.65);
+				planeMaterial.setCd(RGBColor.convertToRGBColor(Color.CYAN));
+				planeMaterial.setKs(0.2);
+				planeMaterial.setPhongExponent(10);
+				planeMaterial.setCs(RGBColor.convertToRGBColor(Color.WHITE));
+				plane.material = planeMaterial;
+				intersectables.add(plane);
 //				
 //				
 				//==== PLANE PRIMITIVE ====//
@@ -170,9 +170,9 @@ public class World{
 //				testParallelogramPrimitive(phong);				
 //				testDiskPrimitive(phong);			
 //				testTeapotCheckers3D(svMatte);
-//				testSuzanne(phong);
+				testSuzanne(phong);
 //				testBunny(phong);
-				testTriceratops(phong);
+//				testTriceratops(phong);
 //				testVenus(phong);
 //				testCylinderPrimitive(phong);
 //				testBoxPrimitive(phong);

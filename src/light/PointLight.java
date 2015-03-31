@@ -71,8 +71,8 @@ public class PointLight extends Light {
 		 * and if the distance to that object is a positive number t smaller than the distance d
 		 * then the hit point lies in the shadow of that object under this light source.
 		 */
-		for(int j = 0; j < sr.world.shapes.size(); j++){
-			if(sr.world.shapes.get(j).shadowHit(shadowRay, sr) && sr.t < d){
+		for(int j = 0; j < sr.world.intersectablesToIntersect.size(); j++){
+			if(sr.world.intersectablesToIntersect.get(j).shadowHit(shadowRay, sr) && sr.t < d){
 				return true;
 			}
 		}
