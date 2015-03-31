@@ -1,5 +1,8 @@
 package shape;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import boundingVolumeHierarchy.AABBox;
 import boundingVolumeHierarchy.BoundingBox;
 import boundingVolumeHierarchy.CompositeAABBox;
@@ -25,6 +28,7 @@ public class Parallelogram implements Shape {
 	public Point v1; // point b
 	public Point v2; // point c
 	public Vector normal;
+	public static double boundingBoxDelta = 0.0001;
 
 	/**
 	 * Creates a new parallelogram with points (0,0,0), (0,0,1) and (1,0,0).
@@ -126,6 +130,14 @@ public class Parallelogram implements Shape {
 		}
 		
 		sr.t = t;
+		
+		sr.material= this.getMaterial();
+		sr.hasHitAnObject = true;
+		sr.ray = ray;
+		sr.hitPoint = ray.origin.add(ray.direction.scale(sr.t));
+		
+		
+		
 		Matrix transposeOfInverse = this.transformation.getInverseTransformationMatrix().transpose();
 		Vector transformedNormal = transposeOfInverse.transform(normal);
 		sr.normal = transformedNormal;
@@ -140,8 +152,73 @@ public class Parallelogram implements Shape {
 
 	@Override
 	public BoundingBox getBoundingBox() {
-		// TODO Auto-generated method stub
-		return null;
+		Vector v1Minv0 = v1.subtract(v0);
+		Point v3 = v2.add(v1Minv0);
+		
+		//p0 should be smaller than p1;
+		List<Point> points = new ArrayList<Point>();
+		points.add(v0);
+		points.add(v1);
+		points.add(v2);
+		points.add(v3);
+		
+		
+		
+		
+		double p0X = Double.MAX_VALUE;
+		double p1X = -Double.MAX_VALUE;
+		for(Point point: points){
+			double pX = point.x;
+			if(pX < p0X){
+				p0X = pX;
+			}
+			if(pX > p1X){
+				p1X = pX;
+			}
+		}
+		
+		double p0Y = Double.MAX_VALUE;
+		double p1Y = -Double.MAX_VALUE;
+		for(Point point: points){
+			double pY = point.y;
+			if(pY < p0Y){
+				p0Y = pY;
+			}
+			if(pY > p1Y){
+				p1Y = pY;
+			}
+		}
+		
+		double p0Z = Double.MAX_VALUE;
+		double p1Z = -Double.MAX_VALUE;
+		for(Point point: points){
+			double pZ = point.z;
+			if(pZ < p0Z){
+				p0Z = pZ;
+			}
+			if(pZ > p1Z){
+				p1Z = pZ;
+			}
+		}
+		
+		Point p0 = new Point(p0X - boundingBoxDelta, p0Y - boundingBoxDelta, p0Z - boundingBoxDelta);
+		Point p1 = new Point(p1X + boundingBoxDelta, p1Y + boundingBoxDelta, p1Z + boundingBoxDelta);
+		
+		System.out.println(p0.toString());
+		System.out.println(p1.toString());
+		
+		return new BoundingBox(p0, p1, transformation);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	}
 
 
@@ -216,10 +293,8 @@ public class Parallelogram implements Shape {
 
 	@Override
 	public AABBox getAABoundingBox() {
-		// TODO Auto-generated method stub
-		return null;
+		return AABBox.boundingBoxToAABoundingBox(getBoundingBox(), this);
 	}
-
 
 	@Override
 	public CompositeAABBox getBoundingVolumeHierarchy() {

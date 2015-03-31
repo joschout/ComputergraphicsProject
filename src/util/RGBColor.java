@@ -59,6 +59,18 @@ public class RGBColor {
 		return format( tempR, tempG, tempB);
 	}
 
+	public RGBColor unboundedAdd(RGBColor rgbColor){
+		
+		float tempR = (float)(this.R + rgbColor.R);
+		float tempG= (float)(this.G + rgbColor.G);
+		float tempB = (float)(this.B + rgbColor.B);
+		RGBColor color = new RGBColor(0);
+		color.R = tempR;
+		color.G = tempG;
+		color.B = tempB;
+		return color;
+	}
+	
 	public RGBColor multiply(RGBColor rgbColor){
 		float tempR = (float)(this.R * rgbColor.R);
 		float tempG= (float)(this.G * rgbColor.G);

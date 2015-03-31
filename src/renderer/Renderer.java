@@ -9,6 +9,7 @@ import main.World;
 import math.Ray;
 import rayTracers.Tracer;
 import sampling.Sample;
+import sampling.SampleFactory;
 import util.RGBColor;
 import gui.ImagePanel;
 import gui.ProgressReporter;
@@ -34,5 +35,6 @@ public abstract class Renderer {
 		reporter.addProgressListener(frame);	
 	}
 	
+	//public abstract void render(World world, Tracer tracer, SampleFactory sampleFactory);
 	public abstract void render(World world, Tracer tracer);
 }

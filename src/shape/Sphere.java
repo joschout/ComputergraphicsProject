@@ -107,6 +107,12 @@ public class Sphere implements Shape {
 			Vector localNormal = localHitPoint.toVector3D().normalize();
 			Matrix transposeOfInverse = this.transformation.getInverseTransformationMatrix().transpose();
 			Vector transformedNormal = transposeOfInverse.transform(localNormal);
+			
+			sr.material= this.getMaterial();
+			sr.hasHitAnObject = true;
+			sr.ray = ray;
+			sr.hitPoint = ray.origin.add(ray.direction.scale(sr.t));
+			
 			sr.normal = transformedNormal;
 			sr.localHitPoint = localHitPoint;
 			return true;
@@ -118,6 +124,12 @@ public class Sphere implements Shape {
 			Vector localNormal = localHitPoint.toVector3D().normalize();
 			Matrix transposeOfInverse = this.transformation.getInverseTransformationMatrix().transpose();
 			Vector transformedNormal = transposeOfInverse.transform(localNormal);
+			
+			
+			sr.material= this.getMaterial();
+			sr.hasHitAnObject = true;
+			sr.ray = ray;
+			sr.hitPoint = ray.origin.add(ray.direction.scale(sr.t));
 			sr.normal = transformedNormal;
 			sr.localHitPoint = localHitPoint;
 			return true;

@@ -15,6 +15,7 @@ import rayTracers.BVHFalseColorImageTracer;
 import rayTracers.BVHTracer;
 import rayTracers.Tracer;
 import sampling.Sample;
+import sampling.SampleFactory;
 import util.RGBColor;
 
 public class SimpleRenderer extends Renderer {
@@ -29,7 +30,12 @@ public class SimpleRenderer extends Renderer {
 		for (int x = 0; x < imageWidth; ++x) {
 			for (int y = 0; y < imageHeight; ++y) {
 				// create a ray through the center of the pixel.
-				Ray ray = world.camera.generateRay(new Sample(x + 0.5, y + 0.5));
+				
+				SingleSampleFactory sampleFactory = new SingleSampleFactory(x + 0.5, y + 0.5);
+				
+				Sample sample = sampleFactory.getNextSample();
+				
+				Ray ray = world.camera.generateRay(sample);
 				RGBColor color = tracer.traceRay(ray);
 				panel.set(x, y, color.convertToColor());	
 			}

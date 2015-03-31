@@ -23,12 +23,17 @@ import rayTracers.Tracer;
 import shape.Box;
 import shape.CompoundObject;
 import shape.Cylinder;
+import shape.Disk;
 import shape.Intersectable;
+import shape.Parallelogram;
 import shape.Plane;
 import shape.Shape;
 import shape.Sphere;
+import shape.Triangle;
 import shape.TriangleMesh;
+import texture.Checkers3Dtexture;
 import texture.ImageTexture;
+import texture.Texture;
 import light.AmbientLight;
 import light.Light;
 import light.PointLight;
@@ -61,13 +66,6 @@ public class World {
 	public World(){
 		camera = null;
 		backgroundColor = new RGBColor((float)0.3);
-		//tracer = new MultipleObjectsTracer(this);
-		//tracer = new DepthTracer(this);
-		//tracer = new NormalFalseColorImagetracer(this);
-		//tracer = new NormalBVHTracer(this);
-		//tracer = new BVHTracer(this);
-		//tracer = new BVHFalseColorImageTracer(this);
-		//tracer = new BVHFalseColorGrayTracer(this);
 		ambientLight = new AmbientLight();
 		bvh = null;
 		maxBVHCounter = 0;
@@ -81,9 +79,13 @@ public class World {
 		lights.add(light);
 	}
 	
-	
-	public  void build(int width, int height){
-				this.initializeCamera(width, height);
+	/**
+	 * 
+	 * @param imageWidth The number of pixels of the image in the horizontal direction
+	 * @param imageHeight The number of pixels of the image in the vertical direction
+	 */
+	public  void build(int imageWidth, int imageHeight){
+				this.initializeCamera(imageWidth, imageHeight);
 				
 				PointLight pl1 = new PointLight(3.0, new RGBColor(1), new  Point(-5,3,0));
 				pl1.setCastShadows(false);
@@ -105,6 +107,12 @@ public class World {
 				matte.setKa(0.25);
 				matte.setKd(0.65);
 				matte.setCd(RGBColor.convertToRGBColor(Color.CYAN));
+				
+				Texture imTex = new Checkers3Dtexture();
+				SVMatteMaterial svMatte = new SVMatteMaterial();
+				svMatte.setKa(0.45);
+				svMatte.setKd(0.65);
+				svMatte.setCd(imTex);
 
 //				Mapping mapping = new SphericalMapping();
 //				ImageTexture imTex = new ImageTexture("MercatorProjection.jpg", mapping);
@@ -139,20 +147,37 @@ public class World {
 //				Plane plane = new Plane(Transformation.createIdentity(), new Point(0,0,0), new Vector(0,1,0));
 //				plane.material = matte;
 //				shapes.add(plane);		
-//
-				//testSuzanne(phong);
-				//testBunny(phong);
-				testTriceratops(phong);
-				//testVenus(phong);
-				//testCylinderPrimitive(phong);
-				//testBoxPrimitive(phong);
-				//testSpherePrimitive(phong);
-				//testApple();
-				//testHouse();
-				//testTeapot(phong);	
-				//testBuddha(phong);
 				
 				
+//				testTrianglePrimitive(phong);				
+//				testParallelogramPrimitive(phong);				
+//				testDiskPrimitive(phong);			
+				testTeapotCheckers3D(svMatte);
+//				testSuzanne(phong);
+//				testBunny(phong);
+//				testTriceratops(phong);
+//				testVenus(phong);
+//				testCylinderPrimitive(phong);
+//				testBoxPrimitive(phong);
+//				testSpherePrimitive(phong);
+//				testApple();
+//				testHouse();
+//				testTeapot(phong);	
+//				testBuddha(phong);
+				
+				
+	}
+
+	private void testTeapotCheckers3D(SVMatteMaterial svMatte) {
+		Transformation meshTransform = Transformation.createRotationY(200);
+		meshTransform = meshTransform.append(Transformation.createRotationX(10));
+		meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -1, 10));
+		ObjectFileReader2 reader = new ObjectFileReader2();
+		CompoundObject mesh;
+		mesh = reader.readFile("objects//teapot.obj");
+		mesh.setTransformation(meshTransform);
+		mesh.material = svMatte;
+		shapes.add(mesh);
 	}
 
 	private void testVenus(PhongMaterial phong) {
@@ -231,7 +256,7 @@ public class World {
 //				box1.material = matte;
 //				//shapes.add(box1);
 //			Box box2 = Box.aaBoundingBoxtoBox(cy.getAABoundingBox());
-//			box2.material = matte;
+//			box2.material = phong;
 //			shapes.add(box2);
 	}
 
@@ -243,6 +268,50 @@ public class World {
 		Box box = new  Box(boxTrans, new Point(), new Point(1,1,1));
 		box.material = phong;
 		shapes.add(box);
+	}
+
+	private void testDiskPrimitive(PhongMaterial phong) {
+		//====DISK PRIMITIVE ====//
+		Transformation diskTrans = Transformation.createRotationY(200);
+		diskTrans = diskTrans.append(Transformation.createRotationX(40));
+		diskTrans = diskTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 12));	
+		Disk disk = new Disk(diskTrans, new Point(), 5, new Vector(0, 0, -1));
+		disk.material = phong;
+//		shapes.add(disk);
+		Box box1 = Box.boundingBoxtoBox(disk.getBoundingBox());
+		box1.material = phong;
+		shapes.add(box1);
+//		Box box2 = Box.aaBoundingBoxtoBox(disk.getAABoundingBox());
+//		box2.material = phong;
+//		shapes.add(box2);
+		
+		
+	}
+
+	private void testParallelogramPrimitive(PhongMaterial phong) {
+		//==== PARALLELOGRAM PRIMITIVE ====//
+		Transformation pllTrans = Transformation.createRotationX(0);
+		pllTrans = pllTrans.appendToTheLeft(Transformation.createTranslation(0, 0, 14)); 
+		Parallelogram pll = new Parallelogram(pllTrans, new Point(5,0,0), new Point(-5,0,0), new Point(0,5,0));
+		pll.material = phong;
+		shapes.add(pll);
+//		Box box1 = Box.boundingBoxtoBox(pll.getBoundingBox());
+//		box1.material = phong;
+//		shapes.add(box1);
+//		Box box2 = Box.aaBoundingBoxtoBox(pll.getAABoundingBox());
+//		box2.material = phong;
+//		shapes.add(box2);
+	}
+
+	private void testTrianglePrimitive(PhongMaterial phong) {
+		//==== TRIANGLE PRIMITIVE ====///
+		Transformation triangleTrans = Transformation.createTranslation(0, 0, 14);
+		Triangle tri = new Triangle(triangleTrans, new Point(5,0,0), new Point(-5,0,0), new Point(0,5,0));
+		tri.material = phong;
+		shapes.add(tri);
+//		Box box = Box.boundingBoxtoBox(tri.getBoundingBox());
+//		box.material = phong;
+//		shapes.add(box);
 	}
 
 	private void testSpherePrimitive(PhongMaterial phong) {
@@ -375,9 +444,14 @@ public ShadeRec hitBVH(Ray ray){
 	}
 	
 	
-
-	private void initializeCamera(int width, int height) {
-		camera = new PerspectiveCamera(width, height,
+	
+	/**
+	 * 
+	 * @param imageWidth The number of pixels of the image in the horizontal direction
+	 * @param imageHeight The number of pixels of the image in the vertical direction
+	 */
+	private void initializeCamera(int imageWidth, int imageHeight) {
+		camera = new PerspectiveCamera(imageWidth, imageHeight,
 
 				//new Point(0,5,0), new Vector(0, -1,3), new Vector(0, 1, 0),90);
 				new Point(0,0,-0.65), new Vector(0, 0, 1), new Vector(0, 1, 0), 60);

@@ -12,10 +12,14 @@ import javax.imageio.ImageIO;
 import math.Ray;
 import rayTracers.BVHFalseColorImageTracer;
 import rayTracers.BVHTracer;
+import rayTracers.MultipleObjectsTracer;
 import rayTracers.Tracer;
+import renderer.AntialiasingRenderer;
 import renderer.Renderer;
 import renderer.SimpleRenderer;
+import sampling.JitteredSampleFactory;
 import sampling.Sample;
+import sampling.SampleFactory;
 import util.RGBColor;
 
 
@@ -56,17 +60,22 @@ public class Main {
 		//Tracer tracer = new DepthTracer(world);
 		//Tracer tracer = new NormalFalseColorImagetracer(world);
 		//Tracer tracer = new NormalBVHTracer(world);
-		//Tracer tracer = new BVHTracer(world);
+		Tracer tracer = new BVHTracer(world);
 		//Tracer tracer = new BVHFalseColorImageTracer(world);
 		//Tracer tracer = new BVHFalseColorGrayTracer(world);
 		
-//		Renderer renderer = new SimpleRenderer(imageResolution[0], imageResolution[1]);
-//		renderer.render(world, tracer);
+//		SampleFactory sampleFactory = new SampleFactory();
+//		SampleFactory sampleFactory = new JitteredSampleFactory();
+		
+		AntialiasingRenderer renderer = new AntialiasingRenderer(imageResolution[0], imageResolution[1]);
+		renderer.setSqrtOfNumberOfRaysPerPixel(10);
+		//Renderer renderer = new SimpleRenderer(imageResolution[0], imageResolution[1]);
+		renderer.render(world, tracer);
 		
 		
-		BVHTracer tracer = new BVHTracer(world);
-		SimpleRenderer renderer = new SimpleRenderer(imageResolution[0], imageResolution[1]);
-		renderer.falseColorRender(world, tracer);
+//		BVHTracer tracer = new BVHTracer(world);
+//		SimpleRenderer renderer = new SimpleRenderer(imageResolution[0], imageResolution[1]);
+//		renderer.falseColorRender(world, tracer, sampleFactory);
 		
 	}
 

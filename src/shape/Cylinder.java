@@ -115,6 +115,12 @@ public class Cylinder implements Shape {
 				if(ray.direction.scale(-1).dot(transformedNormal) < 0.0){
 					transformedNormal = transformedNormal.scale(-1);
 				}
+				
+				sr.material= this.getMaterial();
+				sr.hasHitAnObject = true;
+				sr.ray = ray;
+				sr.hitPoint = ray.origin.add(ray.direction.scale(sr.t));
+				
 				sr.normal = transformedNormal;
 				sr.localHitPoint = p0;
 				return true;
@@ -134,6 +140,13 @@ public class Cylinder implements Shape {
 				if(ray.direction.scale(-1).dot(transformedNormal) < 0.0){
 					transformedNormal = transformedNormal.scale(-1);
 				}
+				
+				
+				sr.material= this.getMaterial();
+				sr.hasHitAnObject = true;
+				sr.ray = ray;
+				sr.hitPoint = ray.origin.add(ray.direction.scale(sr.t));
+				
 				sr.normal = transformedNormal;
 				sr.localHitPoint = p1;
 				return true;

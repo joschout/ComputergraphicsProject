@@ -44,6 +44,9 @@ public class AABBox extends CompositeAABBox{
 //		}
 		this.shape = shape;
 		calculateMidpoint();
+		
+		System.out.println("p0:"+ getP0().toString() +"\n");
+		System.out.println("p1:"+ getP1().toString() +"\n");
 	}
 	
 	public AABBox(double p0X, double p0Y, double p0Z, double p1X, double p1Y, double p1Z, Shape shape){
@@ -63,18 +66,32 @@ public class AABBox extends CompositeAABBox{
 		this.p1 = new Point(p1X, p1Y, p1Z);
 		this.shape = shape;
 		calculateMidpoint();
+//		System.out.println("p0:"+ getP0().toString() +"\n");
+//		System.out.println("p1:"+ getP1().toString() +"\n");
 	}
 
 	@Override
 	public boolean intersect(Ray ray, ShadeRec sr){
 		sr.bvhCounter ++;
 		double thisBoxT = this.getSurroundingBoxIntersectionT(ray);
+//		
+//		System.out.println( "===  AABBOX.hit  ===");
+//		System.out.println("sr.t: " + sr.t );
+//		System.out.println("thisBoxT: " + thisBoxT);
+//		
+		
 		if(thisBoxT < kEpsilon ){
+//			System.out.println( "thisBoxT < kEpsilon  -> FALSE");
+//			System.out.println( "====================");
 			return false;
 		}
 		if(sr.hasHitAnObject && sr.t <  thisBoxT){
+//			System.out.println("sr.hasHitAnObject && sr.t <  thisBoxT  -> FALSE");
+//			System.out.println( "====================");
 			return false;
 		}
+//		System.out.println("intersect inside object  -> MAYBE");
+//		System.out.println( "====================");
 		return intersectInside(ray, sr);
 	}
 	
@@ -130,11 +147,17 @@ public class AABBox extends CompositeAABBox{
 		untransformedPoints.add(pe);
 		untransformedPoints.add(pf);
 		
+		
+		
+		
+		
 		// calculate the vertices of the transformed bounding box
 		List<Point> transformedPoints = new ArrayList<Point>();
 		for(Point point: untransformedPoints){
 			Point transf = boundingBoxTransformation.transform(point);
 			transformedPoints.add(transf);
+			
+//			System.out.println("transformed point: " + transf.toString()+"\n");
 		}
 		
 		

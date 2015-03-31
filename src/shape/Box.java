@@ -46,10 +46,10 @@ public class Box implements Shape {
 			throw new IllegalArgumentException("p1X should be bigger than p0X");
 		}
 		if(p0.y >= p1.y){
-			throw new IllegalArgumentException("p1X should be bigger than p0X");
+			throw new IllegalArgumentException("p1Y should be bigger than p0Y");
 		}
 		if(p0.z >= p1.z){
-			throw new IllegalArgumentException("p1X should be bigger than p0X");
+			throw new IllegalArgumentException("p1Z should be bigger than p0Z");
 		}
 		this.p1 = p1;
 	}
@@ -163,6 +163,13 @@ public class Box implements Shape {
 				sr.t = t1;
 				localNormal = getNormal(faceOut);
 			}
+			
+			sr.material= this.getMaterial();
+			sr.hasHitAnObject = true;
+			sr.ray = ray;
+			sr.hitPoint = ray.origin.add(ray.direction.scale(sr.t));
+			
+			
 			
 			Point localHitPoint = transformed.origin.add(transformed.direction.scale(t0));
 			Matrix transposeOfInverse = this.transformation.getInverseTransformationMatrix().transpose();

@@ -189,6 +189,14 @@ public class Triangle implements Shape {
 		}
 		
 		sr.t = t;
+		
+		
+		sr.material= this.getMaterial();
+		sr.hasHitAnObject = true;
+		sr.ray = ray;
+		sr.hitPoint = ray.origin.add(ray.direction.scale(sr.t));
+		
+		
 		Matrix transposeOfInverse = this.transformation.getInverseTransformationMatrix().transpose();
 		Vector transformedNormal = transposeOfInverse.transform(normal);
 		sr.normal = transformedNormal;
@@ -292,10 +300,8 @@ public class Triangle implements Shape {
 
 	@Override
 	public AABBox getAABoundingBox() {
-		// TODO Auto-generated method stub
-		return null;
+		return AABBox.boundingBoxToAABoundingBox(getBoundingBox(), this);
 	}
-
 
 	@Override
 	public CompositeAABBox getBoundingVolumeHierarchy() {

@@ -64,6 +64,7 @@ public abstract  class CompositeAABBox implements Intersectable{
 	 * @return
 	 */
 	public double getSurroundingBoxIntersectionT(Ray ray){
+		
 		Point rayOrigin = ray.origin;
 		Vector rayDirection = ray.direction;
 		
@@ -122,6 +123,8 @@ public abstract  class CompositeAABBox implements Intersectable{
 		if (tz_max < t1){
 			t1 = tz_max;
 		}	
+		
+//		System.out.println("t0: " + t0 +", t1: "+ t1);
 		
 		if(t0 < t1 && t1 > kEpsilon){//condition for a hit
 //			if(t0 > kEpsilon){
