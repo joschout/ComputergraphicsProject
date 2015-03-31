@@ -208,7 +208,7 @@ public class Box implements Shape {
 
 
 	public static Box aaBoundingBoxtoBox(AABBox boundingBox){
-		return new Box(Transformation.createIdentity(), boundingBox.p0, boundingBox.p1);
+		return new Box(Transformation.createIdentity(), boundingBox.getP0(), boundingBox.getP1());
 	}
 
 	@Override
