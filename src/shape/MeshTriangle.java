@@ -247,4 +247,8 @@ public class MeshTriangle implements Shape{
 		return null;
 	}
 
+	@Override
+	public boolean isInfinite() {
+		return false;
+	}
 }

@@ -319,4 +319,10 @@ public class Box implements Shape {
 	public CompositeAABBox getBoundingVolumeHierarchy() {
 		return getAABoundingBox();
 	}
+
+
+	@Override
+	public boolean isInfinite() {
+		return false;
+	}
 }

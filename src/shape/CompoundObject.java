@@ -190,4 +190,9 @@ public class CompoundObject implements Shape {
 		//return BVHManager2.getBoundingVolumeHierarchy(this.shapes);
 		//return BVHManagerCfrJerre.getBoundingVolumeHierarchy(this.shapes);
 	}	
+	
+	@Override
+	public boolean isInfinite() {
+		return false;
+	}
 }

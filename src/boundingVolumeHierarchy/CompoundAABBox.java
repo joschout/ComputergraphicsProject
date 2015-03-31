@@ -181,4 +181,8 @@ public class CompoundAABBox extends CompositeAABBox {
 		return new Point(p1X + kEpsilon, p1Y + kEpsilon, p1Z + kEpsilon);
 	}
 	
+	@Override
+	public boolean isInfinite() {
+		return false;
+	}	
 }

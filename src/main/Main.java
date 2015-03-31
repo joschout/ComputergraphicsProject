@@ -55,21 +55,24 @@ public class Main {
 
 		World world = new World();
 		world.build(imageResolution[0], imageResolution[1]);
+		
+		world.createBVH2();
+		
 
-		//Tracer tracer = new MultipleObjectsTracer(world);
+		Tracer tracer = new MultipleObjectsTracer(world);
 		//Tracer tracer = new DepthTracer(world);
 		//Tracer tracer = new NormalFalseColorImagetracer(world);
 		//Tracer tracer = new NormalBVHTracer(world);
-		Tracer tracer = new BVHTracer(world);
+		//Tracer tracer = new BVHTracer(world);
 		//Tracer tracer = new BVHFalseColorImageTracer(world);
 		//Tracer tracer = new BVHFalseColorGrayTracer(world);
 		
 //		SampleFactory sampleFactory = new SampleFactory();
 //		SampleFactory sampleFactory = new JitteredSampleFactory();
 		
-		AntialiasingRenderer renderer = new AntialiasingRenderer(imageResolution[0], imageResolution[1]);
-		renderer.setSqrtOfNumberOfRaysPerPixel(10);
-		//Renderer renderer = new SimpleRenderer(imageResolution[0], imageResolution[1]);
+//		AntialiasingRenderer renderer = new AntialiasingRenderer(imageResolution[0], imageResolution[1]);
+//		renderer.setSqrtOfNumberOfRaysPerPixel(10);
+		Renderer renderer = new SimpleRenderer(imageResolution[0], imageResolution[1]);
 		renderer.render(world, tracer);
 		
 		

@@ -36,8 +36,10 @@ public interface Shape extends Intersectable {
 	
 	public void setTransformation(Transformation transformation);
 	
-	public boolean shadowHit(Ray ray, ShadeRec sr);
+	//public boolean shadowHit(Ray ray, ShadeRec sr);
 	
 	public CompositeAABBox getBoundingVolumeHierarchy();
+	
+	//public boolean isInfinite();
 
 }

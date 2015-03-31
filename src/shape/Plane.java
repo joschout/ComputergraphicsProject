@@ -142,4 +142,10 @@ public class Plane implements Shape {
 	}
 
 
+	@Override
+	public boolean isInfinite() {
+		return true;
+	}
+
+
 }

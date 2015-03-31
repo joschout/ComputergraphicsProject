@@ -349,18 +349,18 @@ public class MeshTriangle2 implements Shape{
 		return true;
 	}
 
-
-
 	@Override
 	public AABBox getAABoundingBox() {
 		return AABBox.boundingBoxToAABoundingBox(getBoundingBox(), this);
 	}
-
-
 
 	@Override
 	public CompositeAABBox getBoundingVolumeHierarchy() {
 		return getAABoundingBox();
 	}
 
+	@Override
+	public boolean isInfinite() {
+		return false;
+	}
 }

@@ -198,5 +198,11 @@ public class AABBox extends CompositeAABBox{
 		}
 		
 		return new AABBox(p0X, p0Y, p0Z, p1X, p1Y, p1Z, shape);
+	}
+
+
+	@Override
+	public boolean isInfinite() {
+		return false;
 	}	
 }

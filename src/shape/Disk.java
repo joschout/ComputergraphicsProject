@@ -174,6 +174,9 @@ public class Disk implements Shape {
 		return getAABoundingBox();
 	}
 
-
+	@Override
+	public boolean isInfinite() {
+		return false;
+	}
 
 }

@@ -270,5 +270,8 @@ public class BoundingBox implements Intersectable{
 
 	}
 	
-	
+	@Override
+	public boolean isInfinite() {
+		return false;
+	}	
 }
