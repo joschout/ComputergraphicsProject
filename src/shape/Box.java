@@ -12,7 +12,7 @@ import math.Vector;
 import util.RGBColor;
 import util.ShadeRec;
 
-public class Box implements Shape {
+public class Box extends Shape {
 
 	private Transformation transformation;
 	public Point p0;
@@ -307,19 +307,6 @@ public class Box implements Shape {
 		return new BoundingBox(new Point(p0.x - boundingBoxDelta, p0.y - boundingBoxDelta, p0.z - boundingBoxDelta),
 							new Point(p1.x - boundingBoxDelta, p1.y - boundingBoxDelta, p1.z - boundingBoxDelta), transformation);
 	}
-
-
-	@Override
-	public AABBox getAABoundingBox() {
-		return AABBox.boundingBoxToAABoundingBox(getBoundingBox(), this);
-	}
-
-
-	@Override
-	public CompositeAABBox getBoundingVolumeHierarchy() {
-		return getAABoundingBox();
-	}
-
 
 	@Override
 	public boolean isInfinite() {

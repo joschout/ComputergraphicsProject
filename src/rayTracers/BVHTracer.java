@@ -25,7 +25,7 @@ public class BVHTracer extends Tracer {
 		if(sr.hasHitAnObject){
 			sr.ray = ray;
 			
-			return sr.material.shade(sr);
+			return sr.material.shade2(sr);
 		}
 		else{
 			return world.backgroundColor;

@@ -1,8 +1,10 @@
 package light;
 
+import material.Material;
 import math.Point;
 import math.Ray;
 import math.Vector;
+import shape.Intersectable;
 import util.RGBColor;
 import util.ShadeRec;
 
@@ -71,8 +73,8 @@ public class PointLight extends Light {
 		 * and if the distance to that object is a positive number t smaller than the distance d
 		 * then the hit point lies in the shadow of that object under this light source.
 		 */
-		for(int j = 0; j < sr.world.intersectablesToIntersect.size(); j++){
-			if(sr.world.intersectablesToIntersect.get(j).shadowHit(shadowRay, sr) && sr.t < d){
+		for(Intersectable intersectable: sr.world.intersectablesToIntersect){
+			if(intersectable.shadowHit(shadowRay, sr) && sr.t < d){
 				return true;
 			}
 		}
@@ -84,6 +86,44 @@ public class PointLight extends Light {
 	}
 	public boolean castShadows() {
 		return castShadows;
+	}
+	
+	
+	public RGBColor handleMaterialShading(Material material, ShadeRec sr, Vector wo){
+		Vector wi = this.getDirectionOfIncomingLight(sr);
+		double ndotwi = sr.normal.dot(wi);
+		double ndotwo = sr.normal.dot(wo);
+				
+		RGBColor partialLOfThisLightSource = new RGBColor(0);
+		
+		if(ndotwi > 0.0 && ndotwo > 0.0){
+			
+			//shadow testing: does the hitpoint lie in the shadow of light source j ?
+			boolean inShadow = false;
+			
+			if(this.castShadows()){// if light source j casts shadows
+				// new shadow ray with as origin the hit point and as direction 
+				// the direction of the incoming light
+				Ray shadowRay = new Ray(sr.hitPoint, wi); 
+				/*
+				 * test for this light source if there are objects between the hit point and the
+				 * location of the light source
+				 */
+				inShadow = this.inShadow(shadowRay, sr);
+			}
+			if(! inShadow){
+				/*
+				 * if the point doesn't lie in the shadow of light source j
+				 * then add the radiance of light source j to the total radiance.
+				 */
+				partialLOfThisLightSource = partialLOfThisLightSource.add(material.totalBRDF(sr, wo, wi)
+						.multiply(this.getRadiance(sr).scale(ndotwi)));
+			
+//				System.out.println("diffuse color from light " + j  + " + previous color");
+//				System.out.println(L.toString());
+			 }
+		}
+		return partialLOfThisLightSource;
 	}
 
 }

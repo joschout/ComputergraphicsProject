@@ -12,7 +12,7 @@ import math.Vector;
 import util.ShadeRec;
 import util.UVCoordinates;
 
-public class MeshTriangle2 implements Shape{
+public class MeshTriangle2 extends Shape{
 	
 	CompoundObject mesh;
 	
@@ -347,16 +347,6 @@ public class MeshTriangle2 implements Shape{
 		sr.t = t;
 //		sr.localHitPoint = transformed.origin.add(transformed.direction.scale(t)) ;
 		return true;
-	}
-
-	@Override
-	public AABBox getAABoundingBox() {
-		return AABBox.boundingBoxToAABoundingBox(getBoundingBox(), this);
-	}
-
-	@Override
-	public CompositeAABBox getBoundingVolumeHierarchy() {
-		return getAABoundingBox();
 	}
 
 	@Override

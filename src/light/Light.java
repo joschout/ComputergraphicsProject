@@ -1,5 +1,6 @@
 package light;
 
+import material.Material;
 import math.Ray;
 import math.Vector;
 import util.RGBColor;
@@ -29,6 +30,13 @@ public abstract class Light {
 
 	public abstract boolean castShadows();
 
+	/**
+	 * test for this light source if there are objects between the hit point and the
+	 * location of the light source
+	 */
 	public abstract boolean inShadow(Ray shadowRay, ShadeRec sr);
+	
+	
+	public abstract RGBColor handleMaterialShading(Material material, ShadeRec sr, Vector wo);
 
 }

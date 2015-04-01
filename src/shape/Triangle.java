@@ -12,7 +12,7 @@ import math.Ray;
 import math.Transformation;
 import math.Vector;
 
-public class Triangle implements Shape {
+public class Triangle extends Shape {
 	private Transformation transformation;
 	public Point v0; //point a
 	public Point v1; // point b
@@ -294,18 +294,6 @@ public class Triangle implements Shape {
 		double p1Z = Math.max(Math.max(v0.z, v1.z), v2.z) + boundingBoxDelta;
 		
 		return new BoundingBox(p0X, p0Y, p0Z, p1X, p1Y, p1Z, transformation);
-	}
-
-
-
-	@Override
-	public AABBox getAABoundingBox() {
-		return AABBox.boundingBoxToAABoundingBox(getBoundingBox(), this);
-	}
-
-	@Override
-	public CompositeAABBox getBoundingVolumeHierarchy() {
-		return getAABoundingBox();
 	}
 
 	@Override

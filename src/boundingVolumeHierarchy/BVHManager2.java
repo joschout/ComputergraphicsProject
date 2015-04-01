@@ -80,7 +80,8 @@ public class BVHManager2 {
 		}else if (subList.size() == 1){
 			return subList.get(0);
 		}else {
-			throw new IllegalArgumentException("List of boxes is empty!");
+			CompoundAABBox parentBox = new CompoundAABBox();
+			return parentBox;
 		}
 	}
 

@@ -4,6 +4,8 @@ import java.awt.Color;
 
 public class RGBColor {
 	
+	public static double GAMMA = 2.2;
+	
 	public static RGBColor convertToRGBColor(Color color){
 		return new RGBColor(color.getRGBColorComponents(null)[0], 
 				color.getRGBColorComponents(null)[1],
@@ -89,6 +91,19 @@ public class RGBColor {
 //	public RGBColor format(){
 //		return this;
 //	}
+	
+	
+	public RGBColor power(double power){
+		float tempR = (float) Math.pow(this.R, power);
+		float tempG = (float) Math.pow(this.G, power);
+		float tempB = (float) Math.pow(this.B, power);
+		return format( tempR, tempG, tempB);
+	}
+	
+	
+	public RGBColor gammaCorrect(){
+		return power(1.0/GAMMA);
+	}
 	
 	public RGBColor scale(double s){
 		float tempR = (float) s*R;

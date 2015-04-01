@@ -127,12 +127,12 @@ public abstract  class CompositeAABBox implements Intersectable{
 //		System.out.println("t0: " + t0 +", t1: "+ t1);
 		
 		if(t0 < t1 && t1 > kEpsilon){//condition for a hit
-//			if(t0 > kEpsilon){
+			if(t0 > kEpsilon){
 				return t0;
-//			}else{
-//				return t1;
-//				
-//			}
+			}else{
+				return t1;// dit loste een schaduwprobleem op bij het bunnyvoorbeeld te dicht bij het rechtopstaand vlak
+				
+			}
 		}
 		return -1;
 	}

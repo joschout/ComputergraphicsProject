@@ -12,7 +12,7 @@ import math.Ray;
 import math.Transformation;
 import math.Vector;
 
-public class Cylinder implements Shape {
+public class Cylinder extends Shape {
 
 	private Transformation transformation;
 	public final double radius;
@@ -225,16 +225,6 @@ public class Cylinder implements Shape {
 		Point p0 = new Point(-radius - boundingBoxDelta, ySmall, -radius - boundingBoxDelta);
 		Point p1 = new Point(radius + boundingBoxDelta, yLarge, radius + boundingBoxDelta);
 		return new BoundingBox(p0, p1, this.transformation);
-	}
-
-	@Override
-	public AABBox getAABoundingBox() {
-		return AABBox.boundingBoxToAABoundingBox(getBoundingBox(), this);
-	}
-
-	@Override
-	public CompositeAABBox getBoundingVolumeHierarchy() {
-		return getAABoundingBox();
 	}
 
 	@Override

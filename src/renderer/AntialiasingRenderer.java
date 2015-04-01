@@ -38,7 +38,7 @@ public class AntialiasingRenderer extends Renderer {
 							RGBColor color = tracer.traceRay(ray);
 							averageColor = averageColor.unboundedAdd(color);
 						}
-						averageColor = averageColor.scale(1.0/nbOfRaysPerPixel);
+						averageColor = averageColor.scale(1.0/nbOfRaysPerPixel).gammaCorrect();
 						panel.set(x, y, averageColor.convertToColor());	
 					}
 					reporter.update(imageHeight);

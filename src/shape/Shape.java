@@ -3,10 +3,13 @@ package shape;
 import boundingVolumeHierarchy.AABBox;
 import boundingVolumeHierarchy.BoundingBox;
 import boundingVolumeHierarchy.CompositeAABBox;
+import sampling.SampleFactory;
 import util.ShadeRec;
 import material.Material;
+import math.Point;
 import math.Ray;
 import math.Transformation;
+import math.Vector;
 
 /**
  * Interface which should be implemented by all {@link Shape}s.
@@ -14,32 +17,38 @@ import math.Transformation;
  * @author Niels Billen
  * @version 1.0
  */
-public interface Shape extends Intersectable {
-	
-	/**
-	 * Returns whether the given {@link Ray} intersects this {@link Shape}.
-	 * False when the given ray is null.
-	 * 
-	 * @param ray
-	 *            the ray to intersect with.
-	 * @return true when the given {@link Ray} intersects this {@link Shape}.
-	 */
-	//public boolean intersect(Ray ray);
-	
-	//public boolean intersect(Ray ray, ShadeRec sr);
-	
-	public Material getMaterial();
+public abstract class Shape implements Intersectable {
 
-	public BoundingBox getBoundingBox();
+	public abstract Material getMaterial();
+
+	public abstract BoundingBox getBoundingBox();
 	
-	public AABBox getAABoundingBox();
 	
-	public void setTransformation(Transformation transformation);
+	public AABBox getAABoundingBox() {
+		return AABBox.boundingBoxToAABoundingBox(getBoundingBox(), this);
+	}
+
+	public CompositeAABBox getBoundingVolumeHierarchy() {
+		return getAABoundingBox();
+	}
+		
+	public abstract void setTransformation(Transformation transformation);
 	
-	//public boolean shadowHit(Ray ray, ShadeRec sr);
+	public Point sample(){
+		throw new UnsupportedOperationException("shape cannot be an arealight");
+	}
 	
-	public CompositeAABBox getBoundingVolumeHierarchy();
+	public void setSampler(SampleFactory sampleFactory){
+		throw new UnsupportedOperationException("shape cannot be an arealight");
+	}
 	
-	//public boolean isInfinite();
+	public double pdf(ShadeRec sr){
+		throw new UnsupportedOperationException("shape cannot be an arealight");
+	}
+	
+	public Vector getNormal(Point point){
+		throw new UnsupportedOperationException("shape cannot be an arealight");
+	}
+	
 
 }

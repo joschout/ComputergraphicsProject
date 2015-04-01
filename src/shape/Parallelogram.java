@@ -12,13 +12,14 @@ import math.Point;
 import math.Ray;
 import math.Transformation;
 import math.Vector;
+import sampling.Sample;
 import util.RGBColor;
 import util.ShadeRec;
 
 /**
  *
  */
-public class Parallelogram implements Shape {
+public class Parallelogram extends Shape {
 
 	private Transformation transformation;
 	public static final double kEpsilon = 1e-5;
@@ -290,19 +291,9 @@ public class Parallelogram implements Shape {
 		return true;
 	}
 
-
-	@Override
-	public AABBox getAABoundingBox() {
-		return AABBox.boundingBoxToAABoundingBox(getBoundingBox(), this);
-	}
-
-	@Override
-	public CompositeAABBox getBoundingVolumeHierarchy() {
-		return getAABoundingBox();
-	}
-
 	@Override
 	public boolean isInfinite() {
 		return false;
 	}
+	
 }

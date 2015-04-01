@@ -1,6 +1,7 @@
 package light;
 
 
+import material.Material;
 import math.Ray;
 import math.Vector;
 import util.RGBColor;
@@ -48,6 +49,13 @@ public class AmbientLight extends Light {
 	@Override
 	public boolean inShadow(Ray shadowRay, ShadeRec sr) {
 		return false;
+	}
+
+	@Override
+	public RGBColor handleMaterialShading(Material material, ShadeRec sr,
+			Vector wo) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

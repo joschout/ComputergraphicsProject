@@ -36,7 +36,7 @@ public class SimpleRenderer extends Renderer {
 				Sample sample = sampleFactory.getNextSample();
 				
 				Ray ray = world.camera.generateRay(sample);
-				RGBColor color = tracer.traceRay(ray);
+				RGBColor color = tracer.traceRay(ray).gammaCorrect();
 				panel.set(x, y, color.convertToColor());	
 			}
 			reporter.update(imageHeight);
@@ -77,7 +77,7 @@ public class SimpleRenderer extends Renderer {
 					for (int y = 0; y < imageHeight; ++y) {
 						// create a ray through the center of the pixel.
 						Ray ray = world.camera.generateRay(new Sample(x + 0.5, y + 0.5));
-						RGBColor color = tracer2.traceRay(ray);
+						RGBColor color = tracer2.traceRay(ray).gammaCorrect();
 						panel2.set(x, y, color.convertToColor());	
 					}
 					reporter2.update(imageHeight);

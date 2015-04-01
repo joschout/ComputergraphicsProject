@@ -21,17 +21,20 @@ import shape.Parallelogram;
 import shape.Plane;
 import shape.Shape;
 import shape.Sphere;
+import shape.Square;
 import shape.Triangle;
 import shape.TriangleMesh;
 import texture.Checkers3Dtexture;
 import texture.ImageTexture;
 import texture.Texture;
 import light.AmbientLight;
+import light.AreaLight;
 import light.Light;
 import light.PointLight;
 import mapping.CylindricalMapping;
 import mapping.Mapping;
 import mapping.SphericalMapping;
+import material.EmissiveMaterial;
 import material.MatteMaterial;
 import material.PhongMaterial;
 import material.SVMatteMaterial;
@@ -85,13 +88,13 @@ public class World{
 	public  void build(int imageWidth, int imageHeight){
 				this.initializeCamera(imageWidth, imageHeight);
 				
-				PointLight pl1 = new PointLight(3.0, new RGBColor(1), new  Point(-5,3,0));
-				pl1.setCastShadows(true);
-				this.addLight(pl1);
-
-				PointLight pl2 = new PointLight(1.0, new RGBColor(1), new  Point(5,3,0));
-				pl2.setCastShadows(true);
-				this.addLight(pl2);
+//				PointLight pl1 = new PointLight(3.0, new RGBColor(1), new  Point(-5,3,0));
+//				pl1.setCastShadows(true);
+//				this.addLight(pl1);
+//
+//				PointLight pl2 = new PointLight(1.0, new RGBColor(1), new  Point(5,3,0));
+//				pl2.setCastShadows(true);
+//				this.addLight(pl2);
 
 				PhongMaterial phong = new PhongMaterial();
 				phong.setKa(0.25);
@@ -106,11 +109,12 @@ public class World{
 				matte.setKd(0.65);
 				matte.setCd(RGBColor.convertToRGBColor(Color.CYAN));
 				
-				Texture imTex = new Checkers3Dtexture();
-				SVMatteMaterial svMatte = new SVMatteMaterial();
-				svMatte.setKa(0.45);
-				svMatte.setKd(0.65);
-				svMatte.setCd(imTex);
+//				//==== CHECKERS MATERIAL ====//
+//				Texture imTex = new Checkers3Dtexture();
+//				SVMatteMaterial svMatte = new SVMatteMaterial();
+//				svMatte.setKa(0.45);
+//				svMatte.setKd(0.65);
+//				svMatte.setCd(imTex);
 
 //				Mapping mapping = new SphericalMapping();
 //				ImageTexture imTex = new ImageTexture("MercatorProjection.jpg", mapping);
@@ -147,30 +151,45 @@ public class World{
 //				intersectables.add(plane);
 				
 
-				Plane plane = new Plane(Transformation.createIdentity(), new Point(0,0, 11), new Vector(0,0, -1));
-				PhongMaterial planeMaterial = new PhongMaterial();
-				planeMaterial.setKa(0.25);
-				planeMaterial.setKd(0.65);
-				planeMaterial.setCd(RGBColor.convertToRGBColor(Color.CYAN));
-				planeMaterial.setKs(0.2);
-				planeMaterial.setPhongExponent(10);
-				planeMaterial.setCs(RGBColor.convertToRGBColor(Color.WHITE));
-				plane.material = planeMaterial;
-				intersectables.add(plane);
-//				
-//				
-				//==== PLANE PRIMITIVE ====//
-				Transformation planeTransform = Transformation.createTranslation(0, 0, 5);
-				Transformation planeTransform2 = Transformation.createRotationX(50);
-				Plane pl = new Plane(planeTransform, new Point(0, -5, 0), new Vector(0,1,0));
-				pl.material = svMatte;
-				intersectables.add(pl);
+//				Plane plane = new Plane(Transformation.createIdentity(), new Point(0,0, 11), new Vector(0,0, -1));
+//				PhongMaterial planeMaterial = new PhongMaterial();
+//				planeMaterial.setKa(0.25);
+//				planeMaterial.setKd(0.65);
+//				planeMaterial.setCd(RGBColor.convertToRGBColor(Color.CYAN));
+//				planeMaterial.setKs(0.2);
+//				planeMaterial.setPhongExponent(10);
+//				planeMaterial.setCs(RGBColor.convertToRGBColor(Color.WHITE));
+//				plane.material = planeMaterial;
+//				intersectables.add(plane);
+
 				
+				
+//				//==== PLANE PRIMITIVE ====//
+//				Transformation planeTransform = Transformation.createTranslation(0, 0, 5);
+//				Transformation planeTransform2 = Transformation.createRotationX(50);
+//				Plane pl = new Plane(planeTransform, new Point(0, -5, 0), new Vector(0,1,0));
+//				pl.material = phong;
+//				intersectables.add(pl);
+				
+				
+				
+				
+				testAreaLightSuzanne1(phong);
+				
+				
+				
+				
+				
+				
+				
+				
+				
+//				testSquarePrimitive(phong);
 //				testTrianglePrimitive(phong);				
 //				testParallelogramPrimitive(phong);				
 //				testDiskPrimitive(phong);			
 //				testTeapotCheckers3D(svMatte);
-				testSuzanne(phong);
+//				testSuzanne(phong);
 //				testBunny(phong);
 //				testTriceratops(phong);
 //				testVenus(phong);
@@ -183,6 +202,38 @@ public class World{
 //				testBuddha(phong);
 				
 				
+	}
+
+	private void testAreaLightSuzanne1(PhongMaterial phong) {
+		EmissiveMaterial emissiveMat = new EmissiveMaterial();
+		emissiveMat.setLs(1e1);
+		
+		Transformation sqrTrans = Transformation.createIdentity();
+		Square sqr = new Square(sqrTrans, new Point(3,0,5), new Vector(0,1,0), new Vector(0,0,-1));
+		sqr.material = emissiveMat;
+		intersectables.add(sqr);
+
+		AreaLight areaLight = new AreaLight();
+		AreaLight.nbOfShadowRaysPerAreaLight = 100;
+		areaLight.emissiveMaterial = emissiveMat;
+		areaLight.setCastShadows(true);
+		areaLight.lightEmittingShape = sqr;
+		lights.add(areaLight);
+		
+		Transformation planeTransform = Transformation.createIdentity();
+		Plane pl = new Plane(planeTransform, new Point(-2, 0, 0), new Vector(1,0,0));
+		pl.material = phong;
+		intersectables.add(pl);
+		
+		Transformation meshTransform = Transformation.createRotationY(200);
+		meshTransform = meshTransform.append(Transformation.createScale(0.5, 0.5, 0.5));
+		meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-0.5, 0, 5));
+		ObjectFileReader2 reader = new ObjectFileReader2();
+		CompoundObject mesh;
+		mesh = reader.readFile("objects//suzanne.obj");
+		mesh.setTransformation(meshTransform);
+		mesh.material = phong;
+		intersectables.add(mesh);
 	}
 
 	public ShadeRec hitObjects(Ray ray){
@@ -374,6 +425,22 @@ public class World{
 		
 	}
 
+	private void testSquarePrimitive(PhongMaterial phong) {
+		//==== SQUARE PRIMITIVE ====//
+		Transformation sqrTrans = Transformation.createRotationX(00);
+		sqrTrans = sqrTrans.appendToTheLeft(Transformation.createTranslation(0, 0, 10)); 
+		Square sqr = new Square(sqrTrans, new Point(0,0,0), new Vector(1,0,0), new Vector(0,1,0));
+		sqr.material = phong;
+		intersectables.add(sqr);
+//		Box box1 = Box.boundingBoxtoBox(sqr.getBoundingBox());
+//		box1.material = phong;
+//		intersectables.add(box1);
+//		Box box2 = Box.aaBoundingBoxtoBox(sqr.getAABoundingBox());
+//		box2.material = phong;
+//		intersectables.add(box2);
+	}
+	
+	
 	private void testParallelogramPrimitive(PhongMaterial phong) {
 		//==== PARALLELOGRAM PRIMITIVE ====//
 		Transformation pllTrans = Transformation.createRotationX(0);
@@ -416,7 +483,7 @@ public class World{
 //				intersectables.add(box2);
 	}
 
-	private void testApple() {
+	private void testApple(PhongMaterial phong) {
 		ImageTexture imTex = new ImageTexture("objects//apple//apple_texture.jpg", null);
 		SVMatteMaterial svMatte = new SVMatteMaterial();
 		svMatte.setKa(0.45);
@@ -430,10 +497,10 @@ public class World{
 		mesh = reader.readFile("objects//apple//apple.obj");
 		mesh.setTransformation(meshTransform);
 		mesh.material = svMatte;
-		intersectables.add(mesh);
-//				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
-//				box1.material = phong;
-//				intersectables.add(box1);
+		//intersectables.add(mesh);
+				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
+				box1.material = phong;
+				intersectables.add(box1);
 	}
 
 	private void testHouse() {

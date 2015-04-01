@@ -12,7 +12,7 @@ import math.Ray;
 import math.Transformation;
 import math.Vector;
 
-public class Disk implements Shape {
+public class Disk extends Shape {
 	
 	private Transformation transformation;
 	public Point center;
@@ -162,16 +162,6 @@ public class Disk implements Shape {
 		Point p0 = new Point(- this.radius - boundingBoxDelta, -this.radius - boundingBoxDelta, -this.radius - boundingBoxDelta);
 		Point p1 = new Point(this.radius + boundingBoxDelta, this.radius + boundingBoxDelta, this.radius + boundingBoxDelta);
 		return new BoundingBox(p0, p1, this.transformation);
-	}
-
-	@Override
-	public AABBox getAABoundingBox() {
-		return AABBox.boundingBoxToAABoundingBox(getBoundingBox(), this);
-	}
-
-	@Override
-	public CompositeAABBox getBoundingVolumeHierarchy() {
-		return getAABoundingBox();
 	}
 
 	@Override

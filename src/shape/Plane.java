@@ -12,7 +12,7 @@ import math.Point;
 import math.Transformation;
 import math.Vector;
 
-public class Plane implements Shape {
+public class Plane extends Shape {
 	private Transformation transformation;
 	public Point point;
 	public Vector normal;
@@ -77,13 +77,15 @@ public class Plane implements Shape {
 		
 		double t = numerator / denominator;
 		
-		if(t > kEpsilon){
+		if(t > kEpsilon && t < sr.t){
 			sr.t=t;
 			
 			Matrix transposeOfInverse = this.transformation.getInverseTransformationMatrix().transpose();
 			Vector transformedNormal = transposeOfInverse.transform(normal);
+			if(ray.direction.scale(-1).dot(transformedNormal) < 0.0){
+				transformedNormal = transformedNormal.scale(-1);
+			}
 			sr.normal = transformedNormal;
-			sr.normal = normal;
 			sr.localHitPoint = transformed.origin.add(transformed.direction.scale(t));
 			
 			return true;
@@ -102,7 +104,7 @@ public class Plane implements Shape {
 		
 		double t = numerator / denominator;
 		
-		if(t > kEpsilon){
+		if(t > kEpsilon && t < sr.t){
 			sr.t=t;
 			//sr.localHitPoint = transformed.origin.add(transformed.direction.scale(t));
 			
@@ -122,25 +124,16 @@ public class Plane implements Shape {
 		return new BoundingBox(Point.MIN_MAXVALUES, Point.MAXVALUES, transformation);
 	}
 
-
 	@Override
 	public void setTransformation(Transformation transformation) {
 		this.transformation = transformation;
 		
 	}
 
-
 	@Override
 	public AABBox getAABoundingBox() {
 		return new AABBox(Point.MIN_MAXVALUES, Point.MAXVALUES, this);
 	}
-
-
-	@Override
-	public CompositeAABBox getBoundingVolumeHierarchy() {
-		return getAABoundingBox();
-	}
-
 
 	@Override
 	public boolean isInfinite() {

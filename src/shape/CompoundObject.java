@@ -15,7 +15,7 @@ import math.Vector;
 import util.RGBColor;
 import util.ShadeRec;
 
-public class CompoundObject implements Shape {
+public class CompoundObject extends Shape {
 	
 	private Transformation transformation;
 	public static final double kEpsilon = 1e-5;
@@ -175,14 +175,6 @@ public class CompoundObject implements Shape {
 		}
 		return false;
 	}
-
-
-	@Override
-	public AABBox getAABoundingBox() {
-		return AABBox.boundingBoxToAABoundingBox(boundingBox, this);
-		
-	}
-	
 	
 	public CompositeAABBox getBoundingVolumeHierarchy(){
 		BVHManager2 manager = new BVHManager2();

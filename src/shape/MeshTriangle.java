@@ -11,7 +11,7 @@ import math.Transformation;
 import math.Vector;
 import util.ShadeRec;
 
-public class MeshTriangle implements Shape{
+public class MeshTriangle extends Shape{
 	
 	TriangleMesh mesh;
 	
@@ -233,18 +233,6 @@ public class MeshTriangle implements Shape{
 		sr.t = t;
 //		sr.localHitPoint = transformed.origin.add(transformed.direction.scale(t)) ;
 		return true;
-	}
-
-	@Override
-	public AABBox getAABoundingBox() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public CompositeAABBox getBoundingVolumeHierarchy() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

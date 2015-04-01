@@ -1,5 +1,6 @@
 package material;
 
+import light.Light;
 import math.Ray;
 import math.Vector;
 import texture.Texture;
@@ -48,14 +49,13 @@ import brdf.SVLambertianBRDF;
 			//hb p 271
 			Vector wo = sr.ray.direction.scale(-1);
 			RGBColor L = ambientBRDF.getReflectance(sr, wo).multiply(sr.world.ambientLight.getRadiance(sr));
-			int nbLights = sr.world.lights.size();
 			
 //			System.out.println("==============");
 //			System.out.println("Ambient color:");
 //			System.out.println(L.toString());
 //			
-			for(int j = 0; j< nbLights; j++){
-				Vector wi = sr.world.lights.get(j).getDirectionOfIncomingLight(sr);
+			for(Light light: sr.world.lights){
+				Vector wi = light.getDirectionOfIncomingLight(sr);
 				double ndotwi = sr.normal.dot(wi);
 				double ndotwo = sr.normal.dot(wo);
 				
@@ -63,7 +63,7 @@ import brdf.SVLambertianBRDF;
 					
 					//shadow testing: does the hitpoint lie in the shadow of light source j ?
 					boolean inShadow = false;
-					if(sr.world.lights.get(j).castShadows()){// if light source j casts shadows
+					if(light.castShadows()){// if light source j casts shadows
 						// new shadow ray with as origin the hit point and as direction 
 						// the direction of the incoming light
 						Ray shadowRay = new Ray(sr.hitPoint, wi); 
@@ -71,20 +71,39 @@ import brdf.SVLambertianBRDF;
 						 * test for this light source if there are objects between the hit point and the
 						 * location of the light source
 						 */
-						inShadow = sr.world.lights.get(j).inShadow(shadowRay, sr);
+						inShadow = light.inShadow(shadowRay, sr);
 					}
 					if(! inShadow){
 						/*
 						 * if the point doesn't lie in the shadow of light source j
 						 * then add the radiance of light source j to the total radiance.
 						 */
-						L = L.add(diffuseBRDF.f(sr, wo, wi).multiply(sr.world.lights.get(j).getRadiance(sr).scale(ndotwi)));
+						L = L.add(totalBRDF(sr, wo, wi).multiply(light.getRadiance(sr).scale(ndotwi)));
 //						System.out.println("diffuse color from light " + j  + " + previous color");
 //						System.out.println(L.toString());
 					 }
 				}
 			}
 //			System.out.println("final color: "+ L.toString());
+			return L;
+		}
+
+
+		@Override
+		public RGBColor totalBRDF(ShadeRec sr, Vector wo, Vector wi) {
+			return diffuseBRDF.f(sr, wo, wi);
+		}
+
+
+		@Override
+		public RGBColor shade2(ShadeRec sr) {
+			//hb p 271
+			Vector wo = sr.ray.direction.scale(-1);
+			RGBColor L = ambientBRDF.getReflectance(sr, wo).multiply(sr.world.ambientLight.getRadiance(sr));
+			for(Light light: sr.world.lights){
+				RGBColor partialLOfThisLightSource = light.handleMaterialShading(this, sr, wo);
+				L = L.add(partialLOfThisLightSource);
+			}
 			return L;
 		}
 }

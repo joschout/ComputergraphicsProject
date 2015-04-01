@@ -18,7 +18,7 @@ import math.Vector;
  * @author Niels Billen
  * @version 1.0
  */
-public class Sphere implements Shape {
+public class Sphere extends Shape {
 	private Transformation transformation;
 	public final double radius;
 	public static final double kEpsilon = 0.00001;
@@ -195,16 +195,6 @@ public class Sphere implements Shape {
 		Point p0 = new Point(- this.radius - boundingBoxDelta, -this.radius - boundingBoxDelta, -this.radius - boundingBoxDelta);
 		Point p1 = new Point(this.radius + boundingBoxDelta, this.radius + boundingBoxDelta, this.radius + boundingBoxDelta);
 		return new BoundingBox(p0, p1, this.transformation);
-	}
-
-	@Override
-	public AABBox getAABoundingBox() {
-		return AABBox.boundingBoxToAABoundingBox(getBoundingBox(), this);
-	}
-
-	@Override
-	public CompositeAABBox getBoundingVolumeHierarchy() {
-		return getAABoundingBox();
 	}
 	
 	@Override
