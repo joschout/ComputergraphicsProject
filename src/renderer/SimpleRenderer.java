@@ -15,7 +15,8 @@ import rayTracers.BVHFalseColorImageTracer;
 import rayTracers.BVHTracer;
 import rayTracers.Tracer;
 import sampling.Sample;
-import sampling.SampleFactory;
+import sampling.SquareSampleFactory;
+import sampling.SingleSampleFactory;
 import util.RGBColor;
 
 public class SimpleRenderer extends Renderer {

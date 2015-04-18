@@ -12,6 +12,8 @@ import boundingVolumeHierarchy.BVHManager2;
 import boundingVolumeHierarchy.CompositeAABBox;
 import camera.Camera;
 import camera.PerspectiveCamera;
+import camera.ThinLensCamera;
+import sampling.JitteredSampleFactory;
 import shape.Box;
 import shape.CompoundObject;
 import shape.Cylinder;
@@ -86,15 +88,17 @@ public class World{
 	 * @param imageHeight The number of pixels of the image in the vertical direction
 	 */
 	public  void build(int imageWidth, int imageHeight){
-				this.initializeCamera(imageWidth, imageHeight);
+				//this.initializePerspectiveCamera(imageWidth, imageHeight);
+				this.initializeThinLensCamera(imageWidth, imageHeight);
 				
-//				PointLight pl1 = new PointLight(3.0, new RGBColor(1), new  Point(-5,3,0));
-//				pl1.setCastShadows(true);
-//				this.addLight(pl1);
-//
-//				PointLight pl2 = new PointLight(1.0, new RGBColor(1), new  Point(5,3,0));
-//				pl2.setCastShadows(true);
-//				this.addLight(pl2);
+				
+				PointLight pl1 = new PointLight(3.0, new RGBColor(1), new  Point(-5,3,0));
+				pl1.setCastShadows(false);
+				this.addLight(pl1);
+
+				PointLight pl2 = new PointLight(1.0, new RGBColor(1), new  Point(5,3,0));
+				pl2.setCastShadows(false);
+				this.addLight(pl2);
 
 				PhongMaterial phong = new PhongMaterial();
 				phong.setKa(0.25);
@@ -109,12 +113,18 @@ public class World{
 				matte.setKd(0.65);
 				matte.setCd(RGBColor.convertToRGBColor(Color.CYAN));
 				
-//				//==== CHECKERS MATERIAL ====//
-//				Texture imTex = new Checkers3Dtexture();
-//				SVMatteMaterial svMatte = new SVMatteMaterial();
-//				svMatte.setKa(0.45);
-//				svMatte.setKd(0.65);
-//				svMatte.setCd(imTex);
+				//==== CHECKERS MATERIAL ====//
+				Texture imTex = new Checkers3Dtexture();
+				SVMatteMaterial svMatte = new SVMatteMaterial();
+				svMatte.setKa(0.45);
+				svMatte.setKd(0.65);
+				svMatte.setCd(imTex);
+				
+				
+	
+				
+				
+				
 
 //				Mapping mapping = new SphericalMapping();
 //				ImageTexture imTex = new ImageTexture("MercatorProjection.jpg", mapping);
@@ -166,24 +176,50 @@ public class World{
 				
 //				//==== PLANE PRIMITIVE ====//
 //				Transformation planeTransform = Transformation.createTranslation(0, 0, 5);
-//				Transformation planeTransform2 = Transformation.createRotationX(50);
+//				//Transformation planeTransform2 = Transformation.createRotationX(50);
 //				Plane pl = new Plane(planeTransform, new Point(0, -5, 0), new Vector(0,1,0));
-//				pl.material = phong;
+//				pl.material = svMatte;
 //				intersectables.add(pl);
 				
 				
+				//==== PLANE PRIMITIVE ====//
+				Transformation planeTransform = Transformation.createIdentity();
+				Plane pl = new Plane(planeTransform, new Point(0, -1, 0), new Vector(0,1,0));
+				pl.material = svMatte;
+				intersectables.add(pl);
+				
+				Transformation box1Transf = Transformation.createIdentity();
+				Box box1 = new Box(box1Transf, new Point(-1, -1, 7), new Point(1, 2, 9));
+				Texture boxText1 = new Checkers3Dtexture(new RGBColor(0), new RGBColor(1.0f, 1.0f, 0.0f), 0.25);
+				SVMatteMaterial svMatteBox1 = new SVMatteMaterial();
+				svMatteBox1.setKa(0.45);
+				svMatteBox1.setKd(0.65);
+				svMatteBox1.setCd(boxText1);
+				box1.material = svMatteBox1;
+				intersectables.add(box1);
+				
+				Transformation box2Transf = Transformation.createIdentity();
+				Box box2 = new Box(box2Transf, new Point(-3, -1, 5), new Point(-1, 2, 7));
+				Texture boxText2 = new Checkers3Dtexture(new RGBColor(0), new RGBColor(0.0f, 1.0f, 0.0f), 0.25);
+				SVMatteMaterial svMatteBox2 = new SVMatteMaterial();
+				svMatteBox2.setKa(0.45);
+				svMatteBox2.setKd(0.65);
+				svMatteBox2.setCd(boxText2);
+				box2.material = svMatteBox2;
+				intersectables.add(box2);
+				
+				Transformation box3Transf = Transformation.createIdentity();
+				Box box3 = new Box(box3Transf, new Point(1, -1, 9), new Point(3, 2, 11));
+				Texture boxText3 = new Checkers3Dtexture(new RGBColor(0), new RGBColor(1.0f, 0.0f, 0.0f), 0.25);
+				SVMatteMaterial svMatteBox3 = new SVMatteMaterial();
+				svMatteBox3.setKa(0.45);
+				svMatteBox3.setKd(0.65);
+				svMatteBox3.setCd(boxText3);
+				box3.material = svMatteBox3;
+				intersectables.add(box3);
 				
 				
-				testAreaLightSuzanne1(phong);
-				
-				
-				
-				
-				
-				
-				
-				
-				
+//				testAreaLightSuzanne1(phong);
 //				testSquarePrimitive(phong);
 //				testTrianglePrimitive(phong);				
 //				testParallelogramPrimitive(phong);				
@@ -205,6 +241,11 @@ public class World{
 	}
 
 	private void testAreaLightSuzanne1(PhongMaterial phong) {
+		
+//		PointLight pl1 = new PointLight(3.0, new RGBColor(1), new Point(3,0,5));
+//		pl1.setCastShadows(true);
+//		this.addLight(pl1);
+		
 		EmissiveMaterial emissiveMat = new EmissiveMaterial();
 		emissiveMat.setLs(1e1);
 		
@@ -298,7 +339,19 @@ public class World{
 	 * @param imageWidth The number of pixels of the image in the horizontal direction
 	 * @param imageHeight The number of pixels of the image in the vertical direction
 	 */
-	private void initializeCamera(int imageWidth, int imageHeight) {
+	private void initializeThinLensCamera(int imageWidth, int imageHeight) {
+		camera = new ThinLensCamera(imageWidth, imageHeight,
+				new Point(0,1,0), new Vector(0, 0, 1), new Vector(0, 1, 0), 60,
+				0.4, 9, new JitteredSampleFactory(0, 0, 1, 10));
+	}
+	
+	
+	/**
+	 * 
+	 * @param imageWidth The number of pixels of the image in the horizontal direction
+	 * @param imageHeight The number of pixels of the image in the vertical direction
+	 */
+	private void initializePerspectiveCamera(int imageWidth, int imageHeight) {
 		camera = new PerspectiveCamera(imageWidth, imageHeight,
 	
 				//new Point(0,5,0), new Vector(0, -1,3), new Vector(0, 1, 0),90);

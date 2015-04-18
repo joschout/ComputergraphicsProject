@@ -12,14 +12,10 @@ import sampling.Sample;
  * @author Niels Billen
  * @version 1.0
  */
-public class PerspectiveCamera implements Camera {
-	private final int xResolution;
-	private final int yResolution;
-	private final Point origin;
-	private final OrthonormalBasis basis;
+public class PerspectiveCamera extends Camera {
 
-	private final double width;
-	private final double height;
+	private final double widthOfViewPlaneOverDistanceToViewPlane;
+	private final double heightOfViewPlaneOverDistanceToViewPlane;
 
 	/**
 	 * Creates a new {@link PerspectiveCamera} for an image with the given
@@ -71,10 +67,19 @@ public class PerspectiveCamera implements Camera {
 		this.origin = origin;
 		this.basis = new OrthonormalBasis(lookat, up);
 
-		//cfr handbook: width = s*hres/d  = s*xRes/d
-		width = 2.0 * Math.tan(0.5 * Math.toRadians(fov));
-		//cfr handbook: height = s*vres/d = s*yRes/d
-		height = ((double) yResolution * width) / (double) xResolution;
+		/*
+		 * 	cfr handbook p. 65 and p. 156:
+		 *  width = s*hres/d  = s*xRes/d
+		 *    = Width of the view plane/ distance to view plane
+		 */
+		widthOfViewPlaneOverDistanceToViewPlane = 2.0 * Math.tan(0.5 * Math.toRadians(fov));
+		
+		/*
+		 * 	cfr handbook p. 65 and p. 156:
+		 *  height = s*vres/d = s*yRes/d
+		 *   = Height of the view plane/ distance to view plane
+		 */
+		heightOfViewPlaneOverDistanceToViewPlane = ((double) yResolution * widthOfViewPlaneOverDistanceToViewPlane) / (double) xResolution;
 	}
 
 	/*
@@ -83,15 +88,35 @@ public class PerspectiveCamera implements Camera {
 	 * @see camera.Camera#generateRay(sampling.Sample)
 	 */
 	public Ray generateRay(Sample sample) throws NullPointerException {
-		double u = width * (sample.x / (double) xResolution - 0.5);
-		double v = height * (sample.y / (double) yResolution - 0.5);
+		
+		/*
+		 * the Orthonormal basis consists of u, v, x axes
+		 * --> we need to calculate the u, v, w coordinates of the ray.
+		 * 
+		 * 
+		 * sample.x in [0, xResolution]
+		 * sample.y in [0, yResolution] 
+		 * 
+		 * sample.x/xResolution in [0, 1]
+		 * sample.y/yResolution in [0, 1]
+		 * 
+		 * (sample.x/xResolution -0.5) in [-0.5, 0.5]
+		 * (sample.y/yResolution -0.5) in [-0.5, 0.5]
+		 * 
+		 * 
+		 * width = width of the view plane/ distance to view plane
+		 * height =  height of the view plane/ distance to view plane
+		 *  
+		 */
+		double uCoordinate = widthOfViewPlaneOverDistanceToViewPlane * ((sample.x / (double) xResolution) - 0.5);
+		double vCoordinate = heightOfViewPlaneOverDistanceToViewPlane * ((sample.y / (double) yResolution) - 0.5);
 
-		Vector direction = basis.w.scale(-1).add(basis.u.scale(u).add(basis.v.scale(v)));
+		Vector direction = basis.w.scale(-1) //in de richting van de negatieve z-as
+						.add(basis.u.scale(uCoordinate)
+						.add(basis.v.scale(vCoordinate)));
 
 		return new Ray(origin, direction);
 	}
 	
-	public Point getOrigin(){
-		return this.origin;
-	}
+
 }

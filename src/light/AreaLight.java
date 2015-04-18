@@ -142,8 +142,8 @@ public class AreaLight extends Light {
 			}	
 		}
 		RGBColor temp2 = partialLOfThisLightSource.scale(1.0/nbOfShadowRaysPerAreaLight);
-		System.out.println("temp2; "+ temp2);
-		System.out.println("//================= End Sampling ===================//");
+//		System.out.println("temp2; "+ temp2);
+//		System.out.println("//================= End Sampling ===================//");
 		return temp2;
 	}
 

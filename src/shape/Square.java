@@ -15,7 +15,7 @@ import math.Vector;
 import sampling.JitteredSampleFactory;
 import sampling.RandomSampleFactory;
 import sampling.Sample;
-import sampling.SampleFactory;
+import sampling.SquareSampleFactory;
 import util.RGBColor;
 import util.ShadeRec;
 
@@ -32,7 +32,7 @@ public class Square extends Shape {
 	public Vector v2; //vector b
 	public Vector normal;
 	public static double boundingBoxDelta = 0.0001;
-	public SampleFactory sampleFactory = new JitteredSampleFactory(0.5, 0.5, 1, 1, 1);//new JitteredSampleFactory(0, 0, 2, 1, 1);
+	public SquareSampleFactory sampleFactory = new JitteredSampleFactory(0.5, 0.5, 1, 1, 1);//new JitteredSampleFactory(0, 0, 2, 1, 1);
 
 	/**
 	 * Creates a new parallelogram with points (0,0,0), (0,0,1) and (1,0,0).

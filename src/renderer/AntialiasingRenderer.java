@@ -10,25 +10,27 @@ import math.Ray;
 import rayTracers.Tracer;
 import sampling.JitteredSampleFactory;
 import sampling.Sample;
-import sampling.SampleFactory;
+import sampling.SquareSampleFactory;
 import util.RGBColor;
 
 public class AntialiasingRenderer extends Renderer {
 	
 	
+	public static JitteredSampleFactory sampleFactory;
+	
 	private int sqrtOfNumberOfRaysPerPixel;
 
 	@Override
 	public void render(World world, Tracer tracer) {
-		
-		
+
 		int nbOfRaysPerPixel = sqrtOfNumberOfRaysPerPixel * sqrtOfNumberOfRaysPerPixel;
+		sampleFactory = new JitteredSampleFactory(sqrtOfNumberOfRaysPerPixel);
+		
 		// render the scene
 				for (int x = 0; x < imageWidth; ++x) {
 					for (int y = 0; y < imageHeight; ++y) {
 						// create a ray through the center of the pixel.
-						JitteredSampleFactory sampleFactory 
-							= new JitteredSampleFactory(x + 0.5, y + 0.5, 1, 1, sqrtOfNumberOfRaysPerPixel);
+						sampleFactory.reset(x + 0.5, y + 0.5);
 						
 						RGBColor averageColor = new RGBColor(0);
 						for(int sampleNb = 0; sampleNb <= nbOfRaysPerPixel; sampleNb++){

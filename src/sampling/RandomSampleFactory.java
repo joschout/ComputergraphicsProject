@@ -2,7 +2,7 @@ package sampling;
 
 import java.util.Random;
 
-public class RandomSampleFactory extends SampleFactory {
+public class RandomSampleFactory extends SquareSampleFactory {
 
 	private Random randomNumberGenerator;
 	

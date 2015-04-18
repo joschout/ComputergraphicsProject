@@ -10,7 +10,7 @@ import brdf.SVLambertianBRDF;
 
 
 	/**
-	 * Models a material with perfect diffuse reflection with ambient and diffuse shading
+	 * Models a material with perfect diffuse reflection with ambient and diffuse shading.
 	 * 
 	 * A matte material has: 
 	 * 	- an ambient reflection coefficient ka

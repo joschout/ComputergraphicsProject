@@ -3,7 +3,7 @@ package shape;
 import boundingVolumeHierarchy.AABBox;
 import boundingVolumeHierarchy.BoundingBox;
 import boundingVolumeHierarchy.CompositeAABBox;
-import sampling.SampleFactory;
+import sampling.SquareSampleFactory;
 import util.ShadeRec;
 import material.Material;
 import math.Point;
@@ -38,7 +38,7 @@ public abstract class Shape implements Intersectable {
 		throw new UnsupportedOperationException("shape cannot be an arealight");
 	}
 	
-	public void setSampler(SampleFactory sampleFactory){
+	public void setSampler(SquareSampleFactory sampleFactory){
 		throw new UnsupportedOperationException("shape cannot be an arealight");
 	}
 	
