@@ -168,4 +168,8 @@ public class ProgressReporter {
 		}
 		lock.unlock();
 	}
+
+	public void setQuiet(boolean quiet) {
+		this.quiet = quiet;
+	}
 }

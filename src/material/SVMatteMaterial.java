@@ -3,6 +3,7 @@ package material;
 import light.Light;
 import math.Ray;
 import math.Vector;
+import texture.NormalMapTexture;
 import texture.Texture;
 import util.RGBColor;
 import util.ShadeRec;
@@ -10,6 +11,8 @@ import brdf.SVLambertianBRDF;
 
 
 	/**
+	 * Spacially  Variying Matte material
+	 * 
 	 * Models a material with perfect diffuse reflection with ambient and diffuse shading.
 	 * 
 	 * A matte material has: 
@@ -24,6 +27,8 @@ import brdf.SVLambertianBRDF;
 
 		private SVLambertianBRDF ambientBRDF;
 		private SVLambertianBRDF diffuseBRDF;
+		
+		private NormalMapTexture normalMaptexture;
 		
 		public SVMatteMaterial(){
 			ambientBRDF = new SVLambertianBRDF();
@@ -99,11 +104,28 @@ import brdf.SVLambertianBRDF;
 		public RGBColor shade2(ShadeRec sr) {
 			//hb p 271
 			Vector wo = sr.ray.direction.scale(-1);
+			
+			Vector geometricNormal = sr.normal;
+			
+			if (normalMaptexture != null) {
+				sr.normal = this.normalMaptexture.getGeometricNormal(sr);
+			}
+			
 			RGBColor L = ambientBRDF.getReflectance(sr, wo).multiply(sr.world.ambientLight.getRadiance(sr));
 			for(Light light: sr.world.lights){
 				RGBColor partialLOfThisLightSource = light.handleMaterialShading(this, sr, wo);
 				L = L.add(partialLOfThisLightSource);
 			}
+			
+			if (normalMaptexture != null) {
+				sr.normal = geometricNormal;
+			}
+			
 			return L;
+		}
+
+
+		public void setNormalMaptexture(NormalMapTexture normalMaptexture) {
+			this.normalMaptexture = normalMaptexture;
 		}
 }

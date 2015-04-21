@@ -69,6 +69,8 @@ public class Main {
 		AntialiasingRenderer renderer = new AntialiasingRenderer(imageResolution[0], imageResolution[1]);
 		renderer.setSqrtOfNumberOfRaysPerPixel(10);
 //		Renderer renderer = new SimpleRenderer(imageResolution[0], imageResolution[1]);
+		
+		renderer.reporter.setQuiet(true);
 		renderer.render(world, tracer);
 		
 		

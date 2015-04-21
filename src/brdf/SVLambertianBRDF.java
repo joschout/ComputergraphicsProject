@@ -38,7 +38,7 @@ public class SVLambertianBRDF extends BRDF{
 		this.kd=kd;
 	}
 	
-	public void  setTexture(Texture texture){
+	public void setTexture(Texture texture){
 		this.diffuseTexture = texture;
 	}
 	

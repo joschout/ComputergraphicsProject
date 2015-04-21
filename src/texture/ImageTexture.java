@@ -22,7 +22,6 @@ public class ImageTexture implements Texture {
 		if(filename == null){
 			throw new IllegalArgumentException("filename for image is null");
 		}
-		
 		setImage(readImage(filename));
 		setHres(image.getWidth());
 		setVres(image.getHeight());
@@ -43,7 +42,7 @@ public class ImageTexture implements Texture {
 			xp = (int)(sr.u *(hres-1));
 			yp = (vres-1) - (int) (sr.v *(vres-1));
 		}	
-		System.out.println("xp/hres: " + xp + "/"+ hres + ", yp/vres: " + yp + "/"+ vres) ;
+//		System.out.println("xp/hres: " + xp + "/"+ hres + ", yp/vres: " + yp + "/"+ vres) ;
 		int readColor = image.getRGB(xp, yp);
 
 //		int  red = (color & 0x00ff0000) >> 16;
