@@ -48,6 +48,7 @@ local.properties
 # TeXlipse plugin
 .texlipse
 
+*.jpg
 *.png
 output.png
 outputFalseColor.png

@@ -21,7 +21,7 @@ public class SphericalMapping extends Mapping{
 		
 		//map u and v to the texel coordinates
 		int xp = (int) ((hres - 1) * u);
-		int yp = (int) ((vres - 1) * v);
+		int yp = (int) ((vres-1) -(vres - 1) * v);
 		return new TexelCoordinates(xp, yp);
 	}
 

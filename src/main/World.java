@@ -1,15 +1,12 @@
 package main;
 
-import ioPackage.ObjectFileReader;
 import ioPackage.ObjectFileReader2;
 
 import java.awt.Color;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import boundingVolumeHierarchy.BVHManager2;
-import boundingVolumeHierarchy.CompositeAABBox;
 import camera.Camera;
 import camera.PerspectiveCamera;
 import camera.ThinLensCamera;
@@ -35,6 +32,7 @@ import light.AreaLight;
 import light.Light;
 import light.PointLight;
 import mapping.CylindricalMapping;
+import mapping.LightProbeMapping;
 import mapping.Mapping;
 import mapping.SphericalMapping;
 import material.EmissiveMaterial;
@@ -87,10 +85,12 @@ public class World{
 	 * @param imageHeight The number of pixels of the image in the vertical direction
 	 */
 	public  void build(int imageWidth, int imageHeight){
+				//=== CAMERA ===///
 				this.initializePerspectiveCamera(imageWidth, imageHeight);
 //				this.initializeThinLensCamera(imageWidth, imageHeight);
 				
 				
+				//=== LIGHT SOURCES ===//
 				PointLight pl1 = new PointLight(3.0, new RGBColor(1), new  Point(-5,3,0));
 				pl1.setCastShadows(false);
 				this.addLight(pl1);
@@ -99,6 +99,7 @@ public class World{
 				pl2.setCastShadows(false);
 				this.addLight(pl2);
 
+				//=== MATERIALS ===///
 				PhongMaterial phong = new PhongMaterial();
 				phong.setKa(0.25);
 				phong.setKd(0.65);
@@ -110,89 +111,18 @@ public class World{
 				MatteMaterial matte = new MatteMaterial();
 				matte.setKa(0.25);
 				matte.setKd(0.65);
-				matte.setCd(RGBColor.convertToRGBColor(Color.CYAN));
-				
-				//==== CHECKERS MATERIAL ====//
-				Texture imTex = new Checkers3Dtexture();
-				SVMatteMaterial svMatte = new SVMatteMaterial();
-				svMatte.setKa(0.45);
-				svMatte.setKd(0.65);
-				svMatte.setCd(imTex);
-				
-				
-	
-				
-				
-				
-
-//				Mapping mapping = new SphericalMapping();
-//				ImageTexture imTex = new ImageTexture("MercatorProjection.jpg", mapping);
-//
-//				SVMatteMaterial svMatte = new SVMatteMaterial();
-//				svMatte.setKa(0.45);
-//				svMatte.setKd(0.65);
-//				svMatte.setCd(imTex);
-//				
-//				Transformation sphereTrans = Transformation.createRotationY(120);
-//				sphereTrans = sphereTrans.append(Transformation.createRotationX(180));
-//				sphereTrans = sphereTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 4));
-//				Sphere sphere = new Sphere(sphereTrans, 1);
-//				sphere.material = svMatte;
-//				intersectables.add(sphere);
-				
-				
-//				Mapping mapping = new CylindricalMapping();
-//				ImageTexture imTex = new ImageTexture("Hobbel.JPG", mapping);
-//				SVMatteMaterial svMatte = new SVMatteMaterial();
-//				svMatte.setKa(0.45);
-//				svMatte.setKd(0.65);
-//				svMatte.setCd(imTex);
-//				Transformation cylinderTrans = Transformation.createRotationY(180);
-//				cylinderTrans = cylinderTrans.append(Transformation.createRotationX(180));
-//				cylinderTrans = cylinderTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 4));
-//				Cylinder cylinder = new Cylinder(cylinderTrans, 1, -1, 1);
-//				cylinder.material = svMatte;
-//				intersectables.add(cylinder);		
-			
-				
-//				Plane plane = new Plane(Transformation.createIdentity(), new Point(0,0,0), new Vector(0,1,0));
-//				plane.material = matte;
-//				intersectables.add(plane);
-				
-
-//				Plane plane = new Plane(Transformation.createIdentity(), new Point(0,0, 11), new Vector(0,0, -1));
-//				PhongMaterial planeMaterial = new PhongMaterial();
-//				planeMaterial.setKa(0.25);
-//				planeMaterial.setKd(0.65);
-//				planeMaterial.setCd(RGBColor.convertToRGBColor(Color.CYAN));
-//				planeMaterial.setKs(0.2);
-//				planeMaterial.setPhongExponent(10);
-//				planeMaterial.setCs(RGBColor.convertToRGBColor(Color.WHITE));
-//				plane.material = planeMaterial;
-//				intersectables.add(plane);
-
-				
-				
-//				//==== PLANE PRIMITIVE ====//
-//				Transformation planeTransform = Transformation.createTranslation(0, 0, 5);
-//				//Transformation planeTransform2 = Transformation.createRotationX(50);
-//				Plane pl = new Plane(planeTransform, new Point(0, -5, 0), new Vector(0,1,0));
-//				pl.material = svMatte;
-//				intersectables.add(pl);
-				
-				
-//				//==== PLANE PRIMITIVE ====//
-//				Transformation planeTransform = Transformation.createIdentity();
-//				Plane pl = new Plane(planeTransform, new Point(0, -1, 0), new Vector(0,1,0));
-//				pl.material = svMatte;
-//				intersectables.add(pl);
-				
-				
+				matte.setCd(RGBColor.convertToRGBColor(Color.CYAN));				
+						
 				
 //				testLowResDragon(phong);
 //				testApple2(phong);
-				testLowBuddha(phong);
-				
+//				testLowBuddha(phong);
+//				testSpherePrimitiveLightProbeMapping(phong);				
+//				testPlanePrimitive(matte);
+//				testPlanePrimitive2();
+//				testPlanePrimitiveCheckersMaterial();
+//				testSphericalMapping();
+//				testCylindricalMapping();	
 //				testThinLensCamera();
 //				testAreaLightSuzanne1(phong);
 //				testSquarePrimitive(phong);
@@ -213,6 +143,23 @@ public class World{
 //				testBuddha(phong);
 				
 				
+	}
+
+	private void testSphericalMapping() {
+		Mapping mapping = new SphericalMapping();
+		ImageTexture imTex = new ImageTexture("Lambert-cylindrical-equal-area-projection.jpg", mapping);
+
+		SVMatteMaterial svMatte = new SVMatteMaterial();
+		svMatte.setKa(0.45);
+		svMatte.setKd(0.65);
+		svMatte.setCd(imTex);
+		
+		Transformation sphereTrans = Transformation.createRotationY(0);
+		sphereTrans = sphereTrans.append(Transformation.createRotationX(0));
+		sphereTrans = sphereTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 2));
+		Sphere sphere = new Sphere(sphereTrans, 1);
+		sphere.material = svMatte;
+		intersectables.add(sphere);
 	}
 
 	public ShadeRec hitObjects(Ray ray){
@@ -484,6 +431,21 @@ public class World{
 	//			intersectables.add(box2);
 		}
 
+	private void testCylindricalMapping() {
+		Mapping mapping = new CylindricalMapping();
+		ImageTexture imTex = new ImageTexture("Lambert-cylindrical-equal-area-projection.jpg", mapping);
+		SVMatteMaterial svMatte = new SVMatteMaterial();
+		svMatte.setKa(0.45);
+		svMatte.setKd(0.65);
+		svMatte.setCd(imTex);
+		Transformation cylinderTrans = Transformation.createRotationY(0);
+		cylinderTrans = cylinderTrans.append(Transformation.createRotationX(0));
+		cylinderTrans = cylinderTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 2.5));
+		Cylinder cylinder = new Cylinder(cylinderTrans, 1, -1, 1);
+		cylinder.material = svMatte;
+		intersectables.add(cylinder);
+	}
+
 	private void testDiskPrimitive(PhongMaterial phong) {
 			//====DISK PRIMITIVE ====//
 			Transformation diskTrans = Transformation.createRotationY(200);
@@ -602,11 +564,44 @@ public class World{
 	//		intersectables.add(box2);
 		}
 
+	private void testPlanePrimitive(MatteMaterial matte) {
+		Plane plane = new Plane(Transformation.createIdentity(), new Point(0,-1,0), new Vector(0,1,0));
+		plane.material = matte;
+		intersectables.add(plane);
+	}
+
+	private void testPlanePrimitive2() {
+		Plane plane = new Plane(Transformation.createIdentity(), new Point(0,0, 11), new Vector(0,0, -1));
+		PhongMaterial planeMaterial = new PhongMaterial();
+		planeMaterial.setKa(0.25);
+		planeMaterial.setKd(0.65);
+		planeMaterial.setCd(RGBColor.convertToRGBColor(Color.CYAN));
+		planeMaterial.setKs(0.2);
+		planeMaterial.setPhongExponent(10);
+		planeMaterial.setCs(RGBColor.convertToRGBColor(Color.WHITE));
+		plane.material = planeMaterial;
+		intersectables.add(plane);
+	}
+
+	private void testPlanePrimitiveCheckersMaterial() {
+		//==== CHECKERS MATERIAL ====//
+		Texture imTex = new Checkers3Dtexture();
+		SVMatteMaterial svMatte = new SVMatteMaterial();
+		svMatte.setKa(0.45);
+		svMatte.setKd(0.65);
+		svMatte.setCd(imTex);
+		//==== PLANE PRIMITIVE ====//
+		Transformation planeTransform = Transformation.createIdentity();
+		Plane pl = new Plane(planeTransform, new Point(0, -1, 0), new Vector(0,1,0));
+		pl.material = svMatte;
+		intersectables.add(pl);
+	}
+
 	private void testSpherePrimitive(PhongMaterial phong) {
 			// ==== SPHERE PRIMITIVE ==== ///
-			Transformation sphereTrans = Transformation.createRotationY(200);
+			Transformation sphereTrans = Transformation.createRotationY(0);
 			sphereTrans = sphereTrans.append(Transformation.createRotationX(0));
-			sphereTrans = sphereTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 4));
+			sphereTrans = sphereTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 2));
 			Sphere sphere = new  Sphere(sphereTrans, 1);
 			sphere.material = phong;
 			intersectables.add(sphere);
@@ -617,6 +612,32 @@ public class World{
 	//				box2.material = matte;
 	//				intersectables.add(box2);
 		}
+	
+	
+	private void testSpherePrimitiveLightProbeMapping(PhongMaterial phong) {
+		// ==== SPHERE PRIMITIVE ==== ///
+		
+		LightProbeMapping lightProbeMapping = new LightProbeMapping();
+		ImageTexture sphereImTex = new ImageTexture("angmap24Small.jpg", lightProbeMapping);
+		SVMatteMaterial svMatte = new SVMatteMaterial();
+		svMatte.setKa(0.45);
+		svMatte.setKd(0.65);
+		svMatte.setCd(sphereImTex);
+		
+		
+		Transformation sphereTrans = Transformation.createRotationY(50);
+		sphereTrans = sphereTrans.append(Transformation.createRotationX(0));
+		sphereTrans = sphereTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 2));
+		Sphere sphere = new  Sphere(sphereTrans, 1);
+		sphere.material = svMatte;
+		intersectables.add(sphere);
+//				Box box1 = Box.boundingBoxtoBox(sphere.getBoundingBox());
+//				box1.material = matte;
+//				intersectables.add(box1);
+//				Box box2 = Box.aaBoundingBoxtoBox(sphere.getAABoundingBox());
+//				box2.material = matte;
+//				intersectables.add(box2);
+	}
 
 	private void testSquarePrimitive(PhongMaterial phong) {
 			//==== SQUARE PRIMITIVE ====//
