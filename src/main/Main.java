@@ -14,6 +14,7 @@ import rayTracers.BVHFalseColorImageTracer;
 import rayTracers.BVHTracer;
 import rayTracers.MultipleObjectsTracer;
 import rayTracers.Tracer;
+import rayTracers.WhittedBVHTracer;
 import renderer.AntialiasingRenderer;
 import renderer.Renderer;
 import renderer.SimpleRenderer;
@@ -59,7 +60,8 @@ public class Main {
 		//Tracer tracer = new DepthTracer(world);
 		//Tracer tracer = new NormalFalseColorImagetracer(world);
 		//Tracer tracer = new NormalBVHTracer(world);
-		Tracer tracer = new BVHTracer(world);
+		//Tracer tracer = new BVHTracer(world);
+		Tracer tracer = new WhittedBVHTracer(world);
 		//Tracer tracer = new BVHFalseColorImageTracer(world);
 		//Tracer tracer = new BVHFalseColorGrayTracer(world);
 		

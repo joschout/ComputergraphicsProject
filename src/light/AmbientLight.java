@@ -20,7 +20,7 @@ public class AmbientLight extends Light {
 	public AmbientLight(){
 		super();
 		this.ls = 1.0;
-		this.color = new RGBColor(1);
+		this.color = RGBColor.WHITE;
 	}
 	
 	/**

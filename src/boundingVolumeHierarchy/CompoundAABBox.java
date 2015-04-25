@@ -93,16 +93,15 @@ public class CompoundAABBox extends CompositeAABBox {
 		return false;
 	}
 
-	
 	@Override
 	public boolean shadowHit(Ray shadowRay, ShadeRec sr) {
 		sr.bvhCounter ++;
 		double thisBoxT = this.getSurroundingBoxIntersectionT(shadowRay);
-		if(thisBoxT < kEpsilon ){
+		if(thisBoxT < kEpsilon){
 			return false;
 		}	
 		
-		if(sr.hasHitAnObject && sr.t < thisBoxT){
+		if(sr.t < thisBoxT){
 			return false;
 		}
 

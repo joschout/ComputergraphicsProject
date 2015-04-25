@@ -199,6 +199,8 @@ public class Sphere extends Shape {
 	
 	@Override
 	public boolean isInfinite() {
-		return false;
+		return infinite;
 	}
+	
+	public boolean infinite = false;
 }

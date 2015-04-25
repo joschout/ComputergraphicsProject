@@ -10,9 +10,6 @@ import util.ShadeRec;
 
 public class PointLight extends Light {
 	
-	private boolean castShadows = false;
-	
-	
 	//radiance scaling factor ls, where ls is between [0, infinity).
 	private double ls;
 	
@@ -21,7 +18,7 @@ public class PointLight extends Light {
 	private Point location;
 	
 	public PointLight(){
-		this(1.0, new RGBColor(1), new Point());
+		this(1.0, RGBColor.WHITE, new Point());
 	}
 	
 	public PointLight(double ls, RGBColor rgbColor, Point location){
@@ -65,29 +62,8 @@ public class PointLight extends Light {
 	public boolean inShadow(Ray shadowRay, ShadeRec sr) {
 		// d = the length between the hit point and the light source
 		double d = location.subtract(shadowRay.origin).length();
-		
-		/*
-		 * check for all objects in the scene:
-		 * if the shadow ray in the direction to the light source starting from the hitpoint
-		 * 		hits another object
-		 * and if the distance to that object is a positive number t smaller than the distance d
-		 * then the hit point lies in the shadow of that object under this light source.
-		 */
-		for(Intersectable intersectable: sr.world.intersectablesToIntersect){
-			if(intersectable.shadowHit(shadowRay, sr) && sr.t < d){
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public void setCastShadows(boolean castShadows){
-		this.castShadows = castShadows;
-	}
-	public boolean castShadows() {
-		return castShadows;
-	}
-	
+		return sr.world.shadowHitObjects(shadowRay, d);
+	}	
 	
 	public RGBColor handleMaterialShading(Material material, ShadeRec sr, Vector wo){
 		Vector wi = this.getDirectionOfIncomingLight(sr);

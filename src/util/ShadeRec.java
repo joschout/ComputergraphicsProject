@@ -2,6 +2,7 @@ package util;
 
 import java.awt.Color;
 
+import rayTracers.Tracer;
 import main.World;
 import material.Material;
 import math.Point;
@@ -25,6 +26,7 @@ public class ShadeRec {
 	public double u;
 	public double v;
 	public int bvhCounter;
+	public Tracer tracer;
 	
 	public ShadeRec(World world){
 		hasHitAnObject = false;
@@ -35,6 +37,8 @@ public class ShadeRec {
 		t = Double.MAX_VALUE;
 		bvhCounter = 0;
 		tbox = Double.MAX_VALUE;
+		tracer = null;
+		depth = 0;
 	}
 	
 	public ShadeRec(ShadeRec sr){
@@ -50,6 +54,6 @@ public class ShadeRec {
 		this.v = sr.v;
 		this.bvhCounter = sr.bvhCounter;
 		this.tbox = sr.tbox;
-		
+		this.tracer = sr.tracer;
 	}
 }

@@ -22,13 +22,14 @@ import shape.Shape;
 import shape.Sphere;
 import shape.Square;
 import shape.Triangle;
-import texture.Checkers3Dtexture;
-import texture.ConstantColor;
+import texture.Checkers3DTexture;
+import texture.ConstantColorTexture;
 import texture.ImageTexture;
 import texture.NormalMapTexture;
 import texture.Texture;
 import light.AmbientLight;
 import light.AreaLight;
+import light.EnvironmentLight;
 import light.Light;
 import light.PointLight;
 import mapping.CylindricalMapping;
@@ -38,6 +39,8 @@ import mapping.SphericalMapping;
 import material.EmissiveMaterial;
 import material.MatteMaterial;
 import material.PhongMaterial;
+import material.ReflectiveMaterial;
+import material.SVEmissiveMaterial;
 import material.SVMatteMaterial;
 import math.Point;
 import math.Ray;
@@ -63,12 +66,25 @@ public class World{
 	public List<Light> lights = new ArrayList<Light>();
 	public Light ambientLight;
 	public int maxBVHCounter;
+	private int maxRecursionDepth;
 		
 	public World(){
 		camera = null;
 		backgroundColor = new RGBColor((float)0.3);
 		ambientLight = new AmbientLight();
 		maxBVHCounter = 0;
+		maxRecursionDepth = 0;
+	}
+	
+	public int getMaxRecursionDepth(){
+		return this.maxRecursionDepth;
+	}
+	
+	public void setMaxRecursionDepth(int maxRecursionDepth) throws IllegalArgumentException{
+		if (maxRecursionDepth < 0) {
+			throw new IllegalArgumentException("the given max recursion depth cannot be smaller than zero");
+		}
+		this.maxRecursionDepth = maxRecursionDepth;
 	}
 	
 	public void addIntersectable(Intersectable intersectable){
@@ -91,12 +107,12 @@ public class World{
 				
 				
 				//=== LIGHT SOURCES ===//
-				PointLight pl1 = new PointLight(3.0, new RGBColor(1), new  Point(-5,3,0));
-				pl1.setCastShadows(false);
+				PointLight pl1 = new PointLight(3.0, RGBColor.WHITE, new  Point(-5,3,0));
+				pl1.setCastShadows(true);
 				this.addLight(pl1);
 
-				PointLight pl2 = new PointLight(1.0, new RGBColor(1), new  Point(5,3,0));
-				pl2.setCastShadows(false);
+				PointLight pl2 = new PointLight(1.0, RGBColor.WHITE, new  Point(5,3,0));
+				pl2.setCastShadows(true);
 				this.addLight(pl2);
 
 				//=== MATERIALS ===///
@@ -112,54 +128,108 @@ public class World{
 				matte.setKa(0.25);
 				matte.setKd(0.65);
 				matte.setCd(RGBColor.convertToRGBColor(Color.CYAN));				
-						
 				
-//				testLowResDragon(phong);
+				
+
+				ReflectiveMaterial reflectiveMaterial1 = new ReflectiveMaterial();
+				reflectiveMaterial1.setKa(0.25);
+				reflectiveMaterial1.setKd(0.65);
+				reflectiveMaterial1.setCd(new RGBColor(0.75f, 0.75f, 0f));
+				reflectiveMaterial1.setCs(RGBColor.WHITE);
+				reflectiveMaterial1.setKs(0.75);
+				reflectiveMaterial1.setPhongExponent(100);
+				reflectiveMaterial1.setCr(RGBColor.WHITE);
+				reflectiveMaterial1.setKr(0.75);
+				
+				ReflectiveMaterial reflectiveMaterial2 = new ReflectiveMaterial();
+				reflectiveMaterial2.setKa(0.25);
+				reflectiveMaterial2.setKd(0.65);
+				reflectiveMaterial2.setCd(new RGBColor(0f, 0f, 1f));
+				reflectiveMaterial2.setCs(RGBColor.WHITE);
+				reflectiveMaterial2.setKs(0.75);
+				reflectiveMaterial2.setPhongExponent(100);
+				reflectiveMaterial2.setCr(RGBColor.WHITE);
+				reflectiveMaterial2.setKr(0.75);
+				
+				Transformation sphereTrans = Transformation.createRotationY(0);
+				sphereTrans = sphereTrans.append(Transformation.createRotationX(0));
+				sphereTrans = sphereTrans.appendToTheLeft(Transformation.createTranslation(1 ,0, 3));
+				Sphere sphere = new  Sphere(sphereTrans, 1);
+				sphere.material = reflectiveMaterial1;
+				intersectables.add(sphere);
+				
+				Transformation cylinderTrans = Transformation.createRotationY(0);
+				cylinderTrans = cylinderTrans.append(Transformation.createRotationX(0));
+				cylinderTrans = cylinderTrans.appendToTheLeft(Transformation.createTranslation(-1 ,0, 3));
+				Cylinder cylinder = new Cylinder(cylinderTrans, 1, -1, 1);
+				cylinder.material = reflectiveMaterial2;
+				intersectables.add(cylinder);
+				
+				
+		
+				
+				
+				
+				
+				SVEmissiveMaterial emissiveMat = new SVEmissiveMaterial();
+				emissiveMat.setLs(1e1);
+				LightProbeMapping lightProbeMapping = new LightProbeMapping();
+				ImageTexture sphereImTex = new ImageTexture("angmap24Small.jpg", lightProbeMapping);;
+				ConstantColorTexture colorText = new ConstantColorTexture();
+				colorText.setColor(new RGBColor(1f,0f, 0f));
+				
+				emissiveMat.setCe(sphereImTex);	
+		
+				EnvironmentLight environmentLight = new EnvironmentLight();
+				environmentLight.nbOfShadowRaysPerEnvironmentLight = 100;
+				environmentLight.emissiveMaterial = emissiveMat;
+				environmentLight.setCastShadows(true);
+	//			lights.add(environmentLight);
+				
+				Transformation bigSphereTrans = Transformation.createRotationY(0);
+				bigSphereTrans = bigSphereTrans.append(Transformation.createRotationX(0));
+				bigSphereTrans = bigSphereTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 0));
+				Sphere bigSphere = new  Sphere(bigSphereTrans, 10);
+				bigSphere.material = emissiveMat;
+				bigSphere.infinite = true;
+	//			intersectables.add(bigSphere);
+				
+				
+				
+				
+				
+				
+				
+				setMaxRecursionDepth(10);
+								
+//				testApple(phong);				
 //				testApple2(phong);
-//				testLowBuddha(phong);
-//				testSpherePrimitiveLightProbeMapping(phong);				
-//				testPlanePrimitive(matte);
+//				testAreaLightSuzanne1(phong);				
+//				testBoxPrimitive(phong);
+//				testBuddha(phong);
+//				testBunny(phong);				
+//				testBunnyReflective(phong);
+//				testCylindricalMapping();				
+//				testCylinderPrimitive(phong);
+//				testDiskPrimitive(phong);
+//				testHouse();				
+//				testLowBuddha(phong);				
+//				testLowResDragon(phong);
+//				testParallelogramPrimitive(phong);					
+				testPlanePrimitive(matte);
 //				testPlanePrimitive2();
-//				testPlanePrimitiveCheckersMaterial();
+//				testPlanePrimitiveCheckersMaterial();				
+//				testSpherePrimitive(phong);				
+//				testSpherePrimitiveLightProbeMapping(phong);	
 //				testSphericalMapping();
-//				testCylindricalMapping();	
-//				testThinLensCamera();
-//				testAreaLightSuzanne1(phong);
-//				testSquarePrimitive(phong);
+//				testSuzanne(phong);				
+//				testTeapot(phong);					
+//				testThinLensCamera();				
+//				testSquarePrimitive(phong);	
 //				testTrianglePrimitive(phong);				
-//				testParallelogramPrimitive(phong);				
-//				testDiskPrimitive(phong);			
-//				testTeapotCheckers3D(svMatte);
-//				testSuzanne(phong);
-//				testBunny(phong);
 //				testTriceratops(phong);
 //				testVenus(phong);
-//				testCylinderPrimitive(phong);
-//				testBoxPrimitive(phong);
-//				testSpherePrimitive(phong);
-//				testApple(phong);
-//				testHouse();
-//				testTeapot(phong);	
-//				testBuddha(phong);
-				
-				
-	}
-
-	private void testSphericalMapping() {
-		Mapping mapping = new SphericalMapping();
-		ImageTexture imTex = new ImageTexture("Lambert-cylindrical-equal-area-projection.jpg", mapping);
-
-		SVMatteMaterial svMatte = new SVMatteMaterial();
-		svMatte.setKa(0.45);
-		svMatte.setKd(0.65);
-		svMatte.setCd(imTex);
-		
-		Transformation sphereTrans = Transformation.createRotationY(0);
-		sphereTrans = sphereTrans.append(Transformation.createRotationX(0));
-		sphereTrans = sphereTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 2));
-		Sphere sphere = new Sphere(sphereTrans, 1);
-		sphere.material = svMatte;
-		intersectables.add(sphere);
+			
 	}
 
 	public ShadeRec hitObjects(Ray ray){
@@ -204,6 +274,33 @@ public class World{
 		return sr;
 	}
 
+	/**
+	 * Method called for a specific light source 
+	 *  when shading a hitpoint on an object
+	 *  to see if that hitpoint is in the shadow
+	 *  
+	 * check for all objects in the scene:
+	 * if the shadow ray in the direction to the light source starting from the hitpoint
+	 * 		hits another object
+	 * and if the distance to that object is a positive number t smaller than the distance d
+	 * then the hit point lies in the shadow of that object under this light source.
+	 *  
+	 * @param shadowRay
+	 * @param distance  distance between the hit point on an object
+	 * 					 and the point on the light source
+	 * 
+	 * @return boolean returns true if there is an object between the hitpoint and the point on the light source
+	 */
+	public boolean shadowHitObjects(Ray shadowRay, double distance){
+		ShadeRec sr = new ShadeRec(this);
+		for(Intersectable intersectable: intersectablesToIntersect){
+			if(intersectable.shadowHit(shadowRay, sr) && sr.t < distance){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public void createBVH2(){
 		BVHManager2 manager = new BVHManager2();
 		List<Shape> finiteShapes = new ArrayList<Shape>();
@@ -239,14 +336,14 @@ public class World{
 	private void initializePerspectiveCamera(int imageWidth, int imageHeight) {
 		camera = new PerspectiveCamera(imageWidth, imageHeight,
 	
-				//new Point(0,5,0), new Vector(0, -1,3), new Vector(0, 1, 0),90);
+				//new Point(0,0, 6), new Vector(0, 0, -1), new Vector(0, 1, 0),90);
 				new Point(0,0,-0.65), new Vector(0, 0, 1), new Vector(0, 1, 0), 60);
 	}
 
 	private void testThinLensCamera() {
 		Transformation box1Transf = Transformation.createIdentity();
 		Box box1 = new Box(box1Transf, new Point(-1, -1, 7), new Point(1, 2, 9));
-		Texture boxText1 = new Checkers3Dtexture(new RGBColor(0), new RGBColor(1.0f, 1.0f, 0.0f), 0.25);
+		Texture boxText1 = new Checkers3DTexture(RGBColor.BLACK, new RGBColor(1.0f, 1.0f, 0.0f), 0.25);
 		SVMatteMaterial svMatteBox1 = new SVMatteMaterial();
 		svMatteBox1.setKa(0.45);
 		svMatteBox1.setKd(0.65);
@@ -256,7 +353,7 @@ public class World{
 		
 		Transformation box2Transf = Transformation.createIdentity();
 		Box box2 = new Box(box2Transf, new Point(-3, -1, 5), new Point(-1, 2, 7));
-		Texture boxText2 = new Checkers3Dtexture(new RGBColor(0), new RGBColor(0.0f, 1.0f, 0.0f), 0.25);
+		Texture boxText2 = new Checkers3DTexture(RGBColor.BLACK, new RGBColor(0.0f, 1.0f, 0.0f), 0.25);
 		SVMatteMaterial svMatteBox2 = new SVMatteMaterial();
 		svMatteBox2.setKa(0.45);
 		svMatteBox2.setKd(0.65);
@@ -266,7 +363,7 @@ public class World{
 		
 		Transformation box3Transf = Transformation.createIdentity();
 		Box box3 = new Box(box3Transf, new Point(1, -1, 9), new Point(3, 2, 11));
-		Texture boxText3 = new Checkers3Dtexture(new RGBColor(0), new RGBColor(1.0f, 0.0f, 0.0f), 0.25);
+		Texture boxText3 = new Checkers3DTexture(RGBColor.BLACK, new RGBColor(1.0f, 0.0f, 0.0f), 0.25);
 		SVMatteMaterial svMatteBox3 = new SVMatteMaterial();
 		svMatteBox3.setKa(0.45);
 		svMatteBox3.setKd(0.65);
@@ -309,7 +406,7 @@ public class World{
 			matte.setCd(RGBColor.convertToRGBColor(Color.GREEN));
 			
 			
-			ConstantColor constantColorTexture = new ConstantColor(RGBColor.convertToRGBColor(Color.GREEN));
+			ConstantColorTexture constantColorTexture = new ConstantColorTexture(RGBColor.convertToRGBColor(Color.GREEN));
 
 			ImageTexture appleImTex = new ImageTexture("objects//apple2//apple2_texture.jpg", null);
 			SVMatteMaterial appleSVMatte = new SVMatteMaterial();
@@ -414,6 +511,29 @@ public class World{
 	//				box1.material = phong;
 	//				intersectables.add(box1);		
 		}
+	private void testBunnyReflective(PhongMaterial phong) {
+		//==== BUNNY ====//
+		ReflectiveMaterial reflectiveMaterial2 = new ReflectiveMaterial();
+		reflectiveMaterial2.setKa(0.25);
+		reflectiveMaterial2.setKd(0.65);
+		reflectiveMaterial2.setCd(new RGBColor(0f, 0f, 1f));
+		reflectiveMaterial2.setCr(RGBColor.WHITE);
+		reflectiveMaterial2.setKr(0.75);
+	
+	
+		Transformation meshTransform = Transformation.createRotationY(200);
+		meshTransform = meshTransform.append(Transformation.createRotationX(10));
+		meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -1, 10));
+		ObjectFileReader2 reader = new ObjectFileReader2();
+		CompoundObject mesh;
+		mesh = reader.readFile("objects//bunny.obj");
+		mesh.setTransformation(meshTransform);
+		mesh.material = reflectiveMaterial2;
+		intersectables.add(mesh);
+//				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
+//				box1.material = phong;
+//				intersectables.add(box1);		
+	}
 
 	private void testCylinderPrimitive(PhongMaterial phong) {
 			//====CYLINDER PRIMITIVE ====//
@@ -491,7 +611,7 @@ public class World{
 			matte.setCd(RGBColor.convertToRGBColor(Color.GREEN));
 			
 			
-			ConstantColor constantColorTexture = new ConstantColor(RGBColor.convertToRGBColor(Color.GREEN));
+			ConstantColorTexture constantColorTexture = new ConstantColorTexture(RGBColor.convertToRGBColor(Color.GREEN));
 			SVMatteMaterial dragonSVMatte = new SVMatteMaterial();
 			dragonSVMatte.setKa(0.25);
 			dragonSVMatte.setKd(0.65);
@@ -524,7 +644,7 @@ public class World{
 		matte.setCd(RGBColor.convertToRGBColor(Color.GREEN));
 		
 		
-		ConstantColor constantColorTexture = new ConstantColor(RGBColor.convertToRGBColor(Color.GREEN));
+		ConstantColorTexture constantColorTexture = new ConstantColorTexture(RGBColor.convertToRGBColor(Color.GREEN));
 		SVMatteMaterial buddhaSVMatte = new SVMatteMaterial();
 		buddhaSVMatte.setKa(0.25);
 		buddhaSVMatte.setKd(0.65);
@@ -585,9 +705,9 @@ public class World{
 
 	private void testPlanePrimitiveCheckersMaterial() {
 		//==== CHECKERS MATERIAL ====//
-		Texture imTex = new Checkers3Dtexture();
+		Texture imTex = new Checkers3DTexture();
 		SVMatteMaterial svMatte = new SVMatteMaterial();
-		svMatte.setKa(0.45);
+		svMatte.setKa(0.25);
 		svMatte.setKd(0.65);
 		svMatte.setCd(imTex);
 		//==== PLANE PRIMITIVE ====//
@@ -595,6 +715,23 @@ public class World{
 		Plane pl = new Plane(planeTransform, new Point(0, -1, 0), new Vector(0,1,0));
 		pl.material = svMatte;
 		intersectables.add(pl);
+	}
+
+	private void testSphericalMapping() {
+		Mapping mapping = new SphericalMapping();
+		ImageTexture imTex = new ImageTexture("Lambert-cylindrical-equal-area-projection.jpg", mapping);
+	
+		SVMatteMaterial svMatte = new SVMatteMaterial();
+		svMatte.setKa(0.45);
+		svMatte.setKd(0.65);
+		svMatte.setCd(imTex);
+		
+		Transformation sphereTrans = Transformation.createRotationY(0);
+		sphereTrans = sphereTrans.append(Transformation.createRotationX(0));
+		sphereTrans = sphereTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 2));
+		Sphere sphere = new Sphere(sphereTrans, 1);
+		sphere.material = svMatte;
+		intersectables.add(sphere);
 	}
 
 	private void testSpherePrimitive(PhongMaterial phong) {

@@ -12,7 +12,7 @@ public class LambertianBRDF extends BRDF {
 	
 	public LambertianBRDF() {
 		kd = 0;
-		color = new RGBColor(1);
+		color = RGBColor.WHITE;
 	}
 	
 	public LambertianBRDF(LambertianBRDF brdf) {

@@ -8,7 +8,7 @@ import util.ShadeRec;
 
 public abstract class Light {
 	
-	protected Boolean shadows;
+	private boolean castShadows = false;
 	
 	/**
 	 * Gets the direction of the incoming light at a hit point.
@@ -28,7 +28,13 @@ public abstract class Light {
 	 */
 	public abstract RGBColor getRadiance(ShadeRec sr);
 
-	public abstract boolean castShadows();
+	public void setCastShadows(boolean castShadows){
+		this.castShadows = castShadows;
+	}
+	
+	public boolean castShadows() {
+		return castShadows;
+	}
 
 	/**
 	 * test for this light source if there are objects between the hit point and the

@@ -15,7 +15,7 @@ public class EmissiveMaterial extends Material{
 	public EmissiveMaterial() {
 		super();
 		this.ls = 1;
-		this.ce = new RGBColor(1);
+		this.ce = RGBColor.WHITE;
 	}
 	
 	
@@ -36,7 +36,7 @@ public class EmissiveMaterial extends Material{
 			return ce.scale(ls);
 		}
 		else {
-			return new RGBColor(0);
+			return RGBColor.BLACK;
 		}
 	}
 
@@ -62,7 +62,7 @@ public class EmissiveMaterial extends Material{
 
 	@Override
 	public RGBColor totalBRDF(ShadeRec sr, Vector wo, Vector wi) {
-		return new RGBColor(0);
+		return RGBColor.BLACK;
 	}
 
 
@@ -72,7 +72,7 @@ public class EmissiveMaterial extends Material{
 			return ce.scale(ls);
 		}
 		else {
-			return new RGBColor(0);
+			return RGBColor.BLACK;
 		}
 	}
 	

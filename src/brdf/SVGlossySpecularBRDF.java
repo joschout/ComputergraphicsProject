@@ -47,7 +47,7 @@ public class SVGlossySpecularBRDF {
 		if (rDotWo > 0.0){
 			return glossySpecularTexture.getColor(sr).scale(ks*Math.pow(rDotWo, phongExponent));
 		}
-		return new RGBColor(0);
+		return RGBColor.BLACK;
 	}
 	
 	public void  setKs(double ks){
@@ -55,7 +55,7 @@ public class SVGlossySpecularBRDF {
 	}
 	
 	public RGBColor getReflectance(ShadeRec sr, Vector wo){
-		return new RGBColor(1);
+		return RGBColor.WHITE;
 	}
 	
 	public void setTexture(Texture texture){

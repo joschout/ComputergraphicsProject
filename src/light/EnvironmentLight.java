@@ -2,23 +2,27 @@ package light;
 
 import material.EmissiveMaterial;
 import material.Material;
+import material.SVEmissiveMaterial;
+import material.SVMatteMaterial;
 import math.Point;
 import math.Ray;
 import math.Vector;
-import shape.Intersectable;
+import sampling.HemisphereSampleFactory;
 import shape.Shape;
+import texture.Texture;
 import util.RGBColor;
 import util.ShadeRec;
 
-public class AreaLight extends Light {
-
-	public Point samplePoint; //sample point on light  source
-	public Shape lightEmittingShape;
-	public EmissiveMaterial emissiveMaterial;
+public class EnvironmentLight extends Light {
+	
+	
+	public Point hemisphereSamplePoint; //sample point on light  source
+//	public Sphere lightEmittingShape;
+	public SVEmissiveMaterial emissiveMaterial;
 	public Vector normalAtSamplePoint;
 	public Vector wi; //unit vector from hitpoint to samplepoint
-	
-	public static int nbOfShadowRaysPerAreaLight = 4;
+	public int nbOfShadowRaysPerEnvironmentLight;
+	public HemisphereSampleFactory hemisphereSampleFactory;
 	
 	
 	/**
@@ -28,37 +32,20 @@ public class AreaLight extends Light {
 	 * 				- the normal at the sample point
 	 * 				- wi
 	 * Why the multitasking?
-	 * 	=> a given samplepoint can only be accessed once,
+	 * 	=> a given sample point can only be accessed once,
 	 * 		and the information is necessary in the other methods.
 	 */
 	@Override
 	public Vector getDirectionOfIncomingLight(ShadeRec sr) {
-		this.samplePoint = this.lightEmittingShape.sample();
-		this.normalAtSamplePoint = this.lightEmittingShape.getNormal(this.samplePoint);
-		this.wi = this.samplePoint.subtract(sr.hitPoint).normalize();
+		this.hemisphereSamplePoint = this.hemisphereSampleFactory.getNextSample();
+		this.wi = hemisphereSamplePoint.toVector3D().normalize();
+		this.normalAtSamplePoint = wi.scale(-1);
 		return this.wi;
 	}
 
 	@Override
 	public RGBColor getRadiance(ShadeRec sr) {
-		double ndotd = normalAtSamplePoint.scale(-1).dot(this.wi);
-		
-		if (ndotd > 0.0) {
-			return emissiveMaterial.getLe(sr);
-		}else {
-			return RGBColor.BLACK;
-		}
-	}
-	
-	public double pdf(ShadeRec sr){
-		return lightEmittingShape.pdf(sr);
-	}
-	
-	public double G(ShadeRec sr) {
-		double ndotd = normalAtSamplePoint.scale(-1).dot(wi);
-		double d2 = samplePoint.subtract(sr.hitPoint).lengthSquared();
-		//return ndotd;
-		return ndotd/d2;
+		return emissiveMaterial.getLe(sr);
 	}
 
 	/**
@@ -68,17 +55,20 @@ public class AreaLight extends Light {
 	@Override
 	public boolean inShadow(Ray shadowRay, ShadeRec sr) {
 		// d = the length between the hit point and the sample point on the light source
-		double d = samplePoint.subtract(shadowRay.origin).length();
+		// d = the length between the hit point and the sample point on the light source
+		double d = Double.MAX_VALUE;
 		return sr.world.shadowHitObjects(shadowRay, d);
 	}
 
 	@Override
 	public RGBColor handleMaterialShading(Material material, ShadeRec sr,
 			Vector wo) {
+		
+		this.hemisphereSampleFactory = new HemisphereSampleFactory(sr.normal, sr.hitPoint);
 
 		RGBColor partialLOfThisLightSource = RGBColor.BLACK;	
 //		System.out.println("//============== START SAMPLING =============//");	
-		for (int i = 0; i < nbOfShadowRaysPerAreaLight; i++) {
+		for (int i = 0; i < nbOfShadowRaysPerEnvironmentLight; i++) {
 			Vector wi = this.getDirectionOfIncomingLight(sr);
 			double ndotwi = sr.normal.dot(wi);
 			double ndotwo = sr.normal.dot(wo);
@@ -101,7 +91,7 @@ public class AreaLight extends Light {
 					 * then add the radiance of light source j to the total radiance.
 					 */
 					RGBColor temp = material.totalBRDF(sr, wo, wi)
-							.multiply(this.getRadiance(sr).scale(this.G(sr)*ndotwi/this.pdf(sr)));
+							.multiply(this.getRadiance(sr).scale(Math.PI));
 							
 					partialLOfThisLightSource = partialLOfThisLightSource.unboundedAdd(temp);
 					
@@ -120,7 +110,7 @@ public class AreaLight extends Light {
 				 }
 			}	
 		}
-		RGBColor temp2 = partialLOfThisLightSource.scale(1.0/nbOfShadowRaysPerAreaLight);
+		RGBColor temp2 = partialLOfThisLightSource.scale(1.0/nbOfShadowRaysPerEnvironmentLight);
 //		System.out.println("temp2; "+ temp2);
 //		System.out.println("//================= End Sampling ===================//");
 		return temp2;

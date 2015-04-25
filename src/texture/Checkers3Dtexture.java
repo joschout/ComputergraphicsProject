@@ -3,7 +3,7 @@ package texture;
 import util.RGBColor;
 import util.ShadeRec;
 
-public class Checkers3Dtexture implements Texture {
+public class Checkers3DTexture implements Texture {
 	
 	
 	private static double eps = -0.000187453738;
@@ -12,13 +12,13 @@ public class Checkers3Dtexture implements Texture {
 	private RGBColor color2;
 	private double squareSize;
 	
-	public Checkers3Dtexture() {
-		this.color1 = new RGBColor(0);
-		this.color2 = new RGBColor(1);
+	public Checkers3DTexture() {
+		this.color1 = RGBColor.BLACK;
+		this.color2 = RGBColor.WHITE;
 		this.squareSize = 1;
 	}
 
-	public Checkers3Dtexture(RGBColor color1, RGBColor color2, double squareSize) {
+	public Checkers3DTexture(RGBColor color1, RGBColor color2, double squareSize) {
 		super();
 		this.color1 = color1;
 		this.color2 = color2;

@@ -6,6 +6,9 @@ public class RGBColor {
 	
 	public static double GAMMA = 2.2;
 	
+	public static final RGBColor BLACK = new RGBColor(0);
+	public static final RGBColor WHITE = new RGBColor(1);
+	
 	public static RGBColor convertToRGBColor(Color color){
 		return new RGBColor(color.getRGBColorComponents(null)[0], 
 				color.getRGBColorComponents(null)[1],

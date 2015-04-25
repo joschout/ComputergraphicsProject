@@ -19,7 +19,7 @@ public class GlossySpecularBRDF extends BRDF {
 	}
 	public GlossySpecularBRDF() {
 		ks = 0;
-		color = new RGBColor(1);
+		color = RGBColor.WHITE;
 	}
 	public GlossySpecularBRDF(GlossySpecularBRDF brdf) {
 		ks = brdf.ks;
@@ -43,7 +43,7 @@ public class GlossySpecularBRDF extends BRDF {
 		if (rDotWo > 0.0){
 			return color.scale(ks*Math.pow(rDotWo, phongExponent));
 		}
-		return new RGBColor(0);
+		return RGBColor.BLACK;
 	}
 	
 	public GlossySpecularBRDF clone(){
@@ -61,7 +61,7 @@ public class GlossySpecularBRDF extends BRDF {
 	}
 	
 	public RGBColor getReflectance(ShadeRec sr, Vector wo){
-		return new RGBColor(1);
+		return RGBColor.WHITE;
 	}
 	
 	
