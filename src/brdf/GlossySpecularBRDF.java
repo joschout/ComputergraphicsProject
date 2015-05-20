@@ -46,6 +46,11 @@ public class GlossySpecularBRDF extends BRDF {
 		return RGBColor.BLACK;
 	}
 	
+	public RGBColor sampleF(double phongLobe) {
+		return this.color.scale(this.ks * phongLobe);
+		
+	}
+	
 	public GlossySpecularBRDF clone(){
 		return new GlossySpecularBRDF(this);
 	}
@@ -63,6 +68,13 @@ public class GlossySpecularBRDF extends BRDF {
 	public RGBColor getReflectance(ShadeRec sr, Vector wo){
 		return RGBColor.WHITE;
 	}
+
+	public double getKs(){
+		return this.ks;
+	}
 	
+	public RGBColor getColor(){
+		return this.color;
+	}
 	
 }

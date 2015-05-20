@@ -45,8 +45,8 @@ public class Main {
 		 * imageResolution[1] = height : the amount of pixels in the vertical direction
 		 */
 		int[] imageResolution  = new int[2];
-		imageResolution[0] = 640;
-		imageResolution[1] = 640;
+		imageResolution[0] = 3840;
+		imageResolution[1] = 2160;
 
 		parseArgs(arguments, imageResolution);
 		// validate the input
@@ -54,9 +54,9 @@ public class Main {
 
 		World world = new World();
 		world.build(imageResolution[0], imageResolution[1]);
-			
+		world.setMaxRecursionDepth(4);
 
-		//Tracer tracer = new MultipleObjectsTracer(world);
+//		Tracer tracer = new MultipleObjectsTracer(world);
 		//Tracer tracer = new DepthTracer(world);
 		//Tracer tracer = new NormalFalseColorImagetracer(world);
 		//Tracer tracer = new NormalBVHTracer(world);

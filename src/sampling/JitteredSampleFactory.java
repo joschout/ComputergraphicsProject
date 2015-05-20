@@ -2,13 +2,20 @@ package sampling;
 
 import java.util.Random;
 
+/**
+ * Factory creating multi-jittered samples in a square.
+ * 
+ * 
+ * @author Jonas
+ *
+ */
 public class JitteredSampleFactory extends SquareSampleFactory{
 	
 	private Random randomNumberGenerator;
 
 
-	private double rightPixelBorder;
-	private double upperPixelBorder;
+	private double rightSampleSquareBorder;
+	private double upperSampleSquareBorder;
 	
 	private double subcellWidth;
 	private double subcellHeight;
@@ -19,33 +26,66 @@ public class JitteredSampleFactory extends SquareSampleFactory{
 	private double initialSubcellCenterX;
 	private double initialSubcellCenterY;
 	
-	public JitteredSampleFactory(double pixelCenterX, double pixelCenterY,
-			double pixelWidth, double pixelHeight, int nbOfSubcellsXDimension, int nbOfSubcellsYDimension) {
-		super(pixelCenterX, pixelCenterY, pixelWidth, pixelHeight);
+	/**
+	 * 
+	 * 
+	 * @param sampleSquareCenterX
+	 * @param sampleSquareCenterY
+	 * @param sampleSquareWidth
+	 * @param sampleSquareHeight
+	 * @param nbOfSubcellsXDimension
+	 * @param nbOfSubcellsYDimension
+	 */
+	public JitteredSampleFactory(double sampleSquareCenterX, double sampleSquareCenterY,
+			double sampleSquareWidth, double sampleSquareHeight, int nbOfSubcellsXDimension, int nbOfSubcellsYDimension) {
+		super(sampleSquareCenterX, sampleSquareCenterY, sampleSquareWidth, sampleSquareHeight);
 		
-		subcellWidth = pixelWidth/nbOfSubcellsXDimension;
-		subcellHeight = pixelHeight/nbOfSubcellsYDimension;
+		this.subcellWidth = sampleSquareWidth/nbOfSubcellsXDimension;
+		this.subcellHeight = sampleSquareHeight/nbOfSubcellsYDimension;
 		
-		reset(pixelCenterX,pixelCenterY);
+		reset(sampleSquareCenterX,sampleSquareCenterY);
 		
-		randomNumberGenerator = new Random((long)(pixelCenterX*pixelWidth+pixelCenterY*pixelHeight));
+		randomNumberGenerator = new Random((long)(sampleSquareCenterX*sampleSquareWidth+sampleSquareCenterY*sampleSquareHeight));
 	}
 
-	public JitteredSampleFactory(double pixelCenterX, double pixelCenterY,
-			double pixelWidth, double pixelHeight, int nbOfSubCellsPerDimension) {
-		this(pixelCenterX, pixelCenterY, pixelWidth, pixelHeight, nbOfSubCellsPerDimension, nbOfSubCellsPerDimension);
+	/**
+	 * 
+	 * @param sampleSquareCenterX
+	 * @param sampleSquareCenterY
+	 * @param sampleSquareWidth
+	 * @param sampleSquareHeight
+	 * @param nbOfSubCellsPerDimension
+	 */
+	public JitteredSampleFactory(double sampleSquareCenterX, double sampleSquareCenterY,
+			double sampleSquareWidth, double sampleSquareHeight, int nbOfSubCellsPerDimension) {
+		this(sampleSquareCenterX, sampleSquareCenterY, sampleSquareWidth, sampleSquareHeight, nbOfSubCellsPerDimension, nbOfSubCellsPerDimension);
 	}
 	
-	public JitteredSampleFactory(double pixelCenterX, double pixelCenterY,
-			double pixelSideLength, int nbOfSubCellsPerDimension) {
-		this(pixelCenterX, pixelCenterY, pixelSideLength, pixelSideLength, nbOfSubCellsPerDimension);
+	/**
+	 * 
+	 * @param sampleSquareCenterX
+	 * @param pixelCenterY
+	 * @param sampleSquareSideLength
+	 * @param nbOfSubCellsPerDimension
+	 */
+	public JitteredSampleFactory(double sampleSquareCenterX, double sampleSquareCenterY,
+			double sampleSquareSideLength, int nbOfSubCellsPerDimension) {
+		this(sampleSquareCenterX, sampleSquareCenterY, sampleSquareSideLength, sampleSquareSideLength, nbOfSubCellsPerDimension);
 	}
 	
-	public JitteredSampleFactory(double pixelSideLength, int nbOfSubCellsPerDimension) {
-		this(0, 0, pixelSideLength, pixelSideLength, nbOfSubCellsPerDimension);
+	/**
+	 * 
+	 * @param sampleSquareSideLength
+	 * @param nbOfSubCellsPerDimension
+	 */
+	public JitteredSampleFactory(double sampleSquareSideLength, int nbOfSubCellsPerDimension) {
+		this(0, 0, sampleSquareSideLength, sampleSquareSideLength, nbOfSubCellsPerDimension);
 	}
 	
-	
+	/**
+	 * 
+	 * @param nbOfSubCellsPerDimension
+	 */
 	public JitteredSampleFactory(int nbOfSubCellsPerDimension) {
 		this(1, nbOfSubCellsPerDimension);
 	}
@@ -66,10 +106,10 @@ public class JitteredSampleFactory extends SquareSampleFactory{
 	private void incrementCurrentSubcell() {
 		//increment
 		currentSubcellCenterX = currentSubcellCenterX + subcellWidth;
-		if(currentSubcellCenterX > rightPixelBorder){
+		if(currentSubcellCenterX > rightSampleSquareBorder){
 			currentSubcellCenterX = initialSubcellCenterX;
 			currentSubcellCenterY = currentSubcellCenterY + subcellHeight;
-			if (currentSubcellCenterY > upperPixelBorder) {
+			if (currentSubcellCenterY > upperSampleSquareBorder) {
 				currentSubcellCenterY = initialSubcellCenterY;
 			}
 		}
@@ -77,11 +117,11 @@ public class JitteredSampleFactory extends SquareSampleFactory{
 	
 	public void reset(double pixelCenterX, double pixelCenterY){
 		super.reset(pixelCenterX, pixelCenterY);
-		rightPixelBorder = pixelCenterX + getPixelWidth()/2;
-		upperPixelBorder = pixelCenterY + getPixelHeight()/2;
+		rightSampleSquareBorder = pixelCenterX + getSampleSquareWidth()/2;
+		upperSampleSquareBorder = pixelCenterY + getSampleSquareHeight()/2;
 		
-		initialSubcellCenterX = pixelCenterX - getPixelWidth()/2 + subcellWidth/2;
-		initialSubcellCenterY = pixelCenterY - getPixelHeight()/2 + subcellHeight/2;
+		initialSubcellCenterX = pixelCenterX - getSampleSquareWidth()/2 + subcellWidth/2;
+		initialSubcellCenterY = pixelCenterY - getSampleSquareHeight()/2 + subcellHeight/2;
 		
 		resetCurrentSubcell();
 	}

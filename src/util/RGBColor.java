@@ -20,16 +20,26 @@ public class RGBColor {
 	private float B;
 	
 	public RGBColor(float R, float G, float B){
+		
+		if (Float.isNaN(R)) {
+			throw new IllegalArgumentException("the given value for R is NaN");
+		}
 		if(R < 0 || R > 1){
 			throw new IllegalArgumentException("the value of R should be between 0 and 1.0");
 		}
 		this.R=R;
 		
+		if (Float.isNaN(G)) {
+			throw new IllegalArgumentException("the given value for G is NaN");
+		}
 		if(G < 0 || G > 1){
 			throw new IllegalArgumentException("the value of R should be between 0 and 1.0");
 		}
 		this.G=G;
 		
+		if (Float.isNaN(B)) {
+			throw new IllegalArgumentException("the given value for B is NaN");
+		}
 		if(B < 0 || B > 1){
 			throw new IllegalArgumentException("the value of R should be between 0 and 1.0");
 		}
@@ -109,9 +119,41 @@ public class RGBColor {
 	}
 	
 	public RGBColor scale(double s){
-		float tempR = (float) s*R;
-		float tempG = (float) s*G;
-		float tempB = (float) s*B;
+		double sTimesR = s*R;
+		double sTimesG = s*G;
+		double sTimesB = s*B;
+		
+		float tempR = (float) sTimesR;
+		float tempG = (float) sTimesG;
+		float tempB = (float) sTimesB;
+		
+//		float tempR = (float) s*R;
+//		float tempG = (float) s*G;
+//		float tempB = (float) s*B;
+		if (Float.isNaN(tempR)) {
+			System.out.println("R_Out is NaN");
+			System.out.println("R_Out is R_In * s");
+			System.out.println("R_In is " + R);
+//			System.out.println("double R_In is" + (double) R);
+			System.out.println("s is " + s);
+//			System.out.println("R*s is " + s*R);
+			throw new IllegalArgumentException("nan encountered");
+			
+		}
+		if (Float.isNaN(tempG)) {
+			System.out.println("tempG is NaN");
+			System.out.println("G is " + G);
+//			System.out.println("double G is " + (double) G);
+			System.out.println("s is " + s);
+//			System.out.println("uncasted G*s is " + s*G);
+		}
+		if (Float.isNaN(tempB)) {
+			System.out.println("tempB is NaN");
+			System.out.println("B is " + B);
+//			System.out.println("double B is " + (double) B);
+			System.out.println("s is " + s);
+//			System.out.println("uncasted B*s is " + s*B);
+		}
 		return format( tempR, tempG, tempB);
 	}
 	
@@ -132,8 +174,26 @@ public class RGBColor {
 		float maxValue = Math.max(r, Math.max(g, b));
 		
 		if(maxValue > 1.0){
+//			System.out.println("r/maxValue " + r/maxValue);
+//			System.out.println("g/maxValue " + g/maxValue);
+//			System.out.println("b/maxValue " + b/maxValue);
 			return new RGBColor(r/maxValue,g/maxValue,b/maxValue);
 		}
+		
+		if (!(r<=1 && r>=0 )) {
+			System.out.println("R " + r);
+		}
+		if (!(g<=1 && g>=0 )) {
+			System.out.println("G " + g);
+		}
+		if (!(b<=1 && b>=0 )) {
+			System.out.println("B " + b);
+		}
+//		System.out.println("R " + r);
+//		System.out.println("G " + g);
+//		System.out.println("B " + b);
+		
+		
 		return new RGBColor(r,g,b);
 	}
 	

@@ -3,6 +3,7 @@ package main;
 import ioPackage.ObjectFileReader2;
 
 import java.awt.Color;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +38,7 @@ import mapping.LightProbeMapping;
 import mapping.Mapping;
 import mapping.SphericalMapping;
 import material.EmissiveMaterial;
+import material.GlossyReflectionMaterial;
 import material.MatteMaterial;
 import material.PhongMaterial;
 import material.ReflectiveMaterial;
@@ -151,6 +153,20 @@ public class World{
 				reflectiveMaterial2.setCr(RGBColor.WHITE);
 				reflectiveMaterial2.setKr(0.75);
 				
+				GlossyReflectionMaterial glossyMaterial = new GlossyReflectionMaterial();
+				glossyMaterial.setKa(0.0);
+				glossyMaterial.setKd(0.0);
+				glossyMaterial.setCd(RGBColor.WHITE);
+				glossyMaterial.setKs(0.0);
+				glossyMaterial.setCs(RGBColor.WHITE);
+				glossyMaterial.setKr(0.9);
+				glossyMaterial.setCr(new RGBColor(0f, 0f, 1f));
+				glossyMaterial.setExponent(10000);
+				glossyMaterial.setNbOfHemisphereSamples(10);
+				
+				
+				
+				//=== OBJECTS ===//
 				Transformation sphereTrans = Transformation.createRotationY(0);
 				sphereTrans = sphereTrans.append(Transformation.createRotationX(0));
 				sphereTrans = sphereTrans.appendToTheLeft(Transformation.createTranslation(1 ,0, 3));
@@ -162,13 +178,11 @@ public class World{
 				cylinderTrans = cylinderTrans.append(Transformation.createRotationX(0));
 				cylinderTrans = cylinderTrans.appendToTheLeft(Transformation.createTranslation(-1 ,0, 3));
 				Cylinder cylinder = new Cylinder(cylinderTrans, 1, -1, 1);
-				cylinder.material = reflectiveMaterial2;
+				cylinder.material = glossyMaterial;
 				intersectables.add(cylinder);
 				
-				
-		
-				
-				
+
+
 				
 				
 				SVEmissiveMaterial emissiveMat = new SVEmissiveMaterial();
@@ -184,7 +198,7 @@ public class World{
 				environmentLight.nbOfShadowRaysPerEnvironmentLight = 100;
 				environmentLight.emissiveMaterial = emissiveMat;
 				environmentLight.setCastShadows(true);
-	//			lights.add(environmentLight);
+				lights.add(environmentLight);
 				
 				Transformation bigSphereTrans = Transformation.createRotationY(0);
 				bigSphereTrans = bigSphereTrans.append(Transformation.createRotationX(0));
@@ -192,7 +206,7 @@ public class World{
 				Sphere bigSphere = new  Sphere(bigSphereTrans, 10);
 				bigSphere.material = emissiveMat;
 				bigSphere.infinite = true;
-	//			intersectables.add(bigSphere);
+				intersectables.add(bigSphere);
 				
 				
 				
@@ -200,7 +214,7 @@ public class World{
 				
 				
 				
-				setMaxRecursionDepth(10);
+				
 								
 //				testApple(phong);				
 //				testApple2(phong);
@@ -215,10 +229,12 @@ public class World{
 //				testHouse();				
 //				testLowBuddha(phong);				
 //				testLowResDragon(phong);
-//				testParallelogramPrimitive(phong);					
-				testPlanePrimitive(matte);
+//				testParallelogramPrimitive(phong);	
+//				testParallelogramWithVertices(phong, matte);
+//				testPlanePrimitive(matte);
 //				testPlanePrimitive2();
-//				testPlanePrimitiveCheckersMaterial();				
+				
+				testPlanePrimitiveCheckersMaterial();				
 //				testSpherePrimitive(phong);				
 //				testSpherePrimitiveLightProbeMapping(phong);	
 //				testSphericalMapping();
@@ -335,7 +351,7 @@ public class World{
 	 */
 	private void initializePerspectiveCamera(int imageWidth, int imageHeight) {
 		camera = new PerspectiveCamera(imageWidth, imageHeight,
-	
+				//new Point(5,5,5), new Vector(-1, -1, -1), new Vector(0, 1, 0), 120);
 				//new Point(0,0, 6), new Vector(0, 0, -1), new Vector(0, 1, 0),90);
 				new Point(0,0,-0.65), new Vector(0, 0, 1), new Vector(0, 1, 0), 60);
 	}
@@ -683,6 +699,34 @@ public class World{
 	//		box2.material = phong;
 	//		intersectables.add(box2);
 		}
+
+	private void testParallelogramWithVertices(PhongMaterial phong,
+			MatteMaterial matte) {
+		//=== CAMERA INSTELLEN ===//
+		//camera = new PerspectiveCamera(imageWidth, imageHeight,
+		//		new Point(5,5,5), new Vector(-1, -1, -1), new Vector(0, 1, 0), 120);
+		//=======================//
+		
+		Transformation pllTrans = Transformation.createRotationX(0);
+		pllTrans = pllTrans.appendToTheLeft(Transformation.createTranslation(0, 0, 0)); 
+		Parallelogram pll = new Parallelogram(Transformation.createIdentity(), new Point(0,0,2), new Point(-2,2,4), new Point(0,3,2));
+		pll.material = matte;
+		intersectables.add(pll);
+		
+		Sphere sph1 = new Sphere(Transformation.createTranslation(0, 0, 2), 0.5);
+		sph1.material = phong;
+		intersectables.add(sph1);
+		Sphere sph2 = new Sphere(Transformation.createTranslation(-2, 2, 4), 0.5);
+		sph2.material = phong;
+		intersectables.add(sph2);
+		Sphere sph3 = new Sphere(Transformation.createTranslation(0, 3, 2),0.5);
+		sph3.material = phong;
+		intersectables.add(sph3);
+	
+		Sphere sph4 = new Sphere(Transformation.createTranslation(-2,5,4),0.5);
+		sph4.material = phong;
+		intersectables.add(sph4);
+	}
 
 	private void testPlanePrimitive(MatteMaterial matte) {
 		Plane plane = new Plane(Transformation.createIdentity(), new Point(0,-1,0), new Vector(0,1,0));

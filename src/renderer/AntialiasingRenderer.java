@@ -29,10 +29,10 @@ public class AntialiasingRenderer extends Renderer {
 		// render the scene
 				for (int x = 0; x < imageWidth; ++x) {
 					for (int y = 0; y < imageHeight; ++y) {
-						if (x == 5 && y == 635) {
-							System.out.println("dit is de te testen pixel,"
-									+ "zet hier een breakpoint");
-						}
+//						if (x == 245 && y == 375) {
+//							System.out.println("dit is de te testen pixel,"
+//									+ "zet hier een breakpoint");
+//						}
 						
 						// create a ray through the center of the pixel.
 						sampleFactory.reset(x + 0.5, y + 0.5);

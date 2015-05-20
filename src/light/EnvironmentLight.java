@@ -37,8 +37,7 @@ public class EnvironmentLight extends Light {
 	 */
 	@Override
 	public Vector getDirectionOfIncomingLight(ShadeRec sr) {
-		this.hemisphereSamplePoint = this.hemisphereSampleFactory.getNextSample();
-		this.wi = hemisphereSamplePoint.toVector3D().normalize();
+		this.wi = this.hemisphereSampleFactory.getNextSample();
 		this.normalAtSamplePoint = wi.scale(-1);
 		return this.wi;
 	}
@@ -64,7 +63,7 @@ public class EnvironmentLight extends Light {
 	public RGBColor handleMaterialShading(Material material, ShadeRec sr,
 			Vector wo) {
 		
-		this.hemisphereSampleFactory = new HemisphereSampleFactory(sr.normal, sr.hitPoint);
+		this.hemisphereSampleFactory = new HemisphereSampleFactory(sr.normal);
 
 		RGBColor partialLOfThisLightSource = RGBColor.BLACK;	
 //		System.out.println("//============== START SAMPLING =============//");	

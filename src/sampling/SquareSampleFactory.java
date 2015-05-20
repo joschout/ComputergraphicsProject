@@ -1,66 +1,95 @@
 package sampling;
 
+/**
+ * Base class for all factories samplinng 2D-samples on a square.
+ * @author Jonas
+ *
+ */
 public abstract class SquareSampleFactory  implements SampleFactory{
 	
 	// the horizontal center of the pixel in the image space
-	private double pixelCenterX;
-	// the verticall center of the pixel in the image space
-	private double pixelCenterY;
+	private double sampleSquareCenterX;
+	// the vertical center of the pixel in the image space
+	private double sampleSquareCenterY;
 	
 	// the width of the pixel in the image space
-	private double pixelWidth;
+	private double sampleSquareWidth;
 	//the height of the pixel in the image space
-	private double pixelHeight;
+	private double sampleSquareHeight;
 	
-	public SquareSampleFactory(double pixelCenterX, double pixelCenterY,
-			double pixelWidth, double pixelHeight) {
+	
+	/**
+	 * Constructor for the abstract class. Called by the constructors of its subclasses.
+	 * Initializes the center of the square and the width and height of the square.
+	 *  
+	 * @param sampleSquareCenterX
+	 * @param sampleSquareCenterY
+	 * @param sampleSquareWidth
+	 * @param sampleSquareHeight
+	 */
+	public SquareSampleFactory(double sampleSquareCenterX, double sampleSquareCenterY,
+			double sampleSquareWidth, double sampleSquareHeight) {
 		
 		super();
-		this.pixelCenterX = pixelCenterX;
-		this.pixelCenterY = pixelCenterY;
-		this.pixelWidth = pixelWidth;
-		this.pixelHeight = pixelHeight;
+		this.sampleSquareCenterX = sampleSquareCenterX;
+		this.sampleSquareCenterY = sampleSquareCenterY;
+		this.sampleSquareWidth = sampleSquareWidth;
+		this.sampleSquareHeight = sampleSquareHeight;
 	}
 	
-	public SquareSampleFactory(double pixelCenterX, double pixelCenterY) {
-		this(pixelCenterX, pixelCenterY, 1, 1);
+	/**
+	 * Constructor for the abstract class. Called by the constructors of its subclasses.
+	 * Constructs a unit square around the given center.
+	 * 
+	 * @param sampleSquareCenterX
+	 * @param sampleSquareCenterY
+	 */
+	
+	public SquareSampleFactory(double sampleSquareCenterX, double sampleSquareCenterY) {
+		this(sampleSquareCenterX, sampleSquareCenterY, 1, 1);
 	}
 
-	public double getPixelCenterX() {
-		return pixelCenterX;
+	public double getSampleSquareCenterX() {
+		return sampleSquareCenterX;
 	}
 
-	public void setPixelCenterX(double pixelCenterX) {
-		this.pixelCenterX = pixelCenterX;
+	public void setSampleSquareCenterX(double sampleSquareCenterX) {
+		this.sampleSquareCenterX = sampleSquareCenterX;
 	}
 
-	public double getPixelCenterY() {
-		return pixelCenterY;
+	public double getSampleSquareCenterY() {
+		return sampleSquareCenterY;
 	}
 
-	public void setPixelCenterY(double pixelCenterY) {
-		this.pixelCenterY = pixelCenterY;
+	public void setSampleSquareCenterY(double sampleSquareCenterY) {
+		this.sampleSquareCenterY = sampleSquareCenterY;
 	}
 
-	public double getPixelWidth() {
-		return pixelWidth;
+	public double getSampleSquareWidth() {
+		return sampleSquareWidth;
 	}
 
-	public void setPixelWidth(double pixelWidth) {
-		this.pixelWidth = pixelWidth;
+	public void setSampleSquareWidth(double sampleSquareWidth) {
+		this.sampleSquareWidth = sampleSquareWidth;
 	}
 
-	public double getPixelHeight() {
-		return pixelHeight;
+	public double getSampleSquareHeight() {
+		return sampleSquareHeight;
 	}
 
-	public void setPixelHeight(double pixelHeight) {
-		this.pixelHeight = pixelHeight;
+	public void setSampleSquareHeight(double sampleSquareHeight) {
+		this.sampleSquareHeight = sampleSquareHeight;
 	}
 	
-	public void reset(double pixelCenterX, double pixelCenterY){
-		this.pixelCenterX = pixelCenterX;
-		this.pixelCenterY = pixelCenterY;
+	
+	/**
+	 * Most basic reset method, which resets the center of the square this factory samples from.
+	 * @param sampleSquareCenterX
+	 * @param sampleSquareCenterY
+	 */
+	public void reset(double sampleSquareCenterX, double sampleSquareCenterY){
+		this.sampleSquareCenterX = sampleSquareCenterX;
+		this.sampleSquareCenterY = sampleSquareCenterY;
 	}
 	
 }
