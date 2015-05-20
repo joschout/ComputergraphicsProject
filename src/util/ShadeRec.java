@@ -27,6 +27,7 @@ public class ShadeRec {
 	public double v;
 	public int bvhCounter;
 	public Tracer tracer;
+	public Vector wt;
 	
 	public ShadeRec(World world){
 		hasHitAnObject = false;
@@ -39,6 +40,7 @@ public class ShadeRec {
 		tbox = Double.MAX_VALUE;
 		tracer = null;
 		depth = 0;
+		wt = null;
 	}
 	
 	public ShadeRec(ShadeRec sr){
@@ -55,5 +57,6 @@ public class ShadeRec {
 		this.bvhCounter = sr.bvhCounter;
 		this.tbox = sr.tbox;
 		this.tracer = sr.tracer;
+		this.wt = new Vector(sr.wt);
 	}
 }

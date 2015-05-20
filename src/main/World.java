@@ -44,6 +44,7 @@ import material.PhongMaterial;
 import material.ReflectiveMaterial;
 import material.SVEmissiveMaterial;
 import material.SVMatteMaterial;
+import material.SimpleTransparentMaterial;
 import math.Point;
 import math.Ray;
 import math.Transformation;
@@ -166,20 +167,7 @@ public class World{
 				
 				
 				
-				//=== OBJECTS ===//
-				Transformation sphereTrans = Transformation.createRotationY(0);
-				sphereTrans = sphereTrans.append(Transformation.createRotationX(0));
-				sphereTrans = sphereTrans.appendToTheLeft(Transformation.createTranslation(1 ,0, 3));
-				Sphere sphere = new  Sphere(sphereTrans, 1);
-				sphere.material = reflectiveMaterial1;
-				intersectables.add(sphere);
 				
-				Transformation cylinderTrans = Transformation.createRotationY(0);
-				cylinderTrans = cylinderTrans.append(Transformation.createRotationX(0));
-				cylinderTrans = cylinderTrans.appendToTheLeft(Transformation.createTranslation(-1 ,0, 3));
-				Cylinder cylinder = new Cylinder(cylinderTrans, 1, -1, 1);
-				cylinder.material = glossyMaterial;
-				intersectables.add(cylinder);
 				
 
 
@@ -194,19 +182,40 @@ public class World{
 				
 				emissiveMat.setCe(sphereImTex);	
 		
-				EnvironmentLight environmentLight = new EnvironmentLight();
-				environmentLight.nbOfShadowRaysPerEnvironmentLight = 100;
-				environmentLight.emissiveMaterial = emissiveMat;
-				environmentLight.setCastShadows(true);
-				lights.add(environmentLight);
+//				EnvironmentLight environmentLight = new EnvironmentLight();
+//				environmentLight.nbOfShadowRaysPerEnvironmentLight = 100;
+//				environmentLight.emissiveMaterial = emissiveMat;
+//				environmentLight.setCastShadows(true);
+//				lights.add(environmentLight);
+//				
+//				Transformation bigSphereTrans = Transformation.createRotationY(0);
+//				bigSphereTrans = bigSphereTrans.append(Transformation.createRotationX(0));
+//				bigSphereTrans = bigSphereTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 0));
+//				Sphere bigSphere = new  Sphere(bigSphereTrans, 10);
+//				bigSphere.material = emissiveMat;
+//				bigSphere.infinite = true;
+
 				
-				Transformation bigSphereTrans = Transformation.createRotationY(0);
-				bigSphereTrans = bigSphereTrans.append(Transformation.createRotationX(0));
-				bigSphereTrans = bigSphereTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 0));
-				Sphere bigSphere = new  Sphere(bigSphereTrans, 10);
-				bigSphere.material = emissiveMat;
-				bigSphere.infinite = true;
-				intersectables.add(bigSphere);
+				
+				
+				SimpleTransparentMaterial simpleTransparentMaterial1 = new SimpleTransparentMaterial();
+	//			simpleTransparentMaterial1.setKa(0.25);
+	//			simpleTransparentMaterial1.setKd(0.65);
+	//			simpleTransparentMaterial1.setCd(new RGBColor(0f, 0f, 1f));
+	//			simpleTransparentMaterial1.setCs(RGBColor.WHITE);
+				simpleTransparentMaterial1.setKs(0.5);
+				simpleTransparentMaterial1.setPhongExponent(2000);
+	//			simpleTransparentMaterial1.setCr(RGBColor.WHITE);
+				simpleTransparentMaterial1.setKr(0.1);
+				simpleTransparentMaterial1.setKt(0.9);
+				simpleTransparentMaterial1.setAbsoluteIndexOfRefraction(1.5);
+				
+				Transformation sphereTrans = Transformation.createRotationY(0);
+				sphereTrans = sphereTrans.append(Transformation.createRotationX(0));
+				sphereTrans = sphereTrans.appendToTheLeft(Transformation.createTranslation(1 ,0, 3));
+				Sphere sphere = new  Sphere(sphereTrans, 1);
+				sphere.material = simpleTransparentMaterial1;
+				intersectables.add(sphere);
 				
 				
 				
@@ -226,6 +235,7 @@ public class World{
 //				testCylindricalMapping();				
 //				testCylinderPrimitive(phong);
 //				testDiskPrimitive(phong);
+//				testGlossyMaterialSphereAncCylinder(reflectiveMaterial1, glossyMaterial);
 //				testHouse();				
 //				testLowBuddha(phong);				
 //				testLowResDragon(phong);
@@ -246,6 +256,25 @@ public class World{
 //				testTriceratops(phong);
 //				testVenus(phong);
 			
+	}
+
+	private void testGlossyMaterialSphereAncCylinder(
+			ReflectiveMaterial reflectiveMaterial1,
+			GlossyReflectionMaterial glossyMaterial) {
+		//=== OBJECTS ===//
+		Transformation sphereTrans = Transformation.createRotationY(0);
+		sphereTrans = sphereTrans.append(Transformation.createRotationX(0));
+		sphereTrans = sphereTrans.appendToTheLeft(Transformation.createTranslation(1 ,0, 3));
+		Sphere sphere = new  Sphere(sphereTrans, 1);
+		sphere.material = reflectiveMaterial1;
+		intersectables.add(sphere);
+		
+		Transformation cylinderTrans = Transformation.createRotationY(0);
+		cylinderTrans = cylinderTrans.append(Transformation.createRotationX(0));
+		cylinderTrans = cylinderTrans.appendToTheLeft(Transformation.createTranslation(-1 ,0, 3));
+		Cylinder cylinder = new Cylinder(cylinderTrans, 1, -1, 1);
+		cylinder.material = glossyMaterial;
+		intersectables.add(cylinder);
 	}
 
 	public ShadeRec hitObjects(Ray ray){

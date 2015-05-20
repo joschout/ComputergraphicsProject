@@ -24,7 +24,7 @@ public class RGBColor {
 		if (Float.isNaN(R)) {
 			throw new IllegalArgumentException("the given value for R is NaN");
 		}
-		if(R < 0 || R > 1){
+		if(R < 0.0 || R > 1.0){
 			throw new IllegalArgumentException("the value of R should be between 0 and 1.0");
 		}
 		this.R=R;
@@ -155,6 +155,22 @@ public class RGBColor {
 //			System.out.println("uncasted B*s is " + s*B);
 		}
 		return format( tempR, tempG, tempB);
+	}
+	
+	public RGBColor unboundedScale(double s){
+		double sTimesR = s*R;
+		double sTimesG = s*G;
+		double sTimesB = s*B;
+		
+		float tempR = (float) sTimesR;
+		float tempG = (float) sTimesG;
+		float tempB = (float) sTimesB;
+		
+		RGBColor color = new RGBColor(0);
+		color.R = tempR;
+		color.G = tempG;
+		color.B = tempB;
+		return color;
 	}
 	
 	public Color convertToColor(){
