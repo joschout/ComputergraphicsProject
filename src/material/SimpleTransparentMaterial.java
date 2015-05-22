@@ -46,11 +46,10 @@ public class SimpleTransparentMaterial extends PhongMaterial {
 		RGBColor reflectiveF = reflectiveBRDF.f(sr, wo, wi);
 		Ray reflectedRay = new Ray(sr.hitPoint, wi, sr.depth + 1);
 		
-		if (specularBTDF.checkTotalInternalReflection(sr)) {
+		if (specularBTDF.checkTotalInternalReflection(sr, wo)) {
 			// kr = 1.0
 			return L = L.add(sr.tracer.traceRay(reflectedRay));
 		}else {
-			System.out.println("depth: " + sr.depth);
 			RGBColor transmissiveF = specularBTDF.sampleF(sr,wo,wi );
 			
 			Vector wt = sr.wt;

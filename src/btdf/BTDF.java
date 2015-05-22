@@ -1,5 +1,6 @@
 package btdf;
 
+import math.Vector;
 import util.ShadeRec;
 
 /**
@@ -17,7 +18,7 @@ public abstract class BTDF {
 	 * @param sr
 	 * @return
 	 */
-	public boolean checkTotalInternalReflection(ShadeRec sr){
+	public boolean checkTotalInternalReflection(ShadeRec sr, Vector wo){
 		return false;
 	}
 }

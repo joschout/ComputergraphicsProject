@@ -35,9 +35,8 @@ public class PerfectTransmitterBTDF extends BTDF {
 	 * 
 	 */
 	@Override
-	public boolean  checkTotalInternalReflection(ShadeRec sr){
-		Vector wo = sr.ray.direction.scale(-1);
-		double cosOfThetaIncoming = sr.normal.dot(wo);
+	public boolean  checkTotalInternalReflection(ShadeRec sr, Vector wo){
+		double cosOfThetaIncident = sr.normal.dot(wo);
 		double eta = this.absoluteIndexOfRefraction;
 		
 		/*
@@ -47,11 +46,11 @@ public class PerfectTransmitterBTDF extends BTDF {
 		 *
 		 *In dat geval moet eta geinverteerd worden
 		 */
-		if (cosOfThetaIncoming < 0.0) {
+		if (cosOfThetaIncident < 0.0) {
 			eta = 1.0/eta;
 		}
 		
-		return (1.0 - (1.0 - cosOfThetaIncoming * cosOfThetaIncoming)/ (eta*eta) < 0.0);
+		return (1.0 - (1.0 - cosOfThetaIncident * cosOfThetaIncident)/ (eta*eta) < 0.0);
 	}
 	
 	/**
@@ -77,7 +76,7 @@ public class PerfectTransmitterBTDF extends BTDF {
 
 		if (cosOfThetaIncoming < 0.0) {
 			cosOfThetaIncoming = - cosOfThetaIncoming;
-			normal = normal.scale(-1);		
+			normal = normal.scale(-1.0);		
 			eta = 1.0/eta;
 		}
 
@@ -89,9 +88,9 @@ public class PerfectTransmitterBTDF extends BTDF {
 		Vector wt = wo.scale(-1.0/eta).subtract(normal.scale(cosOfThetaTransmitted - cosOfThetaIncoming/eta)).normalize();
 		sr.wt = wt;
 
-		double scalingFactor = kt/eta*eta;
-		return new RGBColor((float)scalingFactor);
-		
+		double scalingFactor = kt/(eta*eta);
+		//return new RGBColor((float)scalingFactor);
+		return RGBColor.WHITE.unboundedScale(scalingFactor);
 	}
 	
 	public void  setKt(double kt){

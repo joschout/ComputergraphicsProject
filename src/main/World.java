@@ -37,6 +37,7 @@ import mapping.CylindricalMapping;
 import mapping.LightProbeMapping;
 import mapping.Mapping;
 import mapping.SphericalMapping;
+import material.DielectricMaterial;
 import material.EmissiveMaterial;
 import material.GlossyReflectionMaterial;
 import material.MatteMaterial;
@@ -196,6 +197,13 @@ public class World{
 //				bigSphere.infinite = true;
 
 				
+				Transformation sphereTrans = Transformation.createRotationY(0);
+				sphereTrans = sphereTrans.append(Transformation.createRotationX(0));
+				sphereTrans = sphereTrans.appendToTheLeft(Transformation.createTranslation(0.25 ,0, 4));
+				Sphere sphere = new  Sphere(sphereTrans, 1);
+				sphere.material = reflectiveMaterial1;
+				intersectables.add(sphere);
+				
 				
 				
 				SimpleTransparentMaterial simpleTransparentMaterial1 = new SimpleTransparentMaterial();
@@ -208,14 +216,23 @@ public class World{
 	//			simpleTransparentMaterial1.setCr(RGBColor.WHITE);
 				simpleTransparentMaterial1.setKr(0.1);
 				simpleTransparentMaterial1.setKt(0.9);
-				simpleTransparentMaterial1.setAbsoluteIndexOfRefraction(1.5);
+				simpleTransparentMaterial1.setAbsoluteIndexOfRefraction(0.75);
 				
-				Transformation sphereTrans = Transformation.createRotationY(0);
-				sphereTrans = sphereTrans.append(Transformation.createRotationX(0));
-				sphereTrans = sphereTrans.appendToTheLeft(Transformation.createTranslation(1 ,0, 3));
-				Sphere sphere = new  Sphere(sphereTrans, 1);
-				sphere.material = simpleTransparentMaterial1;
-				intersectables.add(sphere);
+				
+				DielectricMaterial dielectricMaterial = new DielectricMaterial();
+				dielectricMaterial.setKs(0.2);
+				dielectricMaterial.setPhongExponent(2000);
+				dielectricMaterial.setEtaIncoming(1.5);
+				dielectricMaterial.setEtaOutgoing(1.0);
+				dielectricMaterial.setCf_in(new RGBColor(0.65f, 0.45f, 0));
+				dielectricMaterial.setCf_out(new RGBColor(0f, 0.5f, 0.5f));
+				
+				Transformation sphereTrans2 = Transformation.createRotationY(0);
+				sphereTrans2 = sphereTrans2.append(Transformation.createRotationX(0));
+				sphereTrans2 = sphereTrans2.appendToTheLeft(Transformation.createTranslation(1 ,0, 3));
+				Sphere sphere2 = new  Sphere(sphereTrans2, 1);
+				sphere2.material = dielectricMaterial;
+				intersectables.add(sphere2);
 				
 				
 				
