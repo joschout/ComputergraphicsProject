@@ -95,6 +95,8 @@ public class PointLight extends Light {
 				partialLOfThisLightSource = partialLOfThisLightSource.add(material.totalBRDF(sr, wo, wi)
 						.multiply(this.getRadiance(sr).scale(ndotwi)));
 			
+//				partialLOfThisLightSource = partialLOfThisLightSource.add(material.totalBRDF(sr, wo, wi)
+//						.multiply(this.getRadiance(sr)));
 //				System.out.println("diffuse color from light " + j  + " + previous color");
 //				System.out.println(L.toString());
 			 }

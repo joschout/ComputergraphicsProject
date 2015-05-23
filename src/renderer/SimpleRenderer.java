@@ -54,7 +54,7 @@ public class SimpleRenderer extends Renderer {
 	}
 	
 	
-	public void falseColorRender(World world, BVHTracer tracer){
+	public void falseColorRender(World world, Tracer tracer){
 		
 		render(world, tracer);
 		

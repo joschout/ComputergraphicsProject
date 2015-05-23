@@ -273,6 +273,22 @@ public class Vector implements Cloneable, Comparable<Vector> {
 	}
 
 	/**
+	 * Returns the half vector of this @link Vector} with the given
+	 * {@link Vector}.
+	 * The half vector = the unit vector halfway between the two vectors
+	 *      (v1 + v2) / ||v1 + v2||
+	 * 
+	 * 
+	 * @param vector
+	 * @return
+	 */
+	public Vector halfVector(Vector vector){
+		double normOfSum = this.add(vector).length();
+		Vector halfVector = this.add(vector).divide(normOfSum).normalize();
+		return halfVector;
+	}
+	
+	/**
 	 * Returns the squared length of this {@link Vector}.
 	 * 
 	 * @return the squared length of this {@link Vector}.

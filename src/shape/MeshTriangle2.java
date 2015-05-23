@@ -101,9 +101,13 @@ public class MeshTriangle2 extends Shape{
 			//=== Phong interpolatie ===//
 			Vector normal = interPolateNormal(beta, gamma);		
 			
+			
+		try{
 			sr.u = interpolateU(beta, gamma);
 			sr.v = interpolateV(beta, gamma);
-			
+		} catch(NullPointerException exc){
+			// do nothing
+		}
 		
 			sr.t = t;
 			Matrix transposeOfInverse = mesh.getTransformation().getInverseTransformationMatrix().transpose();
@@ -203,6 +207,10 @@ public class MeshTriangle2 extends Shape{
 //	}
 	
 	private double interpolateU(double beta, double gamma) {
+		if (uvCoordinates == null) {
+			throw new NullPointerException();
+		}
+		
 		double u = uvCoordinates[0].u * (1-beta-gamma) 
 				+ uvCoordinates[1].u * beta
 				+ uvCoordinates[2].u * gamma;
@@ -212,6 +220,9 @@ public class MeshTriangle2 extends Shape{
 
 
 	private double interpolateV(double beta, double gamma) {
+		if (uvCoordinates == null) {
+			throw new NullPointerException();
+		}
 		double v = uvCoordinates[0].v * (1-beta-gamma) 
 				+ uvCoordinates[1].v * beta
 				+ uvCoordinates[2].v * gamma;
