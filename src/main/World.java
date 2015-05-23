@@ -1,6 +1,6 @@
 package main;
 
-import ioPackage.ObjectFileReader2;
+import ioPackage.ObjectFileReader;
 
 import java.awt.Color;
 import java.awt.Rectangle;
@@ -284,7 +284,7 @@ public class World{
 				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(0,-1, 2));
 				
 				
-				ObjectFileReader2 reader = new ObjectFileReader2();
+				ObjectFileReader reader = new ObjectFileReader();
 				CompoundObject mesh;
 				mesh = reader.readFile("objects//luxo_test.obj");
 				mesh.setTransformation(meshTransform);
@@ -509,7 +509,7 @@ public class World{
 					meshTransform);
 			appleSVMatte.setNormalMaptexture(appleNormalMap);
 			
-			ObjectFileReader2 reader = new ObjectFileReader2();
+			ObjectFileReader reader = new ObjectFileReader();
 			CompoundObject mesh;
 			mesh = reader.readFile("objects//apple//apple.obj");
 			mesh.setTransformation(meshTransform);
@@ -544,7 +544,7 @@ public class World{
 //					meshTransform);
 //			appleSVMatte.setNormalMaptexture(appleNormalMap);
 			
-			ObjectFileReader2 reader = new ObjectFileReader2();
+			ObjectFileReader reader = new ObjectFileReader();
 			CompoundObject mesh;
 			mesh = reader.readFile("objects//apple2//apple2.obj");
 			mesh.setTransformation(meshTransform);
@@ -584,7 +584,7 @@ public class World{
 			Transformation meshTransform = Transformation.createRotationY(200);
 			meshTransform = meshTransform.append(Transformation.createScale(0.5, 0.5, 0.5));
 			meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-0.5, 0, 5));
-			ObjectFileReader2 reader = new ObjectFileReader2();
+			ObjectFileReader reader = new ObjectFileReader();
 			CompoundObject mesh;
 			mesh = reader.readFile("objects//suzanne.obj");
 			mesh.setTransformation(meshTransform);
@@ -607,7 +607,7 @@ public class World{
 			Transformation meshTransform = Transformation.createRotationY(0);
 			meshTransform = meshTransform.append(Transformation.createRotationX(0));
 			meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(0, 0, 1.5));
-			ObjectFileReader2 reader = new ObjectFileReader2();
+			ObjectFileReader reader = new ObjectFileReader();
 			CompoundObject mesh;
 			mesh = reader.readFile("objects//buddha.obj");
 			mesh.setTransformation(meshTransform);
@@ -623,7 +623,7 @@ public class World{
 			Transformation meshTransform = Transformation.createRotationY(200);
 			meshTransform = meshTransform.append(Transformation.createRotationX(10));
 			meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -1, 10));
-			ObjectFileReader2 reader = new ObjectFileReader2();
+			ObjectFileReader reader = new ObjectFileReader();
 			CompoundObject mesh;
 			mesh = reader.readFile("objects//bunny.obj");
 			mesh.setTransformation(meshTransform);
@@ -646,7 +646,7 @@ public class World{
 		Transformation meshTransform = Transformation.createRotationY(200);
 		meshTransform = meshTransform.append(Transformation.createRotationX(10));
 		meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -1, 10));
-		ObjectFileReader2 reader = new ObjectFileReader2();
+		ObjectFileReader reader = new ObjectFileReader();
 		CompoundObject mesh;
 		mesh = reader.readFile("objects//bunny.obj");
 		mesh.setTransformation(meshTransform);
@@ -716,7 +716,7 @@ public class World{
 		Transformation meshTransform = Transformation.createRotationY(120);
 		meshTransform = meshTransform.append(Transformation.createRotationX(40));
 		meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(0,0, 2));
-		ObjectFileReader2 reader = new ObjectFileReader2();
+		ObjectFileReader reader = new ObjectFileReader();
 		CompoundObject mesh;
 		mesh = reader.readFile("objects//house//house.obj");
 		mesh.setTransformation(meshTransform);
@@ -747,7 +747,7 @@ public class World{
 					meshTransform);
 			dragonSVMatte.setNormalMaptexture(dragonNormalMap);
 			
-			ObjectFileReader2 reader = new ObjectFileReader2();
+			ObjectFileReader reader = new ObjectFileReader();
 			CompoundObject mesh;
 			mesh = reader.readFile("objects//dragonLowPoly//dragonHighPoly.obj");
 			mesh.setTransformation(meshTransform);
@@ -780,7 +780,7 @@ public class World{
 //				meshTransform);
 //		buddhaSVMatte.setNormalMaptexture(buddhaNormalMap);
 		
-		ObjectFileReader2 reader = new ObjectFileReader2();
+		ObjectFileReader reader = new ObjectFileReader();
 		CompoundObject mesh;
 		mesh = reader.readFile("objects//buddhaLowPoly//buddhaHighPoly.obj");
 		mesh.setTransformation(meshTransform);
@@ -946,7 +946,7 @@ public class World{
 			Transformation meshTransform = Transformation.createRotationY(200);
 			meshTransform = meshTransform.append(Transformation.createRotationX(0));
 			meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, 1, 7));
-			ObjectFileReader2 reader = new ObjectFileReader2();
+			ObjectFileReader reader = new ObjectFileReader();
 			CompoundObject mesh;
 			mesh = reader.readFile("objects//suzanne.obj");
 			mesh.setTransformation(meshTransform);
@@ -961,7 +961,7 @@ public class World{
 		Transformation meshTransform = Transformation.createRotationY(200);
 		meshTransform = meshTransform.append(Transformation.createRotationX(10));
 		meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -1, 10));
-		ObjectFileReader2 reader = new ObjectFileReader2();
+		ObjectFileReader reader = new ObjectFileReader();
 		CompoundObject mesh;
 		mesh = reader.readFile("objects//teapot.obj");
 		mesh.setTransformation(meshTransform);
@@ -973,7 +973,7 @@ public class World{
 		Transformation meshTransform = Transformation.createRotationY(200);
 		meshTransform = meshTransform.append(Transformation.createRotationX(10));
 		meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -1, 10));
-		ObjectFileReader2 reader = new ObjectFileReader2();
+		ObjectFileReader reader = new ObjectFileReader();
 		CompoundObject mesh;
 		mesh = reader.readFile("objects//teapot.obj");
 		mesh.setTransformation(meshTransform);
@@ -997,7 +997,7 @@ public class World{
 		Transformation meshTransform = Transformation.createRotationY(200);
 		meshTransform = meshTransform.append(Transformation.createRotationX(10));
 		meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -1, 20));
-		ObjectFileReader2 reader = new ObjectFileReader2();
+		ObjectFileReader reader = new ObjectFileReader();
 		CompoundObject mesh;
 		mesh = reader.readFile("objects//triceratops.obj");
 		mesh.setTransformation(meshTransform);
@@ -1013,7 +1013,7 @@ public class World{
 			Transformation meshTransform = Transformation.createRotationY(200);
 			meshTransform = meshTransform.append(Transformation.createRotationX(10));
 			meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -1, 15));
-			ObjectFileReader2 reader = new ObjectFileReader2();
+			ObjectFileReader reader = new ObjectFileReader();
 			CompoundObject mesh;
 			mesh = reader.readFile("objects//venus.obj");
 			mesh.setTransformation(meshTransform);

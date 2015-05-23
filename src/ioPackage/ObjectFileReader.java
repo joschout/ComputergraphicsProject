@@ -12,10 +12,10 @@ import math.Point;
 import math.Transformation;
 import math.Vector;
 import shape.CompoundObject;
-import shape.MeshTriangle2;
+import shape.MeshTriangle;
 import util.UVCoordinates;
 
-public class ObjectFileReader2 {
+public class ObjectFileReader {
 	/**
 	 * Geeft een opbject van de klasse Grid terug
 	 * @param filename
@@ -154,7 +154,7 @@ public class ObjectFileReader2 {
 					+ tokens.toString());
 		}
 		
-		MeshTriangle2 tri = new MeshTriangle2(mesh);
+		MeshTriangle tri = new MeshTriangle(mesh);
 		
 		for(int i = 1; i <= 3; i++){
 			String[] vertexSubtokens = tokens[i].split("/");
@@ -191,7 +191,7 @@ public class ObjectFileReader2 {
 	 * @param tokens
 	 * @throws UnsupportedEncodingException
 	 */
-	private void triangleVertixParser(MeshTriangle2 tri, String[] vertexSubtokens, int vertexNumber) {
+	private void triangleVertixParser(MeshTriangle tri, String[] vertexSubtokens, int vertexNumber) {
 		if(vertexSubtokens.length == 2){
 			int vertexIndex = Integer.parseInt(vertexSubtokens[0]) - 1;
 			tri.vertices[vertexNumber-1] = vertexList.get(vertexIndex);

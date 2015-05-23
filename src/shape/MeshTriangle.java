@@ -12,7 +12,7 @@ import math.Vector;
 import util.ShadeRec;
 import util.UVCoordinates;
 
-public class MeshTriangle2 extends Shape{
+public class MeshTriangle extends Shape{
 	
 	CompoundObject mesh;
 	
@@ -25,7 +25,7 @@ public class MeshTriangle2 extends Shape{
 	public static double boundingBoxDelta = 0.0001;
 	
 	
-	public MeshTriangle2(CompoundObject mesh) {
+	public MeshTriangle(CompoundObject mesh) {
 		if(mesh == null){
 			throw new NullPointerException("the given transformation is null!");
 		}
