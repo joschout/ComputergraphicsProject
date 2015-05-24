@@ -290,6 +290,7 @@ public class Box extends Shape {
 				if(t0 < t1 && t1 > kEpsilon){ //condition for a hit
 //					Point localHitPoint = transformed.origin.add(transformed.direction.scale(t0));
 //					sr.localHitPoint = localHitPoint;
+					sr.t = t0;
 					return true;		
 				}
 				return false;

@@ -26,8 +26,10 @@ public class BVHFalseColorGrayTracer extends Tracer{
 			if(sr.hasHitAnObject){
 				//int k = 15;
 				int depth = sr.bvhCounter;
+				//System.out.println(depth);
 				//double grayValue = 1 - depth/ k;
 				double grayValue = 1.0/Math.log(depth);
+				
 				//double grayValue = Math.exp(-depth);
 //				//sr.ray = ray;
 //				System.out.println(sr.bvhCounter);
@@ -72,6 +74,8 @@ public class BVHFalseColorGrayTracer extends Tracer{
 				
 				
 				//
+		
+				
 				return RGBColor.clamp((float)grayValue, (float)grayValue, (float)grayValue);
 				//return 
 				//return new RGBColor((float) grayValue);

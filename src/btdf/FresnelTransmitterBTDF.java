@@ -106,7 +106,7 @@ public class FresnelTransmitterBTDF extends BTDF{
 		sr.wt = wt;
 
 		double scalingFactor = Math.abs(getFresnelTransmittance(sr))/(eta*eta);
-		System.out.println("scalingFactor: "+scalingFactor);
+	//	System.out.println("scalingFactor: "+scalingFactor);
 		//return new RGBColor((float)scalingFactor);
 		return RGBColor.WHITE.unboundedScale(scalingFactor);
 	}

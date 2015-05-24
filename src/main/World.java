@@ -3,7 +3,6 @@ package main;
 import ioPackage.ObjectFileReader;
 
 import java.awt.Color;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +21,7 @@ import shape.CompoundObject;
 import shape.Cylinder;
 import shape.Disk;
 import shape.Intersectable;
+import shape.MeshTriangle;
 import shape.Parallelogram;
 import shape.Plane;
 import shape.Shape;
@@ -57,8 +57,10 @@ import math.Point;
 import math.Ray;
 import math.Transformation;
 import math.Vector;
+import util.PhysicalMaterialRepository;
 import util.RGBColor;
 import util.ShadeRec;
+import util.SimpleMaterialRepository;
 
 public class World{
 	
@@ -116,8 +118,9 @@ public class World{
 				this.initializePerspectiveCamera(imageWidth, imageHeight);
 //				this.initializeThinLensCamera(imageWidth, imageHeight);
 				
-				
+				//=====================//
 				//=== LIGHT SOURCES ===//
+				//=====================//
 				PointLight pl1 = new PointLight(3.0, RGBColor.WHITE, new  Point(-5,3,0));
 				pl1.setCastShadows(true);
 				this.addLight(pl1);
@@ -125,183 +128,53 @@ public class World{
 				PointLight pl2 = new PointLight(1.0, RGBColor.WHITE, new  Point(5,3,0));
 				pl2.setCastShadows(true);
 				this.addLight(pl2);
-
-				//=== MATERIALS ===///
-				PhongMaterial phong = new PhongMaterial();
-				phong.setKa(0.25);
-				phong.setKd(0.65);
-				phong.setCd(RGBColor.convertToRGBColor(Color.GREEN));
-				phong.setKs(0.2);
-				phong.setPhongExponent(10);
-				phong.setCs(RGBColor.convertToRGBColor(Color.WHITE));
 				
-				MatteMaterial matte = new MatteMaterial();
-				matte.setKa(0.25);
-				matte.setKd(0.65);
-				matte.setCd(RGBColor.convertToRGBColor(Color.CYAN));				
-				
-				
-
-				ReflectiveMaterial reflectiveMaterial1 = new ReflectiveMaterial();
-				reflectiveMaterial1.setKa(0.25);
-				reflectiveMaterial1.setKd(0.65);
-				reflectiveMaterial1.setCd(new RGBColor(0.75f, 0.75f, 0f));
-				reflectiveMaterial1.setCs(RGBColor.WHITE);
-				reflectiveMaterial1.setKs(0.75);
-				reflectiveMaterial1.setPhongExponent(100);
-				reflectiveMaterial1.setCr(RGBColor.WHITE);
-				reflectiveMaterial1.setKr(0.75);
-				
-				ReflectiveMaterial reflectiveMaterial2 = new ReflectiveMaterial();
-				reflectiveMaterial2.setKa(0.25);
-				reflectiveMaterial2.setKd(0.65);
-				reflectiveMaterial2.setCd(new RGBColor(0f, 0f, 1f));
-				reflectiveMaterial2.setCs(RGBColor.WHITE);
-				reflectiveMaterial2.setKs(0.75);
-				reflectiveMaterial2.setPhongExponent(100);
-				reflectiveMaterial2.setCr(RGBColor.WHITE);
-				reflectiveMaterial2.setKr(0.75);
-				
-				GlossyReflectionMaterial glossyMaterial = new GlossyReflectionMaterial();
-				glossyMaterial.setKa(0.0);
-				glossyMaterial.setKd(0.0);
-				glossyMaterial.setCd(RGBColor.WHITE);
-				glossyMaterial.setKs(0.0);
-				glossyMaterial.setCs(RGBColor.WHITE);
-				glossyMaterial.setKr(0.9);
-				glossyMaterial.setCr(new RGBColor(0f, 0f, 1f));
-				glossyMaterial.setExponent(10000);
-				glossyMaterial.setNbOfHemisphereSamples(10);
-					
-				
-				SVEmissiveMaterial emissiveMat = new SVEmissiveMaterial();
-				emissiveMat.setLs(1e1);
-				LightProbeMapping lightProbeMapping = new LightProbeMapping();
-				ImageTexture sphereImTex = new ImageTexture("angmap24Small.jpg", lightProbeMapping);;
-				ConstantColorTexture colorText = new ConstantColorTexture();
-				colorText.setColor(new RGBColor(1f,0f, 0f));
-				
-				emissiveMat.setCe(sphereImTex);	
-		
 //				EnvironmentLight environmentLight = new EnvironmentLight();
 //				environmentLight.nbOfShadowRaysPerEnvironmentLight = 100;
 //				environmentLight.emissiveMaterial = emissiveMat;
 //				environmentLight.setCastShadows(true);
 //				lights.add(environmentLight);
-//				
-				Transformation bigSphereTrans = Transformation.createRotationY(0);
-				bigSphereTrans = bigSphereTrans.append(Transformation.createRotationX(0));
-				bigSphereTrans = bigSphereTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 0));
-				Sphere bigSphere = new  Sphere(bigSphereTrans, 10);
-				bigSphere.material = emissiveMat;
-				bigSphere.infinite = true;
-	//			intersectables.add(bigSphere);
-				
-				
-				
-				BlinnPhongBRDF acrylicBlue_BlinnPhongBRDF = new BlinnPhongBRDF(1.37e4, new RGBColor(0.0016f ,0.00115f ,0.000709f));
-				PhysicalMaterial acrylicBlue_BlinnPhongMaterial = new PhysicalMaterial(acrylicBlue_BlinnPhongBRDF);
-				acrylicBlue_BlinnPhongMaterial.setCd(new RGBColor(0.0147f, 0.0332f, 0.064f));
-				acrylicBlue_BlinnPhongMaterial.setKa(0.25);
-				acrylicBlue_BlinnPhongMaterial.setKd(0.65);
-				acrylicBlue_BlinnPhongBRDF.setKs(0.2);
-				
-				
-				CookTorranceBRDF acrylicBlue_CookTorranceBRDF = new CookTorranceBRDF(0.117, 0.0137, new RGBColor(0.0291f, 0.0193f, 0.0118f));
-				PhysicalMaterial acrylicBlue_CookTorranceMaterial = new PhysicalMaterial(acrylicBlue_CookTorranceBRDF);
-				acrylicBlue_CookTorranceMaterial.setCd(new RGBColor(0.0143f,  0.033f,  0.0639f));
-				acrylicBlue_CookTorranceMaterial.setKa(0.25);
-				acrylicBlue_CookTorranceMaterial.setKd(0.65);
-				acrylicBlue_CookTorranceBRDF.setKs(0.2);
-				
-				
-				CookTorranceBRDF aluminium_CookTorranceBRDF = new CookTorranceBRDF(0.59, 0.00776, new RGBColor(0.0799f, 0.06f, 0.0294f));
-				PhysicalMaterial aluminium_CookTorranceMaterial = new PhysicalMaterial(aluminium_CookTorranceBRDF);
-				aluminium_CookTorranceMaterial.setCd(new RGBColor(0.0418f, 0.0356f, 0.0273f));
-				aluminium_CookTorranceMaterial.setKa(0.25);
-				aluminium_CookTorranceMaterial.setKd(0.65);
-				aluminium_CookTorranceBRDF.setKs(0.2);
-				
-				
-				
-				LafortuneBRDF acrylicBlue_LafortuneBRDF = new LafortuneBRDF(-0.577, 0.577, 4.06e3, new RGBColor(0.0238f, 0.0164f, 0.01f));
-				PhysicalMaterial acrylicBlue_LafortuneMaterial = new PhysicalMaterial(acrylicBlue_LafortuneBRDF);
-				acrylicBlue_LafortuneMaterial.setCd(new RGBColor(0.0145f, 0.0332f, 0.064f));
-				acrylicBlue_LafortuneMaterial.setKa(0.25);
-				acrylicBlue_LafortuneMaterial.setKd(0.65);
-				acrylicBlue_LafortuneBRDF.setKs(0.2);
-				
-				WardBRDF acrylicBlue_WardBRDF = new WardBRDF(0.0162, new RGBColor(0.00774f, 0.00547f, 0.00339f));
-				PhysicalMaterial acrylicBlue_WardMaterial = new PhysicalMaterial(acrylicBlue_WardBRDF);
-				acrylicBlue_WardMaterial.setCd(new RGBColor(0.0138f,  0.0326f,  0.0636f));
-				acrylicBlue_WardMaterial.setKa(0.25);
-				acrylicBlue_WardMaterial.setKd(0.650);
-				acrylicBlue_WardBRDF.setKs(0.2);
-				
-//				Transformation sphereTrans = Transformation.createRotationY(0);
-//				sphereTrans = sphereTrans.append(Transformation.createRotationX(0));
-//				sphereTrans = sphereTrans.appendToTheLeft(Transformation.createTranslation(0.25 ,0, 4));
-//				Sphere sphere = new  Sphere(sphereTrans, 1);
-//				sphere.material = reflectiveMaterial1;
-//				intersectables.add(sphere);
-//				
-				
-				
-				SimpleTransparentMaterial simpleTransparentMaterial1 = new SimpleTransparentMaterial();
-	//			simpleTransparentMaterial1.setKa(0.25);
-	//			simpleTransparentMaterial1.setKd(0.65);
-	//			simpleTransparentMaterial1.setCd(new RGBColor(0f, 0f, 1f));
-	//			simpleTransparentMaterial1.setCs(RGBColor.WHITE);
-				simpleTransparentMaterial1.setKs(0.5);
-				simpleTransparentMaterial1.setPhongExponent(2000);
-	//			simpleTransparentMaterial1.setCr(RGBColor.WHITE);
-				simpleTransparentMaterial1.setKr(0.1);
-				simpleTransparentMaterial1.setKt(0.9);
-				simpleTransparentMaterial1.setAbsoluteIndexOfRefraction(0.75);
-				
-				
-				DielectricMaterial dielectricMaterial = new DielectricMaterial();
-				dielectricMaterial.setKs(0.2);
-				dielectricMaterial.setPhongExponent(2000);
-				dielectricMaterial.setEtaIncoming(1.5);
-				dielectricMaterial.setEtaOutgoing(1.0);
-				dielectricMaterial.setCf_in(new RGBColor(0.65f, 0.45f, 0));
-				dielectricMaterial.setCf_out(new RGBColor(0f, 0.5f, 0.5f));
-				
-				Transformation sphereTrans2 = Transformation.createRotationY(0);
-				sphereTrans2 = sphereTrans2.append(Transformation.createRotationX(0));
-				sphereTrans2 = sphereTrans2.appendToTheLeft(Transformation.createTranslation(1 ,0, 3));
-				Sphere sphere2 = new  Sphere(sphereTrans2, 1);
-				sphere2.material = acrylicBlue_BlinnPhongMaterial;
-				//intersectables.add(sphere2);
-				
-				
-				
 
-				Transformation meshTransform = Transformation.createRotationY(90);
-				meshTransform = meshTransform.append(Transformation.createRotationX(0));
+				//=================//
+				//=== MATERIALS ===//
+				//=================//
+				SimpleMaterialRepository simpleMaterialRepo = new SimpleMaterialRepository();
+				
+				PhongMaterial phong = simpleMaterialRepo.getPhongmaterialGreen();				
+				MatteMaterial matte = simpleMaterialRepo.getMatteMaterialCyan();			
+
+				ReflectiveMaterial reflectiveMaterial1 = simpleMaterialRepo.getReflectiveMaterial1();			
+				ReflectiveMaterial reflectiveMaterial2 = simpleMaterialRepo.getReflectiveMaterial2();
+				
+				GlossyReflectionMaterial glossyMaterial = simpleMaterialRepo.getGlossyMaterial();
+				
+				SVEmissiveMaterial emissiveMat = simpleMaterialRepo.getSVEmissiveMaterial_bigSphere();
+		
+				SimpleTransparentMaterial simpleTransparentMaterial1 = simpleMaterialRepo.getSimpleTransparentMaterial1();
+				DielectricMaterial dielectricMaterial = simpleMaterialRepo.getDielectricMaterial1();
+				
+				
+				
+				PhysicalMaterialRepository physicalMaterialRepo = new PhysicalMaterialRepository();
+				
+				PhysicalMaterial acrylicBlue_BlinnPhongMaterial = physicalMaterialRepo.getAcrylicBlue_BlinnPhongMaterial();
+				PhysicalMaterial acrylicBlue_CookTorranceMaterial = physicalMaterialRepo.getAcrylicBlue_CookTorranceMaterial();
+				PhysicalMaterial acrylicBlue_LafortuneMaterial = physicalMaterialRepo.getAcrylicBlue_LafortuneMaterial();
+				PhysicalMaterial acrylicBlue_WardMaterial = physicalMaterialRepo.getAcrylicBlue_WardMaterial();
+					
+				PhysicalMaterial aluminium_CookTorranceMaterial = physicalMaterialRepo.getAluminium_CookTorranceMaterial();
+				
+					
+//				Transformation sphereTrans2 = Transformation.createRotationY(0);
+//				sphereTrans2 = sphereTrans2.append(Transformation.createRotationX(0));
+//				sphereTrans2 = sphereTrans2.appendToTheLeft(Transformation.createTranslation(1 ,0, 3));
+//				Sphere sphere2 = new  Sphere(sphereTrans2, 1);
+//				sphere2.material = acrylicBlue_BlinnPhongMaterial;
+//				//intersectables.add(sphere2);
 			
-				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(0,-1, 2));
+						
+//				testBigSphere(emissiveMat);
 				
-				
-				ObjectFileReader reader = new ObjectFileReader();
-				CompoundObject mesh;
-				mesh = reader.readFile("objects//luxo_test.obj");
-				mesh.setTransformation(meshTransform);
-				mesh.material = aluminium_CookTorranceMaterial;
-			//	intersectables.add(mesh);
-				
-				CompoundObject testCompound = new CompoundObject(Transformation.createIdentity());
-				testCompound.addObject(sphere2);
-				testCompound.addObject(mesh);
-				intersectables.add(testCompound);
-				
-////				Box box1 = Box.boundingBoxtoBox(mesh.getBoundingBox());
-////				box1.material = phong;
-////				intersectables.add(box1);
-				
-				
-								
 //				testApple(phong);				
 //				testApple2(phong);
 //				testAreaLightSuzanne1(phong);				
@@ -309,6 +182,7 @@ public class World{
 //				testBuddha(phong);
 //				testBunny(phong);				
 //				testBunnyReflective(phong);
+//				testCompoundObjectTwoObjects(acrylicBlue_BlinnPhongMaterial, aluminium_CookTorranceMaterial);
 //				testCylindricalMapping();				
 //				testCylinderPrimitive(phong);
 //				testDiskPrimitive(phong);
@@ -316,13 +190,15 @@ public class World{
 //				testHouse();				
 //				testLowBuddha(phong);				
 //				testLowResDragon(phong);
+//				testLuxoAluminium(aluminium_CookTorranceMaterial);
 //				testParallelogramPrimitive(phong);	
 //				testParallelogramWithVertices(phong, matte);
 //				testPlanePrimitive(matte);
-//				testPlanePrimitive2();
-				
-				testPlanePrimitiveCheckersMaterial();				
-//				testSpherePrimitive(phong);				
+//				testPlanePrimitive2();				
+//				testPlanePrimitiveCheckersMaterial();	
+//				testSpheresDielectricandReflective(reflectiveMaterial1, dielectricMaterial);
+//				testSpherePrimitive(phong);
+//				testSphereObject(phong);
 //				testSpherePrimitiveLightProbeMapping(phong);	
 //				testSphericalMapping();
 //				testSuzanne(phong);				
@@ -331,10 +207,65 @@ public class World{
 //				testSquarePrimitive(phong);	
 //				testTrianglePrimitive(phong);				
 //				testTriceratops(phong);
-//				testVenus(phong);
+				testVenus(phong);
 			
 	}
 
+	private void testBigSphere(SVEmissiveMaterial emissiveMat) {
+		Transformation bigSphereTrans = Transformation.createRotationY(0);
+		bigSphereTrans = bigSphereTrans.append(Transformation.createRotationX(0));
+		bigSphereTrans = bigSphereTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 0));
+		Sphere bigSphere = new  Sphere(bigSphereTrans, 10);
+		bigSphere.material = emissiveMat;
+		bigSphere.infinite = true;
+		intersectables.add(bigSphere);
+	}
+
+	private void testLuxoAluminium(
+			PhysicalMaterial aluminium_CookTorranceMaterial) {
+		
+		PhongMaterial phong = new PhongMaterial();
+		phong.setKa(0.25);
+		phong.setKd(0.65);
+		phong.setCd(RGBColor.convertToRGBColor(Color.GREEN));
+		phong.setKs(0.2);
+		phong.setPhongExponent(10);
+		phong.setCs(RGBColor.convertToRGBColor(Color.WHITE));
+		
+		Transformation meshTransform = Transformation.createRotationY(90);
+		meshTransform = meshTransform.append(Transformation.createRotationX(0));
+		meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1,-1, 2));
+		
+		
+		ObjectFileReader reader = new ObjectFileReader();
+		CompoundObject mesh;
+		mesh = reader.readFile("objects//luxo_test.obj");
+		mesh.setTransformation(meshTransform);
+		mesh.material = aluminium_CookTorranceMaterial;
+		intersectables.add(mesh);
+	}
+
+	private Sphere testSpheresDielectricandReflective(
+			ReflectiveMaterial reflectiveMaterial1,
+			DielectricMaterial dielectricMaterial) {
+		Transformation sphereTrans = Transformation.createRotationY(0);
+		sphereTrans = sphereTrans.append(Transformation.createRotationX(0));
+		sphereTrans = sphereTrans.appendToTheLeft(Transformation.createTranslation(0.25 ,0, 4));
+		Sphere sphere = new  Sphere(sphereTrans, 1);
+		sphere.material = reflectiveMaterial1;
+		intersectables.add(sphere);
+		
+		
+		Transformation sphereTrans2 = Transformation.createRotationY(0);
+		sphereTrans2 = sphereTrans2.append(Transformation.createRotationX(0));
+		sphereTrans2 = sphereTrans2.appendToTheLeft(Transformation.createTranslation(1 ,0, 3));
+		Sphere sphere2 = new  Sphere(sphereTrans2, 1);
+		sphere2.material = dielectricMaterial;
+		intersectables.add(sphere2);
+		return sphere2;
+	}
+
+	
 	private void testGlossyMaterialSphereAncCylinder(
 			ReflectiveMaterial reflectiveMaterial1,
 			GlossyReflectionMaterial glossyMaterial) {
@@ -594,10 +525,12 @@ public class World{
 
 	private void testBoxPrimitive(PhongMaterial phong) {
 		// ==== BOX PRIMITIVE ==== ///
-		Transformation boxTrans = Transformation.createRotationY(200);
+		
+		
+		Transformation boxTrans = Transformation.createRotationY(45);
 		boxTrans = boxTrans.append(Transformation.createRotationX(0));
 		boxTrans = boxTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 2));
-		Box box = new  Box(boxTrans, new Point(), new Point(1,1,1));
+		Box box = new  Box(boxTrans, new Point(-0.50, -1, 0), new Point(0.5,0,1));
 		box.material = phong;
 		intersectables.add(box);
 	}
@@ -657,12 +590,36 @@ public class World{
 //				intersectables.add(box1);		
 	}
 
+	public void testCompoundObjectTwoObjects(PhysicalMaterial acrylicBlue_BlinnPhongMaterial,PhysicalMaterial aluminium_CookTorranceMaterial){
+		
+		Transformation meshTransform = Transformation.createRotationY(90);
+		meshTransform = meshTransform.append(Transformation.createRotationX(0));
+		meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(0,-1, 2));
+		
+		Transformation sphereTrans2 = Transformation.createRotationY(0);
+		sphereTrans2 = sphereTrans2.append(Transformation.createRotationX(0));
+		sphereTrans2 = sphereTrans2.appendToTheLeft(Transformation.createTranslation(1 ,0, 3));
+		Sphere sphere2 = new  Sphere(sphereTrans2, 1);
+		sphere2.material = acrylicBlue_BlinnPhongMaterial;
+		
+		ObjectFileReader reader = new ObjectFileReader();
+		CompoundObject mesh;
+		mesh = reader.readFile("objects//luxo_test.obj");
+		mesh.setTransformation(meshTransform);
+		mesh.material = aluminium_CookTorranceMaterial;
+		
+		CompoundObject testCompound = new CompoundObject(Transformation.createIdentity());
+		testCompound.addObject(sphere2);
+		testCompound.addObject(mesh);
+		intersectables.add(testCompound);
+	}
+
 	private void testCylinderPrimitive(PhongMaterial phong) {
 			//====CYLINDER PRIMITIVE ====//
-			Transformation cylinderTrans = Transformation.createRotationY(200);
+			Transformation cylinderTrans = Transformation.createRotationY(0);
 			cylinderTrans = cylinderTrans.append(Transformation.createRotationX(0));
-			cylinderTrans = cylinderTrans.appendToTheLeft(Transformation.createTranslation(0 ,0,7));			
-			Cylinder cy = new Cylinder(cylinderTrans, 1, 0, 2 );
+			cylinderTrans = cylinderTrans.appendToTheLeft(Transformation.createTranslation(0 ,0,3));			
+			Cylinder cy = new Cylinder(cylinderTrans, 1, -1, 1 );
 			cy.material = phong;
 			intersectables.add(cy);
 	//				Box box1 = Box.boundingBoxtoBox(cy.getBoundingBox());
@@ -676,6 +633,7 @@ public class World{
 	private void testCylindricalMapping() {
 		Mapping mapping = new CylindricalMapping();
 		ImageTexture imTex = new ImageTexture("Lambert-cylindrical-equal-area-projection.jpg", mapping);
+		//ImageTexture imTex = new ImageTexture("hobbelzammelen.jpg", mapping);
 		SVMatteMaterial svMatte = new SVMatteMaterial();
 		svMatte.setKa(0.45);
 		svMatte.setKd(0.65);
@@ -690,15 +648,15 @@ public class World{
 
 	private void testDiskPrimitive(PhongMaterial phong) {
 			//====DISK PRIMITIVE ====//
-			Transformation diskTrans = Transformation.createRotationY(200);
-			diskTrans = diskTrans.append(Transformation.createRotationX(40));
-			diskTrans = diskTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 12));	
-			Disk disk = new Disk(diskTrans, new Point(), 5, new Vector(0, 0, -1));
+			Transformation diskTrans = Transformation.createRotationY(45);
+			diskTrans = diskTrans.append(Transformation.createRotationX(0));
+			diskTrans = diskTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 2));	
+			Disk disk = new Disk(diskTrans, new Point(0,0,0), 1, new Vector(0, 0, -1));
 			disk.material = phong;
-	//		intersectables.add(disk);
-			Box box1 = Box.boundingBoxtoBox(disk.getBoundingBox());
-			box1.material = phong;
-			intersectables.add(box1);
+			intersectables.add(disk);
+//			Box box1 = Box.boundingBoxtoBox(disk.getBoundingBox());
+//			box1.material = phong;
+//			intersectables.add(box1);
 	//		Box box2 = Box.aaBoundingBoxtoBox(disk.getAABoundingBox());
 	//		box2.material = phong;
 	//		intersectables.add(box2);
@@ -709,13 +667,14 @@ public class World{
 	private void testHouse() {
 		//======== HOUSE =====//
 		ImageTexture imTex = new ImageTexture("objects//house//house_texture.jpg", null);
+
 		SVMatteMaterial svMatte = new SVMatteMaterial();
 		svMatte.setKa(0.45);
 		svMatte.setKd(0.65);
 		svMatte.setCd(imTex);
-		Transformation meshTransform = Transformation.createRotationY(120);
-		meshTransform = meshTransform.append(Transformation.createRotationX(40));
-		meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(0,0, 2));
+		Transformation meshTransform = Transformation.createRotationY(30);
+		meshTransform = meshTransform.append(Transformation.createRotationX(0));
+		meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(0,-1, 2));
 		ObjectFileReader reader = new ObjectFileReader();
 		CompoundObject mesh;
 		mesh = reader.readFile("objects//house//house.obj");
@@ -877,7 +836,7 @@ public class World{
 		svMatte.setCd(imTex);
 		
 		Transformation sphereTrans = Transformation.createRotationY(0);
-		sphereTrans = sphereTrans.append(Transformation.createRotationX(0));
+		sphereTrans = sphereTrans.append(Transformation.createRotationX(-50));
 		sphereTrans = sphereTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 2));
 		Sphere sphere = new Sphere(sphereTrans, 1);
 		sphere.material = svMatte;
@@ -900,6 +859,27 @@ public class World{
 	//				intersectables.add(box2);
 		}
 	
+	private void testSphereObject(PhongMaterial phong) {
+		MeshTriangle.setPhongInterpolation(false);
+		Transformation meshTransform = Transformation.createRotationY(0);
+		meshTransform = meshTransform.append(Transformation.createRotationX(90));
+		meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(0, 0, 2));
+		
+		ObjectFileReader reader = new ObjectFileReader();
+		CompoundObject mesh;
+		mesh = reader.readFile("objects//sphere.obj");
+		mesh.setTransformation(meshTransform);
+		mesh.material = phong;
+		intersectables.add(mesh);
+		
+
+//				Box box1 = Box.boundingBoxtoBox(sphere.getBoundingBox());
+//				box1.material = matte;
+//				intersectables.add(box1);
+//				Box box2 = Box.aaBoundingBoxtoBox(sphere.getAABoundingBox());
+//				box2.material = matte;
+//				intersectables.add(box2);
+	}
 	
 	private void testSpherePrimitiveLightProbeMapping(PhongMaterial phong) {
 		// ==== SPHERE PRIMITIVE ==== ///
@@ -943,9 +923,12 @@ public class World{
 
 	private void testSuzanne(PhongMaterial phong) {
 			//==== SUZANNE ====//
+			MeshTriangle.setPhongInterpolation(false);
+		
 			Transformation meshTransform = Transformation.createRotationY(200);
 			meshTransform = meshTransform.append(Transformation.createRotationX(0));
-			meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, 1, 7));
+//			meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, 1, 7));
+			meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(0, 0, 3));
 			ObjectFileReader reader = new ObjectFileReader();
 			CompoundObject mesh;
 			mesh = reader.readFile("objects//suzanne.obj");
@@ -983,8 +966,9 @@ public class World{
 
 	private void testTrianglePrimitive(PhongMaterial phong) {
 			//==== TRIANGLE PRIMITIVE ====///
-			Transformation triangleTrans = Transformation.createTranslation(0, 0, 14);
-			Triangle tri = new Triangle(triangleTrans, new Point(5,0,0), new Point(-5,0,0), new Point(0,5,0));
+			Transformation triangleTrans =Transformation.createRotationY(45);
+			triangleTrans = triangleTrans.appendToTheLeft(Transformation.createTranslation(0, 0, 2));
+			Triangle tri = new Triangle(triangleTrans, new Point(1,-1,0), new Point(-1,-1,0), new Point(0,1,0));
 			tri.material = phong;
 			intersectables.add(tri);
 	//		Box box = Box.boundingBoxtoBox(tri.getBoundingBox());

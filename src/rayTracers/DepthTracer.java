@@ -8,17 +8,21 @@ import util.ShadeRec;
 public class DepthTracer extends Tracer {
 
 	
-private World world;
+	private World world;
 	
 	public DepthTracer(World world) {
 		this.world = world;
 	}
 	
 	public RGBColor traceRay(Ray ray){
+		if(world.intersectablesToIntersect.isEmpty()){
+			world.createBVH2();
+		}
+		
 		ShadeRec sr = world.hitObjects(ray);
 		
 		if(sr.hasHitAnObject){
-			int k = 15;
+			//int k = 15;
 			double depth = world.camera.getOrigin().subtract(sr.hitPoint).length();
 			//double grayValue = 1 - depth/ k;
 			double grayValue = 1.0/Math.log(depth);
