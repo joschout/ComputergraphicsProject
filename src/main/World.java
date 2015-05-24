@@ -6,7 +6,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import boundingVolumeHierarchy.BVHManager2;
+import boundingVolumeHierarchy.BVHManager;
 import brdf.BRDF;
 import brdf.BlinnPhongBRDF;
 import brdf.CookTorranceBRDF;
@@ -355,7 +355,7 @@ public class World{
 	}
 	
 	public void createBVH2(){
-		BVHManager2 manager = new BVHManager2();
+		BVHManager manager = new BVHManager();
 		List<Shape> finiteShapes = new ArrayList<Shape>();
 		
 		for(Intersectable intersectable: intersectables){

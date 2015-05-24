@@ -11,9 +11,9 @@ import java.util.logging.Logger;
 
 import shape.Shape;
 
-public class BVHManager2 {
+public class BVHManager {
 	
-	public BVHManager2(){}
+	public BVHManager(){}
 	
 	public CompositeAABBox getBoundingVolumeHierarchy(List<Shape> shapes){
 		List<CompositeAABBox> bboxList = getBoundingBoxList(shapes);
@@ -31,7 +31,7 @@ public class BVHManager2 {
 	private CompositeAABBox getBoundingVolumeHierarchy2(List<CompositeAABBox> subList) {
 		
 		if(subList.size() > 1){
-			AABBComparator2 comparator = new AABBComparator2();
+			AABBComparator comparator = new AABBComparator();
 			comparator.instantiateComparingAxis(subList);
 			Collections.sort(subList, comparator);
 	

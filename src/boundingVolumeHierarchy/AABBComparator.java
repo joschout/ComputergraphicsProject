@@ -5,7 +5,7 @@ import java.util.List;
 
 import math.Point;
 
-public class AABBComparator2 implements Comparator<CompositeAABBox> {
+public class AABBComparator implements Comparator<CompositeAABBox> {
 
 	/**
 	 * 1 = x
@@ -15,7 +15,7 @@ public class AABBComparator2 implements Comparator<CompositeAABBox> {
 	public int coordinateToCompare;
 
 	
-	public AABBComparator2() {
+	public AABBComparator() {
 		coordinateToCompare = 1;
 	}
 	
