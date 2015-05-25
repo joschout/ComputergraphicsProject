@@ -17,7 +17,7 @@ public class SimpleMaterialRepository {
 	
 	public PhongMaterial getPhongmaterialGreen(){
 		PhongMaterial phong = new PhongMaterial();
-		phong.setKa(0.25);
+		phong.setKa(0.05);
 		phong.setKd(0.65);
 		phong.setCd(RGBColor.convertToRGBColor(Color.GREEN));
 		phong.setKs(0.2);
@@ -69,14 +69,14 @@ public class SimpleMaterialRepository {
 		glossyMaterial.setCs(RGBColor.WHITE);
 		glossyMaterial.setKr(0.9);
 		glossyMaterial.setCr(new RGBColor(0f, 0f, 1f));
-		glossyMaterial.setExponent(10000);
+		glossyMaterial.setExponent(100000);
 		glossyMaterial.setNbOfHemisphereSamples(10);
 		return glossyMaterial;
 	}
 	
 	public SVEmissiveMaterial getSVEmissiveMaterial_bigSphere(){
 		SVEmissiveMaterial emissiveMat = new SVEmissiveMaterial();
-		emissiveMat.setLs(1e1);
+		emissiveMat.setLs(1e0);
 		LightProbeMapping lightProbeMapping = new LightProbeMapping();
 		ImageTexture sphereImTex = new ImageTexture("angmap24Small.jpg", lightProbeMapping);;
 		ConstantColorTexture colorText = new ConstantColorTexture();
@@ -96,7 +96,7 @@ public class SimpleMaterialRepository {
 //			simpleTransparentMaterial1.setCr(RGBColor.WHITE);
 		simpleTransparentMaterial1.setKr(0.1);
 		simpleTransparentMaterial1.setKt(0.9);
-		simpleTransparentMaterial1.setAbsoluteIndexOfRefraction(0.75);
+		simpleTransparentMaterial1.setAbsoluteIndexOfRefraction(1.1);
 		return simpleTransparentMaterial1;	
 	}
 	
@@ -108,8 +108,22 @@ public class SimpleMaterialRepository {
 		dielectricMaterial.setEtaOutgoing(1.0);
 		dielectricMaterial.setCf_in(new RGBColor(0.65f, 0.45f, 0));
 		dielectricMaterial.setCf_out(new RGBColor(0f, 0.5f, 0.5f));
+//		dielectricMaterial.setCf_in(new RGBColor(1.0f));
+//		dielectricMaterial.setCf_out(new RGBColor(1.0f));
 		return dielectricMaterial;
 	}
 	
+	public DielectricMaterial getDielectricMaterial2(){
+		DielectricMaterial dielectricMaterial = new DielectricMaterial();
+		dielectricMaterial.setKs(0.2);
+		dielectricMaterial.setPhongExponent(2000);
+		dielectricMaterial.setEtaIncoming(1.5);
+		dielectricMaterial.setEtaOutgoing(2.0);
+		dielectricMaterial.setCf_in(new RGBColor(0f, 1f, 1));
+		dielectricMaterial.setCf_out(new RGBColor(0.65f, 0.45f, 0));
+//		dielectricMaterial.setCf_in(new RGBColor(1.0f));
+		dielectricMaterial.setCf_out(new RGBColor(1.0f));
+		return dielectricMaterial;
+	}
 	
 }

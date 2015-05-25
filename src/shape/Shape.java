@@ -17,8 +17,8 @@ import math.Vector;
  * @author Niels Billen
  * @version 1.0
  */
-public abstract class Shape implements Intersectable {
-
+public abstract class Shape extends Intersectable {
+	
 	public abstract Material getMaterial();
 
 	public abstract BoundingBox getBoundingBox();

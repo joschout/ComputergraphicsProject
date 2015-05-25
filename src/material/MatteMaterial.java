@@ -73,6 +73,7 @@ public class MatteMaterial extends Material {
 					inShadow = light.inShadow(shadowRay, sr);
 				}
 				if(! inShadow){
+					System.out.println("not in shadow");
 					/*
 					 * if the point doesn't lie in the shadow of light source j
 					 * then add the radiance of light source j to the total radiance.

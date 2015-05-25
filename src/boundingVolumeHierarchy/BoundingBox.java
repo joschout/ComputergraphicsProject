@@ -8,7 +8,7 @@ import math.Ray;
 import math.Transformation;
 import math.Vector;
 
-public class BoundingBox implements Intersectable{
+public class BoundingBox extends Intersectable{
 	
 	//p0 should be smaller than p1;
 	public Point p0;

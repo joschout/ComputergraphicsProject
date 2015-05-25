@@ -4,7 +4,7 @@ import math.Ray;
 import math.Vector;
 import shape.Intersectable;
 
-public abstract  class CompositeAABBox implements Intersectable{
+public abstract  class CompositeAABBox extends Intersectable{
 	
 	public static final double kEpsilon = 1e-5;
 	public Point p0;

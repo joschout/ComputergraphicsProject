@@ -28,7 +28,7 @@ public class AreaLight extends Light {
 	 * 				- the normal at the sample point
 	 * 				- wi
 	 * Why the multitasking?
-	 * 	=> a given samplepoint can only be accessed once,
+	 * 	=> a given sample point can only be accessed once,
 	 * 		and the information is necessary in the other methods.
 	 */
 	@Override

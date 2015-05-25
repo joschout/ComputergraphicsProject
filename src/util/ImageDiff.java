@@ -12,15 +12,15 @@ public class ImageDiff {
 	public static void main(String[] args) {
 
 		
-		BufferedImage image1 = readImage("spherePrimitive.png");
-		BufferedImage image2 = readImage("sphereObject.png");
+		BufferedImage image1 = readImage("apple2 normal map//dragonHighPoly.png");
+		BufferedImage image2 = readImage("apple2 normal map//lowPolyDragon matte.png");
 				
 		
 
 		BufferedImage diff = getDifferenceImage(image1, image2);
 		
 		try {
-			ImageIO.write(diff, "png", new File("sphereDifference.png"));
+			ImageIO.write(diff, "png", new File("apple2 normal map//appleDiff.png"));
 		} catch (IOException e) {
 		}
 

@@ -34,25 +34,31 @@ public class Square extends Shape {
 	public static double boundingBoxDelta = 0.0001;
 	public SquareSampleFactory sampleFactory = new JitteredSampleFactory(0.5, 0.5, 1, 1, 1);//new JitteredSampleFactory(0, 0, 2, 1, 1);
 
+	
+	
+	public Square(Transformation transformation,Point midPoint){
+		this(transformation, new Point(midPoint.x - 0.5, midPoint.y ,midPoint.z-0.5), new Vector(1,0,0),new Vector(0,0,1));
+		
+	}
 	/**
 	 * Creates a new parallelogram with points (0,0,0), (0,0,1) and (1,0,0).
 	 */
 	public Square(){
-		this(Transformation.createIdentity(), new Point(0,0,0), new Vector(1,0,0),new Vector(0,0,-1));
+		this(Transformation.createIdentity(), new Point(0,0,0), new Vector(1,0,0),new Vector(0,0,1));
 		
 	}
 	
 	
 	/**
-	 * Creates a new {@link Triangle} with the given three points and which is
+	 * Creates a new {@link Square} with the given three points and which is
 	 * transformed by the given {@link Transformation}.
 	 * 
 	 * @param transformation
-	 *            the transformation applied to this {@link Triangle}.
+	 *            the transformation applied to this {@link Square}.
 	 * @param point
-	 *            a point of this {@link Triangle}.
+	 *            a point of this {@link Square}.
 	 * @param normal
-	 *            the normal of this {@link Triangle}.            
+	 *            the normal of this {@link Square}.            
 	 * @throws NullPointerException
 	 *             when the transformation, point or normal is null.
 	 */

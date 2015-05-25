@@ -84,6 +84,7 @@ public class World{
 	public World(){
 		camera = null;
 		backgroundColor = new RGBColor((float)0.3);
+//		backgroundColor = RGBColor.WHITE;
 		ambientLight = new AmbientLight();
 		maxBVHCounter = 0;
 		maxRecursionDepth = 0;
@@ -152,7 +153,7 @@ public class World{
 		
 				SimpleTransparentMaterial simpleTransparentMaterial1 = simpleMaterialRepo.getSimpleTransparentMaterial1();
 				DielectricMaterial dielectricMaterial = simpleMaterialRepo.getDielectricMaterial1();
-				
+				DielectricMaterial dielectricMaterial2 = simpleMaterialRepo.getDielectricMaterial2();
 				
 				
 				PhysicalMaterialRepository physicalMaterialRepo = new PhysicalMaterialRepository();
@@ -164,51 +165,140 @@ public class World{
 					
 				PhysicalMaterial aluminium_CookTorranceMaterial = physicalMaterialRepo.getAluminium_CookTorranceMaterial();
 				
-					
-//				Transformation sphereTrans2 = Transformation.createRotationY(0);
-//				sphereTrans2 = sphereTrans2.append(Transformation.createRotationX(0));
-//				sphereTrans2 = sphereTrans2.appendToTheLeft(Transformation.createTranslation(1 ,0, 3));
-//				Sphere sphere2 = new  Sphere(sphereTrans2, 1);
-//				sphere2.material = acrylicBlue_BlinnPhongMaterial;
-//				//intersectables.add(sphere2);
+				PhysicalMaterial darkRedPaint_BlinnPhongMaterial = physicalMaterialRepo.getDarkRedPaint_BlinnPhongMaterial();
+				PhysicalMaterial darkRedPaint_CookTorranceMaterial = physicalMaterialRepo.getDarkRedPaint_CookTorranceMaterial();
+				PhysicalMaterial darkRedPaint_LafortuneMaterial = physicalMaterialRepo.getDarkRedPaint_LafortuneMaterial();
+				PhysicalMaterial darkRedPaint_WardMaterial = physicalMaterialRepo.getDarkRedPaint_WardMaterial();
+				
+				
 			
+		
 						
 //				testBigSphere(emissiveMat);
 				
 //				testApple(phong);				
 //				testApple2(phong);
+//				testAreaLight1(phong);
 //				testAreaLightSuzanne1(phong);				
 //				testBoxPrimitive(phong);
 //				testBuddha(phong);
-//				testBunny(phong);				
+//				testBunny(phong);
+//				testBunnyDielectricMaterial1(dielectricMaterial);
 //				testBunnyReflective(phong);
 //				testCompoundObjectTwoObjects(acrylicBlue_BlinnPhongMaterial, aluminium_CookTorranceMaterial);
 //				testCylindricalMapping();				
 //				testCylinderPrimitive(phong);
 //				testDiskPrimitive(phong);
 //				testGlossyMaterialSphereAncCylinder(reflectiveMaterial1, glossyMaterial);
-//				testHouse();				
+//				testHouse();
+//				testLightProbeMappingSpherePrimitive(phong);
+//				testLightProbeMapSuzanne();
 //				testLowBuddha(phong);				
 //				testLowResDragon(phong);
-//				testLuxoAluminium(aluminium_CookTorranceMaterial);
+				testLuxoAluminium(aluminium_CookTorranceMaterial);
 //				testParallelogramPrimitive(phong);	
 //				testParallelogramWithVertices(phong, matte);
 //				testPlanePrimitive(matte);
 //				testPlanePrimitive2();				
-//				testPlanePrimitiveCheckersMaterial();	
-//				testSpheresDielectricandReflective(reflectiveMaterial1, dielectricMaterial);
+				testPlanePrimitiveCheckersMaterial();	
+				testSpheresDielectricandReflective(reflectiveMaterial1, dielectricMaterial);
 //				testSpherePrimitive(phong);
-//				testSphereObject(phong);
-//				testSpherePrimitiveLightProbeMapping(phong);	
+//				testSpherePrimitiveDielectricMaterial1(dielectricMaterial);				
+//				testSpherePrimitiveDielectricMaterial2(dielectricMaterial2);					
+//				testSphereObject(phong);	
 //				testSphericalMapping();
-//				testSuzanne(phong);				
+//				testSuzanne(phong);	
+//				testSquarePrimitive(phong);				
 //				testTeapot(phong);					
-//				testThinLensCamera();				
-//				testSquarePrimitive(phong);	
+//				testThinLensCamera();					
 //				testTrianglePrimitive(phong);				
 //				testTriceratops(phong);
-				testVenus(phong);
+//				testVenus(phong);
 			
+	}
+
+	private void testBunnyDielectricMaterial1(
+			DielectricMaterial dielectricMaterial) {
+		Transformation meshTransform = Transformation.createRotationY(200);
+		meshTransform = meshTransform.append(Transformation.createRotationX(10));
+		meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, -1, 10));
+		ObjectFileReader reader = new ObjectFileReader();
+		CompoundObject mesh;
+		mesh = reader.readFile("objects//bunny.obj");
+		mesh.setTransformation(meshTransform);
+		mesh.material = dielectricMaterial;
+		intersectables.add(mesh);
+	}
+
+	private void testSpherePrimitiveDielectricMaterial2(
+			DielectricMaterial dielectricMaterial2) {
+		Transformation sphereTrans3 = Transformation.createRotationY(0);
+		sphereTrans3 = sphereTrans3.append(Transformation.createRotationX(0));
+		sphereTrans3 = sphereTrans3.appendToTheLeft(Transformation.createTranslation(1,0, 3));
+		Sphere sphere3 = new  Sphere(sphereTrans3, 1);
+		sphere3.material = dielectricMaterial2;
+		intersectables.add(sphere3);
+	}
+
+	private void testSpherePrimitiveDielectricMaterial1(
+			DielectricMaterial dielectricMaterial) {
+		testSpherePrimitiveDielectricMaterial2(dielectricMaterial);
+	}
+
+	private void testLightProbeMapSuzanne() {
+		LightProbeMapping lightProbeMapping = new LightProbeMapping();
+		ImageTexture sphereImTex = new ImageTexture("angmap24Small.jpg", lightProbeMapping);
+		SVMatteMaterial svMatte = new SVMatteMaterial();
+		svMatte.setKa(0.45);
+		svMatte.setKd(0.65);
+		svMatte.setCd(sphereImTex);
+		
+
+		Transformation meshTransform = Transformation.createRotationY(200);
+		meshTransform = meshTransform.append(Transformation.createRotationX(0));
+//				meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1, 1, 7));
+		meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(0, 0, 3));
+		ObjectFileReader reader = new ObjectFileReader();
+		CompoundObject mesh;
+		mesh = reader.readFile("objects//suzanne.obj");
+		mesh.setTransformation(meshTransform);
+		mesh.material = svMatte;
+		intersectables.add(mesh);
+	}
+
+	private void testAreaLight1(Material material) {
+		EmissiveMaterial emissiveMat2 = new EmissiveMaterial();
+		emissiveMat2.setLs(1e1);
+		
+		Transformation sqrTrans = Transformation.createIdentity();
+		sqrTrans = sqrTrans.append(Transformation.createScale(1, 1, 1));
+		Square sqr = new Square(sqrTrans, new Point(0, 1, 2)); //new Square(sqrTrans, new Point(-0.5,0.5,1), new Vector(1,0,0), new Vector(0,0,1));
+		sqr.material = emissiveMat2;
+		intersectables.add(sqr);
+		sqr.setLightSource(true);
+
+		AreaLight areaLight = new AreaLight();
+		AreaLight.nbOfShadowRaysPerAreaLight = 100;
+		areaLight.emissiveMaterial = emissiveMat2;
+		areaLight.setCastShadows(true);
+		areaLight.lightEmittingShape = sqr;
+		lights.add(areaLight);
+
+		
+		
+		Transformation sphereTrans = Transformation.createRotationY(0);
+		sphereTrans = sphereTrans.append(Transformation.createRotationX(0));
+		sphereTrans = sphereTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 2));
+		Sphere sphere = new  Sphere(sphereTrans, 0.25);
+		sphere.material = material;
+		intersectables.add(sphere);
+		
+		
+
+		Transformation planeTransform = Transformation.createIdentity();
+		Plane pl = new Plane(planeTransform, new Point(0, -1, 0), new Vector(0,1,0));
+		pl.material = material;
+		intersectables.add(pl);
 	}
 
 	private void testBigSphere(SVEmissiveMaterial emissiveMat) {
@@ -234,7 +324,7 @@ public class World{
 		
 		Transformation meshTransform = Transformation.createRotationY(90);
 		meshTransform = meshTransform.append(Transformation.createRotationX(0));
-		meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(-1,-1, 2));
+		meshTransform = meshTransform.appendToTheLeft(Transformation.createTranslation(0,-1, 2));
 		
 		
 		ObjectFileReader reader = new ObjectFileReader();
@@ -247,7 +337,7 @@ public class World{
 
 	private Sphere testSpheresDielectricandReflective(
 			ReflectiveMaterial reflectiveMaterial1,
-			DielectricMaterial dielectricMaterial) {
+			Material mat2) {
 		Transformation sphereTrans = Transformation.createRotationY(0);
 		sphereTrans = sphereTrans.append(Transformation.createRotationX(0));
 		sphereTrans = sphereTrans.appendToTheLeft(Transformation.createTranslation(0.25 ,0, 4));
@@ -260,7 +350,7 @@ public class World{
 		sphereTrans2 = sphereTrans2.append(Transformation.createRotationX(0));
 		sphereTrans2 = sphereTrans2.appendToTheLeft(Transformation.createTranslation(1 ,0, 3));
 		Sphere sphere2 = new  Sphere(sphereTrans2, 1);
-		sphere2.material = dielectricMaterial;
+		sphere2.material = mat2;
 		intersectables.add(sphere2);
 		return sphere2;
 	}
@@ -347,19 +437,19 @@ public class World{
 	public boolean shadowHitObjects(Ray shadowRay, double distance){
 		ShadeRec sr = new ShadeRec(this);
 		for(Intersectable intersectable: intersectablesToIntersect){
-			if(intersectable.shadowHit(shadowRay, sr) && sr.t < distance){
+			if(!intersectable.isLightSource() && intersectable.shadowHit(shadowRay, sr) && sr.t < distance){
 				return true;
 			}
 		}
 		return false;
 	}
-	
+		
 	public void createBVH2(){
 		BVHManager manager = new BVHManager();
 		List<Shape> finiteShapes = new ArrayList<Shape>();
 		
 		for(Intersectable intersectable: intersectables){
-			if (intersectable.isInfinite()) {
+			if (intersectable.isInfinite() || intersectable.isLightSource()) {
 				intersectablesToIntersect.add(intersectable);
 			}else {
 				finiteShapes.add((Shape)intersectable);
@@ -377,7 +467,7 @@ public class World{
 	private void initializeThinLensCamera(int imageWidth, int imageHeight) {
 		camera = new ThinLensCamera(imageWidth, imageHeight,
 				new Point(0,1,0), new Vector(0, 0, 1), new Vector(0, 1, 0), 60,
-				0.2, 9, new JitteredSampleFactory(0, 0, 1, 10));
+				1.1, 9, new JitteredSampleFactory(0, 0, 1, 10));
 	}
 	
 	
@@ -881,7 +971,7 @@ public class World{
 //				intersectables.add(box2);
 	}
 	
-	private void testSpherePrimitiveLightProbeMapping(PhongMaterial phong) {
+	private void testLightProbeMappingSpherePrimitive(PhongMaterial phong) {
 		// ==== SPHERE PRIMITIVE ==== ///
 		
 		LightProbeMapping lightProbeMapping = new LightProbeMapping();
@@ -892,7 +982,7 @@ public class World{
 		svMatte.setCd(sphereImTex);
 		
 		
-		Transformation sphereTrans = Transformation.createRotationY(50);
+		Transformation sphereTrans = Transformation.createRotationY(0);
 		sphereTrans = sphereTrans.append(Transformation.createRotationX(0));
 		sphereTrans = sphereTrans.appendToTheLeft(Transformation.createTranslation(0 ,0, 2));
 		Sphere sphere = new  Sphere(sphereTrans, 1);

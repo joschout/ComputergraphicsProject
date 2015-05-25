@@ -205,7 +205,14 @@ public class ThinLensCamera extends Camera {
 		Sample diskSample = diskSampleFactory.getNextSample();
 		double lensPointUCoord = origin.x + diskSample.x * lensRadius;
 		double lensPointVCoord = origin.y + diskSample.y * lensRadius;
-		Point primaryRayOrigin = new Point(lensPointUCoord, lensPointVCoord, origin.z);
+//		Point primaryRayOrigin = new Point(lensPointUCoord, lensPointVCoord, origin.z);
+		
+		Point primaryRayOrigin = origin.add(basis.u.scale(diskSample.x * lensRadius))
+				.add(basis.v.scale(diskSample.y * lensRadius));
+		
+//		double primaryRayUCoord = focalPlanePointUCoord - diskSample.x;
+//		double primaryRayVCoord = focalPlanePointVCoord - diskSample.y;
+//		double primaryRayWcoord = - focalPlaneDistance;		
 		
 		
 		double primaryRayUCoord = focalPlanePointUCoord - lensPointUCoord;

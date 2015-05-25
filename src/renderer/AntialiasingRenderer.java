@@ -38,7 +38,7 @@ public class AntialiasingRenderer extends Renderer {
 						sampleFactory.reset(x + 0.5, y + 0.5);
 						
 						RGBColor averageColor = RGBColor.BLACK;
-						for(int sampleNb = 0; sampleNb <= nbOfRaysPerPixel; sampleNb++){
+						for(int sampleNb = 0; sampleNb < nbOfRaysPerPixel; sampleNb++){
 							//SampleFactory sampleFactory = new SampleFactory();
 							Sample sample = sampleFactory.getNextSample();
 							Ray ray = world.camera.generateRay(sample);

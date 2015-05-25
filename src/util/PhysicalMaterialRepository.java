@@ -14,7 +14,7 @@ public class PhysicalMaterialRepository {
 		acrylicBlue_BlinnPhongMaterial.setCd(new RGBColor(0.0147f, 0.0332f, 0.064f));
 		acrylicBlue_BlinnPhongMaterial.setKa(0.25);
 		acrylicBlue_BlinnPhongMaterial.setKd(0.65);
-		acrylicBlue_BlinnPhongBRDF.setKs(0.2);
+		acrylicBlue_BlinnPhongBRDF.setKs(0.9);
 		return acrylicBlue_BlinnPhongMaterial;		
 	}
 
@@ -47,6 +47,50 @@ public class PhysicalMaterialRepository {
 		acrylicBlue_WardBRDF.setKs(0.2);
 		return acrylicBlue_WardMaterial;
 	}
+	
+	
+	public PhysicalMaterial getDarkRedPaint_BlinnPhongMaterial(){	
+		BlinnPhongBRDF darkRedPaint_BlinnPhongBRDF = new BlinnPhongBRDF(34.1, new RGBColor(0.00473f ,0.00271f ,0.00194f));
+		PhysicalMaterial darkRedPaint_BlinnPhongMaterial = new PhysicalMaterial(darkRedPaint_BlinnPhongBRDF);
+		darkRedPaint_BlinnPhongMaterial.setCd(new RGBColor(0.256f, 0.0341f, 0.0102f));
+		darkRedPaint_BlinnPhongMaterial.setKa(0.25);
+		darkRedPaint_BlinnPhongMaterial.setKd(0.65);
+		darkRedPaint_BlinnPhongBRDF.setKs(0.2);
+		return darkRedPaint_BlinnPhongMaterial;		
+	}
+
+	public PhysicalMaterial getDarkRedPaint_CookTorranceMaterial(){
+		CookTorranceBRDF darkRedPaint_CookTorranceBRDF = new CookTorranceBRDF(0.0405, 0.329, new RGBColor(0.185f, 0.138f, 0.09f));
+		PhysicalMaterial darkRedPaint_CookTorranceMaterial = new PhysicalMaterial(darkRedPaint_CookTorranceBRDF);
+		darkRedPaint_CookTorranceMaterial.setCd(new RGBColor(0.253f,  0.0308f,  0.00838f));
+		darkRedPaint_CookTorranceMaterial.setKa(0.25);
+		darkRedPaint_CookTorranceMaterial.setKd(0.65);
+		darkRedPaint_CookTorranceBRDF.setKs(0.2);
+		return darkRedPaint_CookTorranceMaterial;
+	}
+	
+	public PhysicalMaterial getDarkRedPaint_LafortuneMaterial(){
+		LafortuneBRDF darkRedPaint_LafortuneBRDF = new LafortuneBRDF(-0.656, 0.372, 24.8, new RGBColor(0.223f, 0.169f, 0.109f));
+		PhysicalMaterial darkRedPaint_LafortuneMaterial = new PhysicalMaterial(darkRedPaint_LafortuneBRDF);
+		darkRedPaint_LafortuneMaterial.setCd(new RGBColor(0.26f, 0.0361f, 0.0118f));
+		darkRedPaint_LafortuneMaterial.setKa(0.25);
+		darkRedPaint_LafortuneMaterial.setKd(0.65);
+		darkRedPaint_LafortuneBRDF.setKs(0.2);
+		return darkRedPaint_LafortuneMaterial;
+	}
+	
+	public PhysicalMaterial getDarkRedPaint_WardMaterial(){
+		WardBRDF darkRedPaint_WardBRDF = new WardBRDF(0.419, new RGBColor(0.0477f, 0.0312f, 0.0221f));
+		PhysicalMaterial darkRedPaint_WardMaterial = new PhysicalMaterial(darkRedPaint_WardBRDF);
+		darkRedPaint_WardMaterial.setCd(new RGBColor(0.242f,  0.0244f,  0.00338f));
+		darkRedPaint_WardMaterial.setKa(0.25);
+		darkRedPaint_WardMaterial.setKd(0.650);
+		darkRedPaint_WardBRDF.setKs(0.2);
+		return darkRedPaint_WardMaterial;
+	}
+	
+	
+	
 	
 	public PhysicalMaterial getAluminium_CookTorranceMaterial(){
 		CookTorranceBRDF aluminium_CookTorranceBRDF = new CookTorranceBRDF(0.59, 0.00776, new RGBColor(0.0799f, 0.06f, 0.0294f));
